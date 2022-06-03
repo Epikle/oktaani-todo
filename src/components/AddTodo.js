@@ -2,7 +2,7 @@ import { useRef, useContext } from 'react';
 
 import TodoContext from '../store/todo-context';
 
-const AddTodo = (props) => {
+const AddTodo = () => {
   const todoCtx = useContext(TodoContext);
   const todoInputRef = useRef();
 
@@ -11,9 +11,13 @@ const AddTodo = (props) => {
 
     const enteredText = todoInputRef.current.value;
 
-    todoCtx.addTodo(enteredText, 'red');
+    todoCtx.addTodo(enteredText, null);
 
     todoInputRef.current.value = '';
+  };
+
+  const removeSelectedListHandler = () => {
+    todoCtx.setSelected('', '');
   };
 
   const test = todoCtx.selectedTodoList.title
@@ -22,7 +26,8 @@ const AddTodo = (props) => {
 
   return (
     <form onSubmit={submitHandler}>
-      {test} -- <input ref={todoInputRef} type="text" />
+      <div onClick={removeSelectedListHandler}>{test}</div>
+      <input ref={todoInputRef} type="text" />
       <button>Add</button>
     </form>
   );

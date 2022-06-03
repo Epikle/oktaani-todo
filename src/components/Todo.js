@@ -1,12 +1,21 @@
+import { useState } from 'react';
+
+import './Todo.css';
+
 //Returns one todo item
 const Todo = (props) => {
-  const clickHandler = (event) => {
-    event.target.classList.toggle('done');
+  const [isDone, setIsDone] = useState(props.done);
+
+  const clickHandler = () => {
+    setIsDone((prevState) => !prevState);
     //need also change state
   };
 
   return (
-    <li className={props.done ? 'done' : ''} onClick={clickHandler}>
+    <li
+      className={isDone ? 'todo-item done' : 'todo-item'}
+      onClick={clickHandler}
+    >
       {props.todo}
     </li>
   );

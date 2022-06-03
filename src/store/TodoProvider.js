@@ -29,21 +29,40 @@ const defaultTodoState = {
 const todoReducer = (state, action) => {
   if (action.type === 'ADD') {
     let newTodoList;
+
     //if ID then add todo to list else create new list
     if (state.selectedTodoList.id) {
-      console.log('adding new');
-      newTodoList = [];
+      const todoIndex = state.todoList.findIndex(
+        (list) => list.id === state.selectedTodoList.id
+      );
+
+      const createId = uuid();
+      const newTodo = {
+        id: createId,
+        todo: action.todo.text,
+        done: false,
+      };
+
+      const addedTodo = state.todoList[todoIndex].todos.concat(newTodo);
+
+      const oldList = [...state.todoList];
+      oldList[todoIndex] = { ...state.todoList[todoIndex], todos: addedTodo };
+
+      newTodoList = oldList;
     } else {
       const createId = uuid();
 
-      const newTodo = {
+      const newList = {
         id: createId,
         title: action.todo.text,
-        color: action.todo.color,
+        color: action.todo.color || 'red',
         todos: [],
       };
-      newTodoList = state.todoList.concat(newTodo);
+
+      newTodoList = state.todoList.concat(newList);
     }
+
+    localStorage.setItem('todoList', JSON.stringify(newTodoList));
 
     return {
       ...state,
@@ -62,16 +81,26 @@ const todoReducer = (state, action) => {
     };
   }
 
+  if (action.type === 'LOAD') {
+    const storedList = localStorage.getItem('todoList');
+    console.log(JSON.parse(storedList));
+
+    return {
+      ...state,
+      todoList: JSON.parse(storedList),
+    };
+  }
+
   return defaultTodoState;
 };
 
-const TodoProvider = (props) => {
+const TodoProvider = ({ children }) => {
   const [todoState, dispatchTodoAction] = useReducer(
     todoReducer,
     defaultTodoState
   );
 
-  const addTodoHandler = (todo, color) => {
+  const addTodoHandler = (todo, color = null) => {
     dispatchTodoAction({ type: 'ADD', todo: { text: todo, color: color } });
   };
 
@@ -79,17 +108,20 @@ const TodoProvider = (props) => {
     dispatchTodoAction({ type: 'SET', selected: { id, title } });
   };
 
+  const loadTodosHandler = () => {
+    dispatchTodoAction({ type: 'LOAD' });
+  };
+
   const todoContext = {
     todoList: todoState.todoList,
     selectedTodoList: todoState.selectedTodoList,
     addTodo: addTodoHandler,
     setSelected: setSelectedTodoListHandler,
+    loadTodo: loadTodosHandler,
   };
 
   return (
-    <TodoContext.Provider value={todoContext}>
-      {props.children}
-    </TodoContext.Provider>
+    <TodoContext.Provider value={todoContext}>{children}</TodoContext.Provider>
   );
 };
 

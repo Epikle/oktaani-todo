@@ -3,14 +3,13 @@ import { useContext } from 'react';
 import Todo from './Todo';
 import TodoContext from '../store/todo-context';
 
-const ListTodos = (props) => {
+const ListTodos = () => {
   const todoCtx = useContext(TodoContext);
 
   const { todoList: allTodos } = todoCtx;
 
   const todoSelectHandler = (id, event) => {
     todoCtx.setSelected(id, event.target.innerText);
-    console.log(event.target.innerText);
   };
 
   return (

@@ -1,0 +1,7 @@
+ul li {
+  cursor: pointer;
+}
+
+.done {
+  color: red;
+}
