@@ -13,6 +13,10 @@ const AddTodo = () => {
 
     const enteredText = todoInputRef.current.value;
 
+    if (enteredText.trim() === '') {
+      return;
+    }
+
     todoCtx.createTodo(enteredText, null);
 
     todoInputRef.current.value = '';
@@ -22,16 +26,25 @@ const AddTodo = () => {
     todoCtx.setSelected('', '');
   };
 
-  const test = todoCtx.selectedTodoList.title
+  const currentCollection = todoCtx.selectedTodoList.title
     ? todoCtx.selectedTodoList.title
-    : 'Lisää uusi';
+    : 'Add a new TODO list!';
 
   return (
     <header>
+      <div>
+        {todoCtx.selectedTodoList.title && (
+          <button onClick={removeSelectedListHandler}>
+            <span className="material-symbols-outlined">cancel</span>
+          </button>
+        )}
+        {currentCollection}
+      </div>
       <form onSubmit={submitHandler}>
-        <div onClick={removeSelectedListHandler}>{test}</div>
         <input ref={todoInputRef} type="text" />
-        <button>Add</button>
+        <button type="submit">
+          <span className="material-symbols-outlined">add_circle</span>
+        </button>
       </form>
     </header>
   );

@@ -1,20 +1,43 @@
 header {
   padding: 1rem;
-  display: flex;
+  display: grid;
   justify-content: center;
+  gap: 1rem;
+}
+
+header div {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+header div button {
+  display: grid;
+  place-content: center;
+  background: none;
+  border-radius: 50%;
+  padding: 0;
+  margin: 0;
+}
+
+header div button .material-symbols-outlined {
+  font-size: 1.5rem;
 }
 
 form {
   display: flex;
-  gap: 1rem;
+  gap: 0.5rem;
 }
 
-form div {
-  width: 8rem;
-  border: 1px solid gray;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  border-radius: 100vw;
-  padding-left: 0.5rem;
+form button {
+  display: grid;
+  place-content: center;
+  border-radius: 50%;
+  background: none;
+  margin: 0;
+  padding: 0;
+}
+
+form button .material-symbols-outlined {
+  font-size: 2.5rem;
 }

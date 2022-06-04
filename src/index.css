@@ -59,6 +59,16 @@ select {
   font: inherit;
 }
 
+button {
+	background: darkgrey;
+	color: inherit;
+	border: none;
+	padding: 0.15rem;
+  margin: 0.15rem;
+	cursor: pointer;
+	outline: inherit;
+}
+
 /* Remove all animations, transitions and smooth scroll for people that prefer not to see them */
 @media (prefers-reduced-motion: reduce) {
   html:focus-within {

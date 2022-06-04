@@ -4,14 +4,3 @@ main {
   gap: 1rem;
   padding: 1rem;
 }
-
-article {
-  background-color: rgb(212, 212, 212);
-  padding: 0.75rem;
-}
-
-ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
