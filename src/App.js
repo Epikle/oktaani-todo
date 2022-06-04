@@ -8,7 +8,7 @@ function App() {
   const todoCtx = useContext(TodoContext);
 
   useEffect(() => {
-    todoCtx.loadTodo();
+    todoCtx.readTodos();
   }, []);
 
   return (

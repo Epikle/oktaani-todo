@@ -1,22 +1,29 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+
+import TodoContext from '../store/todo-context';
 
 import './Todo.css';
 
-//Returns one todo item
-const Todo = (props) => {
-  const [isDone, setIsDone] = useState(props.done);
+const Todo = ({ todoData, collectionId }) => {
+  const TodoCtx = useContext(TodoContext);
+  const [isChecked, setIsChecked] = useState(todoData.done);
 
-  const clickHandler = () => {
-    setIsDone((prevState) => !prevState);
-    //need also change state
+  const todoChangeHandler = () => {
+    TodoCtx.setDoneTodo(collectionId, todoData.id);
+    setIsChecked((prevState) => !prevState);
   };
 
   return (
-    <li
-      className={isDone ? 'todo-item done' : 'todo-item'}
-      onClick={clickHandler}
-    >
-      {props.todo}
+    <li>
+      <input
+        type="checkbox"
+        id={todoData.id}
+        onChange={todoChangeHandler}
+        checked={isChecked}
+      />
+      <label htmlFor={todoData.id} className={isChecked ? 'done' : ''}>
+        {todoData.todo}
+      </label>
     </li>
   );
 };

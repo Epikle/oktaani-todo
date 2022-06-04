@@ -1,7 +1,8 @@
 ul li {
-  cursor: pointer;
+  font-family: 'Arvo', serif;
 }
 
 .done {
-  color: red;
+  color: gray;
+  text-decoration: line-through;
 }

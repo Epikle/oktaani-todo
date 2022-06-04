@@ -1,33 +1,30 @@
 import { useContext } from 'react';
 
-import Todo from './Todo';
+import Collection from './Collection';
 import TodoContext from '../store/todo-context';
+
+import './ListTodos.css';
 
 const ListTodos = () => {
   const todoCtx = useContext(TodoContext);
-
   const { todoList: allTodos } = todoCtx;
 
-  const todoSelectHandler = (id, event) => {
-    todoCtx.setSelected(id, event.target.innerText);
+  const collectionSelectHandler = (id, title) => {
+    todoCtx.setSelected(id, title);
   };
 
   return (
     <main>
-      {allTodos.map((todosList) => {
-        return (
-          <article key={todosList.id}>
-            <h3 onClick={todoSelectHandler.bind(null, todosList.id)}>
-              {todosList.title}
-            </h3>
-            <ul>
-              {todosList.todos.map((todo) => (
-                <Todo key={todo.id} todo={todo.todo} done={todo.done} />
-              ))}
-            </ul>
-          </article>
-        );
-      })}
+      {allTodos.length === 0 && <p>Tyhjä lista</p>}
+      {allTodos.length > 0 &&
+        allTodos.map((todosList) => (
+          <Collection
+            key={todosList.id}
+            collectionData={todosList}
+            onChange={collectionSelectHandler}
+            selected={todoCtx.selectedTodoList.id}
+          />
+        ))}
     </main>
   );
 };

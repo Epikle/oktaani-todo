@@ -2,6 +2,8 @@ import { useRef, useContext } from 'react';
 
 import TodoContext from '../store/todo-context';
 
+import './AddTodo.css';
+
 const AddTodo = () => {
   const todoCtx = useContext(TodoContext);
   const todoInputRef = useRef();
@@ -11,7 +13,7 @@ const AddTodo = () => {
 
     const enteredText = todoInputRef.current.value;
 
-    todoCtx.addTodo(enteredText, null);
+    todoCtx.createTodo(enteredText, null);
 
     todoInputRef.current.value = '';
   };
@@ -25,11 +27,13 @@ const AddTodo = () => {
     : 'Lisää uusi';
 
   return (
-    <form onSubmit={submitHandler}>
-      <div onClick={removeSelectedListHandler}>{test}</div>
-      <input ref={todoInputRef} type="text" />
-      <button>Add</button>
-    </form>
+    <header>
+      <form onSubmit={submitHandler}>
+        <div onClick={removeSelectedListHandler}>{test}</div>
+        <input ref={todoInputRef} type="text" />
+        <button>Add</button>
+      </form>
+    </header>
   );
 };
 
