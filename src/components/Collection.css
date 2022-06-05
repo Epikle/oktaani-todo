@@ -62,6 +62,11 @@ article {
   font-size: 2rem;
 }
 
+.todo-collection-title label,
+.todo-collection-title input {
+  cursor: pointer;
+}
+
 .todo-collection-done {
   position: absolute;
   top: 0.25rem;

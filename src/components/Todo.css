@@ -11,3 +11,8 @@
   color: gray;
   text-decoration: line-through;
 }
+
+.todo-item label,
+.todo-item input {
+  cursor: pointer;
+}
