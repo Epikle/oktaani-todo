@@ -1,4 +1,4 @@
-import { useRef, useContext, useId } from 'react';
+import { useRef, useContext, useId, Fragment } from 'react';
 
 import TodoContext from '../store/todo-context';
 
@@ -27,9 +27,13 @@ const AddTodo = () => {
     todoCtx.setSelected('', '');
   };
 
-  const currentCollection = todoCtx.selectedTodoList.title
-    ? todoCtx.selectedTodoList.title
-    : 'oktaaniTODO';
+  const currentCollection = todoCtx.selectedTodoList.title ? (
+    todoCtx.selectedTodoList.title
+  ) : (
+    <Fragment>
+      oktaani<strong>TODO</strong>
+    </Fragment>
+  );
 
   return (
     <header>
