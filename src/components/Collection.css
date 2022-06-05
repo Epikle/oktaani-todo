@@ -51,7 +51,7 @@ article {
 }
 
 .todo-container.color-red {
-  border-top: 6px solid red;
+  border-top: 6px solid rgb(252, 76, 76);
   border-bottom: 3px solid #7c9473;
 }
 

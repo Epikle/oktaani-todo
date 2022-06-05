@@ -21,7 +21,7 @@ const Todo = ({ todoData, collectionId }) => {
         onChange={todoChangeHandler}
         checked={isChecked}
       />
-      <label htmlFor={todoData.id} className={isChecked ? 'done' : ''}>
+      <label htmlFor={todoData.id}>
         {todoData.todo}
       </label>
     </li>
