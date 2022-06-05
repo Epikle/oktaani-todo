@@ -5,7 +5,7 @@ import TodoContext from './todo-context';
 
 const defaultTodoState = {
   todoList: [],
-  selectedTodoList: { id: '', title: '' },
+  selectedTodoList: { id: '', title: '', color: '#a25b5b' },
 };
 
 const todoReducer = (state, action) => {
@@ -22,7 +22,7 @@ const todoReducer = (state, action) => {
       const createId = uuid();
       const newTodo = {
         id: createId,
-        todo: action.todo.text,
+        todo: action.todo,
         done: false,
       };
 
@@ -35,10 +35,12 @@ const todoReducer = (state, action) => {
     } else {
       const createId = uuid();
 
+      console.log('create new todo:', state.selectedTodoList.color);
+
       const newList = {
         id: createId,
-        title: action.todo.text,
-        color: action.todo.color || 'red',
+        title: action.todo,
+        color: state.selectedTodoList.color,
         todos: [],
       };
 
@@ -146,6 +148,7 @@ const todoReducer = (state, action) => {
       selectedTodoList: {
         id: action.selected.id,
         title: action.selected.title,
+        color: action.selected.color,
       },
     };
   }
@@ -160,8 +163,8 @@ const TodoProvider = ({ children }) => {
     defaultTodoState
   );
 
-  const createTodoHandler = (todo, color = null) => {
-    dispatchTodoAction({ type: 'CREATE', todo: { text: todo, color: color } });
+  const createTodoHandler = (todo) => {
+    dispatchTodoAction({ type: 'CREATE', todo });
   };
 
   const readTodosHandler = () => {
@@ -184,8 +187,8 @@ const TodoProvider = ({ children }) => {
     dispatchTodoAction({ type: 'CLEAR', id });
   };
 
-  const setSelectedCollectionHandler = (id, title) => {
-    dispatchTodoAction({ type: 'SET', selected: { id, title } });
+  const setSelectedCollectionHandler = (id, title, color) => {
+    dispatchTodoAction({ type: 'SET', selected: { id, title, color } });
   };
 
   const todoContext = {

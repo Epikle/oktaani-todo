@@ -30,7 +30,7 @@ article {
 .delete:focus,
 .clear:hover,
 .clear:focus {
-  border: 2px solid #e8eae6;
+  border: 2px solid #252525;
 }
 
 .delete {
@@ -48,10 +48,6 @@ article {
   background-color: #e8eae6;
   padding: 1.5rem 1rem;
   position: relative;
-}
-
-.todo-container.color-red {
-  border-top: 6px solid rgb(252, 76, 76);
   border-bottom: 3px solid #7c9473;
 }
 

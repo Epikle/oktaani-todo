@@ -10,7 +10,7 @@ const ListTodos = () => {
   const { todoList: allTodos } = todoCtx;
 
   const collectionSelectHandler = (id, title) => {
-    todoCtx.setSelected(id, title);
+    todoCtx.setSelected(id, title, todoCtx.selectedTodoList.color);
   };
 
   return (

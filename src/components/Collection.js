@@ -11,7 +11,7 @@ const Collection = ({ collectionData, onChange, selected }) => {
 
   const deleteBtnHandler = (id) => {
     todoCtx.deleteCollection(id);
-    todoCtx.setSelected('', '');
+    todoCtx.setSelected('', '', todoCtx.selectedTodoList.color);
   };
 
   const clearBtnHandler = (id) => {
@@ -40,7 +40,7 @@ const Collection = ({ collectionData, onChange, selected }) => {
           <span className="material-symbols-outlined">delete</span>
         </button>
       </div>
-      <div className="todo-container color-red">
+      <div className="todo-container" style={{borderTop: `6px solid ${collectionData.color}`}}>
         <div className="todo-collection-title">
           <input
             type="radio"

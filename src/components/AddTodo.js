@@ -1,6 +1,7 @@
 import { useRef, useContext, useId, Fragment } from 'react';
 
 import TodoContext from '../store/todo-context';
+import ColorChooser from './ColorChooser';
 
 import './AddTodo.css';
 
@@ -24,7 +25,7 @@ const AddTodo = () => {
   };
 
   const removeSelectedListHandler = () => {
-    todoCtx.setSelected('', '');
+    todoCtx.setSelected('', '', todoCtx.selectedTodoList.color);
   };
 
   const currentCollection = todoCtx.selectedTodoList.title ? (
@@ -45,6 +46,8 @@ const AddTodo = () => {
         )}
         <h1>{currentCollection}</h1>
       </div>
+      <div className='header-form'>
+        <ColorChooser />
       <form onSubmit={submitHandler}>
         <label htmlFor={id} className="sr-only">
           Add a new TODO list!
@@ -60,6 +63,7 @@ const AddTodo = () => {
           <span className="material-symbols-outlined">add_circle</span>
         </button>
       </form>
+      </div>
     </header>
   );
 };

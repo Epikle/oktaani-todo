@@ -1,0 +1,17 @@
+.color-chooser ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.color-chooser-btn {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  overflow: hidden;
+  color: transparent;
+  cursor: pointer;
+}
+.color-chooser-btn:hover,
+.color-chooser-btn:focus {
+  border: 2px solid #252525;
+ }
