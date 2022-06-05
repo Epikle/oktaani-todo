@@ -45,6 +45,7 @@ const Collection = ({ collectionData, onChange, selected }) => {
           <input
             type="radio"
             id={collectionData.id}
+            className="sr-only"
             name="collection"
             onChange={onChange.bind(
               null,

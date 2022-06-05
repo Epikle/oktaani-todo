@@ -8,34 +8,14 @@
 }
 
 .todo-item label {
+  text-align: left;
   position: relative;
   transition: opacity 350ms ease-in-out;
 }
 
 .todo-item input:checked + label {
-  opacity: 0.6;
-}
-
-.todo-item input:checked + label::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 0;
-  width: 100%;
-  transform: translateY(-50%);
-  border-top: 2px solid #7c9473;
-
-  animation: linethrough 300ms ease-in-out 1;
-}
-
-@keyframes linethrough {
-  from {
-    width: 0;
-  }
-
-  to {
-    width: 100%;
-  }
+  opacity: 0.5;
+  text-decoration: line-through;
 }
 
 .todo-item label,

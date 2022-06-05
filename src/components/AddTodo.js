@@ -54,6 +54,7 @@ const AddTodo = () => {
           type="text"
           id={id}
           placeholder="Add a new TODO!"
+          maxLength="64"
         />
         <button type="submit">
           <span className="material-symbols-outlined">add_circle</span>

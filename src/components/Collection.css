@@ -58,8 +58,36 @@ article {
 .todo-collection-title {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.25rem;
   font-size: 2rem;
+}
+
+.todo-collection-title label {
+  position: relative;
+  width: 100%;
+}
+
+.todo-collection-title input:checked + label::after,
+.todo-collection-title input:focus + label::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  border-top: 2px solid #7c9473;
+
+  animation: linethrough 300ms ease-in-out 1;
+}
+
+@keyframes linethrough {
+  from {
+    width: 0;
+  }
+
+  to {
+    width: 100%;
+  }
 }
 
 .todo-collection-title label,
