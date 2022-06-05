@@ -1,4 +1,4 @@
-import { useRef, useContext } from 'react';
+import { useRef, useContext, useId } from 'react';
 
 import TodoContext from '../store/todo-context';
 
@@ -7,6 +7,7 @@ import './AddTodo.css';
 const AddTodo = () => {
   const todoCtx = useContext(TodoContext);
   const todoInputRef = useRef();
+  const id = useId();
 
   const submitHandler = (event) => {
     event.preventDefault();
@@ -28,20 +29,28 @@ const AddTodo = () => {
 
   const currentCollection = todoCtx.selectedTodoList.title
     ? todoCtx.selectedTodoList.title
-    : 'Add a new TODO list!';
+    : 'oktaaniTODO';
 
   return (
     <header>
-      <div>
+      <div className="selected-todo-collection">
         {todoCtx.selectedTodoList.title && (
           <button onClick={removeSelectedListHandler}>
             <span className="material-symbols-outlined">cancel</span>
           </button>
         )}
-        {currentCollection}
+        <h1>{currentCollection}</h1>
       </div>
       <form onSubmit={submitHandler}>
-        <input ref={todoInputRef} type="text" />
+        <label htmlFor={id} className="sr-only">
+          Add a new TODO list!
+        </label>
+        <input
+          ref={todoInputRef}
+          type="text"
+          id={id}
+          placeholder="Add a new TODO!"
+        />
         <button type="submit">
           <span className="material-symbols-outlined">add_circle</span>
         </button>

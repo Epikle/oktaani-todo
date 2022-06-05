@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, Fragment } from 'react';
 
 import Collection from './Collection';
 import TodoContext from '../store/todo-context';
@@ -15,7 +15,12 @@ const ListTodos = () => {
 
   return (
     <main>
-      {allTodos.length === 0 && <p>Tyhjä lista</p>}
+      {allTodos.length === 0 && (
+        <Fragment>
+          <h2>No TODOs found!</h2>
+          <p>Start by creating a new list for your TODOs.</p>
+        </Fragment>
+      )}
       {allTodos.length > 0 &&
         allTodos.map((todosList) => (
           <Collection

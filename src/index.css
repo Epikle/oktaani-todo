@@ -37,6 +37,7 @@ body {
   line-height: 1.5;
   /* font-family: 'Arvo', serif; */
   font-family: 'Oswald', sans-serif;
+  background-color: #CDD0CB;
 }
 
 /* A elements that don't have a class get default styles */
@@ -60,13 +61,21 @@ select {
 }
 
 button {
-	background: darkgrey;
-	color: inherit;
-	border: none;
-	padding: 0.15rem;
+  background: darkgrey;
+  color: inherit;
+  border: none;
+  padding: 0.15rem;
   margin: 0.15rem;
-	cursor: pointer;
-	outline: inherit;
+  outline: inherit;
+}
+
+.sr-only {
+  position: absolute;
+  left: -10000px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
 }
 
 /* Remove all animations, transitions and smooth scroll for people that prefer not to see them */

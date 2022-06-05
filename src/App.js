@@ -2,6 +2,7 @@ import { Fragment, useContext, useEffect } from 'react';
 
 import ListTodos from './components/ListTodos';
 import AddTodo from './components/AddTodo';
+import Footer from './components/Footer';
 import TodoContext from './store/todo-context';
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
     <Fragment>
       <AddTodo />
       <ListTodos />
+      <Footer />
     </Fragment>
   );
 }

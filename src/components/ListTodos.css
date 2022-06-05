@@ -1,6 +1,17 @@
 main {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr;
   justify-content: center;
-  gap: 1rem;
-  padding: 1rem;
+  padding-bottom: 1rem;
+  text-align: center;
+}
+
+main h2 {
+  margin-block: 1rem;
+}
+
+main p {
+  font-family: 'Arvo', serif;
+  margin-bottom: 3rem;
+  font-size: 0.9rem;
 }

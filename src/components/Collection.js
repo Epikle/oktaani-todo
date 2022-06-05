@@ -6,58 +6,69 @@ import TodoContext from '../store/todo-context';
 import './Collection.css';
 
 const Collection = ({ collectionData, onChange, selected }) => {
-  const TodoCtx = useContext(TodoContext);
+  const todoCtx = useContext(TodoContext);
   const checked = selected === collectionData.id ? true : false;
 
   const deleteBtnHandler = (id) => {
-    TodoCtx.deleteCollection(id);
+    todoCtx.deleteCollection(id);
+    todoCtx.setSelected('', '');
   };
 
   const clearBtnHandler = (id) => {
-    TodoCtx.clearDoneTodos(id);
+    todoCtx.clearDoneTodos(id);
   };
 
   const isDone = collectionData.todos.filter((todo) => todo.done);
+  const isSelected = todoCtx.selectedTodoList.id === collectionData.id;
 
   return (
     <article>
-      <div className='controls'>
+      <div className="controls">
         <button
-          className="delete"
+          className={isSelected && isDone.length > 0 ? 'clear active' : 'clear'}
+          onClick={clearBtnHandler.bind(null, collectionData.id)}
+          disabled={!isSelected || isDone.length === 0}
+        >
+          <span className="material-symbols-outlined">clear_all</span>
+        </button>
+
+        <button
+          className={isSelected ? 'delete active' : 'delete'}
           onClick={deleteBtnHandler.bind(null, collectionData.id)}
+          disabled={!isSelected}
         >
           <span className="material-symbols-outlined">delete</span>
         </button>
-        {isDone.length > 0 && (
-          <button className="clear" onClick={clearBtnHandler.bind(null, collectionData.id)}>
-            <span className="material-symbols-outlined">clear_all</span>
-          </button>
-        )}
       </div>
-      <div>
-        <input
-          type="radio"
-          id={collectionData.id}
-          name="collection"
-          onChange={onChange.bind(
-            null,
-            collectionData.id,
-            collectionData.title
-          )}
-          checked={checked}
-        />
-        <label htmlFor={collectionData.id}>{collectionData.title}</label>
-      </div>
-
-      <ul>
-        {collectionData.todos.map((todo) => (
-          <Todo
-            key={todo.id}
-            todoData={todo}
-            collectionId={collectionData.id}
+      <div className="todo-container color-red">
+        <div className="todo-collection-title">
+          <input
+            type="radio"
+            id={collectionData.id}
+            name="collection"
+            onChange={onChange.bind(
+              null,
+              collectionData.id,
+              collectionData.title
+            )}
+            checked={checked}
           />
-        ))}
-      </ul>
+          <label htmlFor={collectionData.id}>{collectionData.title}</label>
+        </div>
+        <div className="todo-collection-done">
+          {isDone.length} / {collectionData.todos.length}
+        </div>
+
+        <ul className="todo-items-list">
+          {collectionData.todos.map((todo) => (
+            <Todo
+              key={todo.id}
+              todoData={todo}
+              collectionId={collectionData.id}
+            />
+          ))}
+        </ul>
+      </div>
     </article>
   );
 };

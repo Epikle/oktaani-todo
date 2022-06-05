@@ -1,8 +1,13 @@
-ul li {
+.todo-item {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
   font-family: 'Arvo', serif;
+  font-size: 1.5rem;
+  margin-left: 1rem;
 }
 
-.done {
+.todo-item .done {
   color: gray;
   text-decoration: line-through;
 }

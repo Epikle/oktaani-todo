@@ -14,7 +14,7 @@ const Todo = ({ todoData, collectionId }) => {
   };
 
   return (
-    <li>
+    <li className="todo-item">
       <input
         type="checkbox"
         id={todoData.id}
