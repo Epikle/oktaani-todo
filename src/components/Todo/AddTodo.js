@@ -21,12 +21,6 @@ const AddTodo = () => {
     if (todoCtx.selectedTodoList.isUpdating) {
       todoInputRef.current.value = '';
       todoCtx.updateTodo(enteredText, todoCtx.selectedTodoList.color);
-      todoCtx.setSelected(
-        todoCtx.selectedTodoList.id,
-        todoCtx.selectedTodoList.title,
-        todoCtx.selectedTodoList.color,
-        false
-      );
       return;
     }
 

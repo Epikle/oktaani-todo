@@ -90,6 +90,7 @@ const todoReducer = (state, action) => {
       selectedTodoList: {
         ...state.selectedTodoList,
         title: action.update.title,
+        isUpdating: false,
       },
     };
   }
