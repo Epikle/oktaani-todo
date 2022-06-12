@@ -5,11 +5,12 @@
   font-family: var(--secondary-ff);
   font-size: 1.5rem;
   margin-left: 1rem;
-  word-break: break-all;
-  overflow: hidden;
+  padding: 0.25rem 0;
 }
 
 .todo-item label {
+  overflow-wrap: break-word;
+  min-width: 1rem;
   text-align: left;
   position: relative;
   transition: opacity 350ms ease-in-out;

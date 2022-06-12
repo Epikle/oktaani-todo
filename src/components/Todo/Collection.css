@@ -64,13 +64,13 @@ article {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.25rem;
   font-size: 2rem;
 }
 
 .todo-collection-title label {
   position: relative;
   width: 100%;
+  overflow-wrap: break-word;
 }
 
 .todo-collection-title input:checked + label::after,
@@ -106,4 +106,5 @@ article {
   right: 0.5rem;
   font-family: var(--secondary-ff);
   font-size: 0.75rem;
+  user-select: none;
 }

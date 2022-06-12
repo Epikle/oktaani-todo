@@ -18,7 +18,6 @@ const Collection = ({ collectionData, onChange, selected }) => {
   };
 
   const updateBtnHandler = () => {
-    // todoCtx.updateTodo('test update', todoCtx.....);
     todoCtx.setSelected(
       todoCtx.selectedTodoList.id,
       todoCtx.selectedTodoList.title,
