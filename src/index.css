@@ -1,11 +1,13 @@
-/* Box sizing rules */
+/* CSS RESET */
+
 *,
 *::before,
 *::after {
   box-sizing: border-box;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -moz-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
-/* Remove default margin */
 body,
 h1,
 h2,
@@ -19,40 +21,27 @@ dd {
   margin: 0;
 }
 
-/* Remove list styles on ul, ol elements with a list role, which suggests default styling will be removed */
 ul[role='list'],
 ol[role='list'] {
   list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
-/* Set core root defaults */
 html:focus-within {
   scroll-behavior: smooth;
 }
 
-/* Set core body defaults */
-body {
-  min-height: 100vh;
-  text-rendering: optimizeSpeed;
-  line-height: 1.5;
-  /* font-family: 'Arvo', serif; */
-  font-family: 'Oswald', sans-serif;
-  background-color: #CDD0CB;
-}
-
-/* A elements that don't have a class get default styles */
 a:not([class]) {
   text-decoration-skip-ink: auto;
 }
 
-/* Make images easier to work with */
 img,
 picture {
   max-width: 100%;
   display: block;
 }
 
-/* Inherit fonts for inputs and buttons */
 input,
 button,
 textarea,
@@ -78,7 +67,6 @@ button {
   overflow: hidden;
 }
 
-/* Remove all animations, transitions and smooth scroll for people that prefer not to see them */
 @media (prefers-reduced-motion: reduce) {
   html:focus-within {
     scroll-behavior: auto;
@@ -92,4 +80,37 @@ button {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* ------------------- */
+
+:root {
+  --primary-green: #7c9473;
+  --primary-red: #a25b5b;
+  --primary-gray: #e8eae6;
+
+  /*color chooser */
+  --cc-1: var(--primary-green);
+  --cc-2: var(--primary-red);
+  --cc-3: #ffd166;
+  --cc-4: #118ab2;
+  --cc-5: #6d597a;
+
+  --neutral-dgray: #252525;
+
+  --bg-color: #cdd0cb;
+
+  --primary-ff: 'Oswald', sans-serif;
+  --secondary-ff: 'Arvo', serif;
+  --fs: 1rem;
+}
+
+body {
+  min-height: 100vh;
+  text-rendering: optimizeSpeed;
+  line-height: 1.5;
+
+  font-family: var(--primary-ff);
+  font-size: var(--fs);
+  background-color: var(--bg-color);
 }

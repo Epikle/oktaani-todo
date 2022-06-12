@@ -5,7 +5,12 @@ import TodoContext from './todo-context';
 
 const defaultTodoState = {
   todoList: [],
-  selectedTodoList: { id: '', title: '', color: '#a25b5b' },
+  selectedTodoList: {
+    id: '',
+    title: '',
+    color: 'var(--cc-1)',
+    isUpdating: false,
+  },
 };
 
 const todoReducer = (state, action) => {
@@ -35,8 +40,6 @@ const todoReducer = (state, action) => {
     } else {
       const createId = uuid();
 
-      console.log('create new todo:', state.selectedTodoList.color);
-
       const newList = {
         id: createId,
         title: action.todo,
@@ -55,7 +58,7 @@ const todoReducer = (state, action) => {
     };
   }
 
-  //READ todos from localstorage
+  //READ todos from localStorage
   if (action.type === 'READ') {
     const storedList = localStorage.getItem('todoList') || '[]';
 
@@ -67,10 +70,27 @@ const todoReducer = (state, action) => {
 
   //UPDATE todo text or collection text
   if (action.type === 'UPDATE') {
-    console.log('Updating...');
+    const selectedTodoIndex = state.todoList.findIndex(
+      (list) => list.id === state.selectedTodoList.id
+    );
+
+    const oldList = [...state.todoList];
+
+    oldList[selectedTodoIndex] = {
+      ...state.todoList[selectedTodoIndex],
+      title: action.update.title,
+      color: action.update.color,
+    };
+
+    localStorage.setItem('todoList', JSON.stringify(oldList));
 
     return {
       ...state,
+      todoList: oldList,
+      selectedTodoList: {
+        ...state.selectedTodoList,
+        title: action.update.title,
+      },
     };
   }
 
@@ -146,9 +166,11 @@ const todoReducer = (state, action) => {
     return {
       ...state,
       selectedTodoList: {
+        ...state.selectedTodoList,
         id: action.selected.id,
         title: action.selected.title,
         color: action.selected.color,
+        isUpdating: action.selected.update,
       },
     };
   }
@@ -171,8 +193,8 @@ const TodoProvider = ({ children }) => {
     dispatchTodoAction({ type: 'READ' });
   };
 
-  const updateTodoHandler = (id, text) => {
-    dispatchTodoAction({ type: 'UPDATE', update: { id, text } });
+  const updateTodoHandler = (title, color) => {
+    dispatchTodoAction({ type: 'UPDATE', update: { title, color } });
   };
 
   const deleteCollectionHandler = (id) => {
@@ -187,8 +209,16 @@ const TodoProvider = ({ children }) => {
     dispatchTodoAction({ type: 'CLEAR', id });
   };
 
-  const setSelectedCollectionHandler = (id, title, color) => {
-    dispatchTodoAction({ type: 'SET', selected: { id, title, color } });
+  const setSelectedCollectionHandler = (
+    id = '',
+    title = '',
+    color = 'var(--cc-1)',
+    update = false
+  ) => {
+    dispatchTodoAction({
+      type: 'SET',
+      selected: { id, title, color, update },
+    });
   };
 
   const todoContext = {

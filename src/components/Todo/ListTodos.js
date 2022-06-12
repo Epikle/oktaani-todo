@@ -1,7 +1,7 @@
-import { useContext, Fragment } from 'react';
+import { useContext, Fragment, useEffect } from 'react';
 
 import Collection from './Collection';
-import TodoContext from '../store/todo-context';
+import TodoContext from '../../store/todo-context';
 
 import './ListTodos.css';
 
@@ -9,9 +9,13 @@ const ListTodos = () => {
   const todoCtx = useContext(TodoContext);
   const { todoList: allTodos } = todoCtx;
 
-  const collectionSelectHandler = (id, title) => {
-    todoCtx.setSelected(id, title, todoCtx.selectedTodoList.color);
+  const collectionSelectHandler = (id, title, color) => {
+    todoCtx.setSelected(id, title, color);
   };
+
+  useEffect(() => {
+    todoCtx.readTodos();
+  }, []);
 
   return (
     <main>

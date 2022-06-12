@@ -10,6 +10,7 @@ const TodoContext = React.createContext({
   setDoneTodo: () => {},
   clearDoneTodos: () => {},
   setSelected: () => {},
+  setUpdating: () => {},
 });
 
 export default TodoContext;

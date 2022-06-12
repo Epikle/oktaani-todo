@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
 
-import TodoContext from '../store/todo-context';
+import TodoContext from '../../store/todo-context';
 
 import './Todo.css';
 
@@ -14,16 +14,14 @@ const Todo = ({ todoData, collectionId }) => {
   };
 
   return (
-    <li className="todo-item">
+    <li className="todo-item" role="listitem">
       <input
         type="checkbox"
         id={todoData.id}
         onChange={todoChangeHandler}
         checked={isChecked}
       />
-      <label htmlFor={todoData.id}>
-        {todoData.todo}
-      </label>
+      <label htmlFor={todoData.id}>{todoData.todo}</label>
     </li>
   );
 };

@@ -1,21 +1,30 @@
 import { useContext } from 'react';
 
 import Todo from './Todo';
-import TodoContext from '../store/todo-context';
+import TodoContext from '../../store/todo-context';
 
 import './Collection.css';
 
 const Collection = ({ collectionData, onChange, selected }) => {
   const todoCtx = useContext(TodoContext);
-  const checked = selected === collectionData.id ? true : false;
 
   const deleteBtnHandler = (id) => {
     todoCtx.deleteCollection(id);
-    todoCtx.setSelected('', '', todoCtx.selectedTodoList.color);
+    todoCtx.setSelected(); //reset default selection
   };
 
   const clearBtnHandler = (id) => {
     todoCtx.clearDoneTodos(id);
+  };
+
+  const updateBtnHandler = () => {
+    // todoCtx.updateTodo('test update', todoCtx.....);
+    todoCtx.setSelected(
+      todoCtx.selectedTodoList.id,
+      todoCtx.selectedTodoList.title,
+      todoCtx.selectedTodoList.color,
+      true
+    );
   };
 
   const isDone = collectionData.todos.filter((todo) => todo.done);
@@ -33,6 +42,14 @@ const Collection = ({ collectionData, onChange, selected }) => {
         </button>
 
         <button
+          className={isSelected ? 'edit active' : 'edit'}
+          onClick={updateBtnHandler}
+          disabled={!isSelected}
+        >
+          <span className="material-symbols-outlined">edit</span>
+        </button>
+
+        <button
           className={isSelected ? 'delete active' : 'delete'}
           onClick={deleteBtnHandler.bind(null, collectionData.id)}
           disabled={!isSelected}
@@ -40,7 +57,10 @@ const Collection = ({ collectionData, onChange, selected }) => {
           <span className="material-symbols-outlined">delete</span>
         </button>
       </div>
-      <div className="todo-container" style={{borderTop: `6px solid ${collectionData.color}`}}>
+      <div
+        className="todo-container"
+        style={{ borderTop: `6px solid ${collectionData.color}` }}
+      >
         <div className="todo-collection-title">
           <input
             type="radio"
@@ -50,17 +70,22 @@ const Collection = ({ collectionData, onChange, selected }) => {
             onChange={onChange.bind(
               null,
               collectionData.id,
-              collectionData.title
+              collectionData.title,
+              collectionData.color
             )}
-            checked={checked}
+            checked={selected === collectionData.id}
           />
-          <label htmlFor={collectionData.id}>{collectionData.title}</label>
+          <label htmlFor={collectionData.id}>
+            {collectionData.title || 'UNTITLED'}
+          </label>
         </div>
-        <div className="todo-collection-done">
-          {isDone.length} / {collectionData.todos.length}
-        </div>
+        {collectionData.todos.length > 0 && (
+          <div className="todo-collection-done">
+            {isDone.length} / {collectionData.todos.length}
+          </div>
+        )}
 
-        <ul className="todo-items-list">
+        <ul role="list">
           {collectionData.todos.map((todo) => (
             <Todo
               key={todo.id}
