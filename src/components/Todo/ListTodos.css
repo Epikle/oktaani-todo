@@ -11,12 +11,14 @@ main {
 
 main h2 {
   margin: 1rem 0;
+  grid-column: 1 / span 2;
 }
 
 main p {
   margin-bottom: 3rem;
   font-family: var(--secondary-ff);
   font-size: 0.9rem;
+  grid-column: 1 / span 2;
 }
 
 @media (min-width: 48rem) {

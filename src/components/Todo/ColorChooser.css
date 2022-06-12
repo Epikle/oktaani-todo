@@ -5,6 +5,7 @@
   overflow: hidden;
   color: transparent;
   cursor: pointer;
+  user-select: none;
 }
 .color-chooser-btn:hover,
 .color-chooser-btn:focus {
