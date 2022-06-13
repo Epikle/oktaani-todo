@@ -5,16 +5,16 @@ import TodoContext from '../../store/todo-context';
 import './Todo.css';
 
 const Todo = ({ todoData, collectionId }) => {
-  const TodoCtx = useContext(TodoContext);
+  const todoCtx = useContext(TodoContext);
   const [isChecked, setIsChecked] = useState(todoData.done);
 
   const todoChangeHandler = () => {
-    TodoCtx.setDoneTodo(collectionId, todoData.id);
+    todoCtx.setDoneTodo(collectionId, todoData.id);
     setIsChecked((prevState) => !prevState);
   };
 
   return (
-    <li className="todo-item" role="listitem">
+    <li className="todo-item">
       <input
         type="checkbox"
         id={todoData.id}

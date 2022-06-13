@@ -84,7 +84,7 @@ const Collection = ({ collectionData, onChange, selected }) => {
           </div>
         )}
 
-        <ul role="list">
+        <ul>
           {collectionData.todos.map((todo) => (
             <Todo
               key={todo.id}

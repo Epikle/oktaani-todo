@@ -2,7 +2,7 @@ import React from 'react';
 
 const TodoContext = React.createContext({
   todoList: [],
-  selectedTodoList: { id: '', title: '', color: '' },
+  selectedTodoList: { id: '', title: '', color: '', isUpdating: false },
   createTodo: () => {},
   readTodos: () => {},
   updateTodo: () => {},
@@ -10,7 +10,6 @@ const TodoContext = React.createContext({
   setDoneTodo: () => {},
   clearDoneTodos: () => {},
   setSelected: () => {},
-  setUpdating: () => {},
 });
 
 export default TodoContext;
