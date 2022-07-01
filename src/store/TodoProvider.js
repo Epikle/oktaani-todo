@@ -45,6 +45,7 @@ const todoReducer = (state, action) => {
           id: createId,
           title: action.todo,
           color: state.selectedTodoList.color,
+          timestamp: Date.now(), //added if need to sort by when created
           todos: [],
         };
 

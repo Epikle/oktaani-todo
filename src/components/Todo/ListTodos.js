@@ -15,7 +15,6 @@ const ListTodos = () => {
 
   useEffect(() => {
     todoCtx.readTodos();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
