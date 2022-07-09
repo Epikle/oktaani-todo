@@ -11,7 +11,8 @@ article {
 
 .delete,
 .clear,
-.edit {
+.edit,
+.share {
   display: grid;
   place-content: center;
   border-radius: 50%;
@@ -25,7 +26,8 @@ article {
 
 .delete.active,
 .clear.active,
-.edit.active {
+.edit.active,
+.share.active {
   opacity: 1;
   cursor: pointer;
 }
@@ -35,7 +37,9 @@ article {
 .clear:hover,
 .clear:focus,
 .edit:hover,
-.edit:focus {
+.edit:focus,
+.share:hover,
+.share:active {
   border: 2px solid var(--neutral-dgray);
 }
 
