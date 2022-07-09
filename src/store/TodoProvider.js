@@ -1,5 +1,5 @@
 import { useReducer } from 'react';
-import { v4 as uuid } from 'uuid';
+import { nanoid } from 'nanoid';
 
 import TodoContext from './todo-context';
 
@@ -20,15 +20,16 @@ const todoReducer = (state, action) => {
       let newTodoList;
 
       //If ID then add todo to existing collection
-      if (state.selectedTodoList.id) {
+      if (state.selectedTodoList.id && !action.create.share) {
+        console.log('Ei pitäisi olla täällä');
         const todoIndex = state.todoList.findIndex(
           (list) => list.id === state.selectedTodoList.id
         );
 
-        const createId = uuid();
+        const createId = nanoid();
         const newTodo = {
           id: createId,
-          todo: action.todo,
+          todo: action.create.todo,
           done: false,
         };
 
@@ -39,14 +40,15 @@ const todoReducer = (state, action) => {
 
         newTodoList = oldList;
       } else {
-        const createId = uuid();
+        console.log('here:', action.create.todo);
+        const createId = nanoid();
 
         const newList = {
           id: createId,
-          title: action.todo,
-          color: state.selectedTodoList.color,
+          title: action.create.share ? action.create.todo.title : action.create.todo,
+          color: action.create.share ? action.create.todo.color : state.selectedTodoList.color,
           timestamp: Date.now(), //added if need to sort by when created
-          todos: [],
+          todos: action.create.share ? action.create.todo.todos : [],
         };
 
         newTodoList = state.todoList.concat(newList);
@@ -192,8 +194,8 @@ const TodoProvider = ({ children }) => {
     defaultTodoState
   );
 
-  const createTodoHandler = (todo) => {
-    dispatchTodoAction({ type: 'CREATE', todo });
+  const createTodoHandler = (todo, share = false) => {
+    dispatchTodoAction({ type: 'CREATE', create: {todo, share} });
   };
 
   const readTodosHandler = () => {

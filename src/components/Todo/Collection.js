@@ -12,6 +12,8 @@ const Collection = ({ collectionData, onChange, selected }) => {
   const [isSharing, setIsSharing] = useState(false);
   const [shared, setShared] = useState(false);
   const [shareCode, setShareCode] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const deleteBtnHandler = (id) => {
     todoCtx.deleteCollection(id);
@@ -31,14 +33,29 @@ const Collection = ({ collectionData, onChange, selected }) => {
     );
   };
 
-  const shareBtnHandler = () => {
-    setIsSharing(false);
-    setShared(true);
+  const shareBtnHandler = async () => {
+    setIsLoading(true);
+    setError('');
     const shareId = nanoid(6);
     setShareCode(shareId);
-    console.log('Share collection...', shareCode);
-    const shareData = {...collectionData, shareId: shareId}
-    console.log(shareData);
+    const shareData = { ...collectionData, shareId: shareId };
+
+    try {
+      await fetch('http://localhost:5000/api/share', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ shareData }),
+      });
+    } catch (err) {
+      console.error(err);
+      setError('Something went wrong, try again...');
+    }
+
+    setIsLoading(false);
+    setIsSharing(false);
+    setShared(true);
   };
 
   const copyBtnHandler = () => {
@@ -59,28 +76,45 @@ const Collection = ({ collectionData, onChange, selected }) => {
       <h3>Share this collection?</h3>
       <p>Do you want to share your collection to someone?</p>
       <p className="danger">
-        Be carefull not to share something you shouldn&apos;t!
+        Make sure that you are not sharing something you shouldn&apos;t!
       </p>
       <div className="modal-btns">
-        <button onClick={shareBtnHandler}>Share</button>{' '}
-        <button onClick={() => setIsSharing(false)}>No</button>
+        <button onClick={shareBtnHandler} disabled={isLoading}>
+          Share
+        </button>{' '}
+        <button onClick={() => setIsSharing(false)} disabled={isLoading}>
+          No
+        </button>
       </div>
     </Fragment>
   );
 
   const sharedData = (
     <Fragment>
-      <h3>You collection is now shared!</h3>
-      {/* <div className="share-img">
+      {error && (
+        <Fragment>
+          <h3>Error</h3>
+          <p>{error}</p>
+          <div className="modal-btns">
+            <button onClick={() => setShared(false)}>Close</button>
+          </div>
+        </Fragment>
+      )}
+      {!error && (
+        <Fragment>
+          <h3>Your collection is now shared!</h3>
+          {/* <div className="share-img">
         <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Example" alt="QR Code" />
       </div> */}
-      <div className="share-code">
-        http://oktaani.com/todo/share/{shareCode}{' '}
-        <button onClick={copyBtnHandler}>Copy link</button>
-      </div>
-      <div className="modal-btns">
-        <button onClick={() => setShared(false)}>Close</button>
-      </div>
+          <div className="share-code">
+            {process.env.REACT_APP_PAGE_URL}/share/{shareCode}{' '}
+            <button onClick={copyBtnHandler}>Copy link</button>
+          </div>
+          <div className="modal-btns">
+            <button onClick={() => setShared(false)}>Close</button>
+          </div>
+        </Fragment>
+      )}
     </Fragment>
   );
 

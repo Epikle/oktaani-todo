@@ -25,7 +25,7 @@ const AddTodo = () => {
     }
 
     todoInputRef.current.value = '';
-    todoCtx.createTodo(enteredText, null);
+    todoCtx.createTodo(enteredText, false);
   };
 
   const removeSelectedListHandler = () => {
