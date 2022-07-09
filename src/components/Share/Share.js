@@ -13,7 +13,9 @@ const Share = () => {
     const fetchShared = async () => {
       try {
         //Fetch shared collection from db
-        const response = await fetch(`http://localhost:5000/api/share/${id}`);
+        const response = await fetch(
+          `${process.env.REACT_APP_API_URL}/api/share/${id}`
+        );
         const responseData = await response.json();
 
         if (responseData.sharedCollection === null) {
@@ -23,7 +25,7 @@ const Share = () => {
         }
 
         //Delete shared collection from db after collected data
-        await fetch(`http://localhost:5000/api/share/${id}`, {
+        await fetch(`${process.env.REACT_APP_API_URL}/api/share/${id}`, {
           method: 'DELETE',
         });
 

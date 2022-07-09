@@ -21,11 +21,25 @@
 }
 
 .modal h3 {
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
 }
 
 .modal .danger {
   color: red;
+}
+
+.share-img img {
+  margin: 0 auto 2rem auto;
+}
+
+.share-code button {
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+}
+
+.share-code button:hover,
+.share-code button:focus {
+  opacity: 0.5;
 }
 
 .modal-btns {

@@ -45,8 +45,12 @@ const todoReducer = (state, action) => {
 
         const newList = {
           id: createId,
-          title: action.create.share ? action.create.todo.title : action.create.todo,
-          color: action.create.share ? action.create.todo.color : state.selectedTodoList.color,
+          title: action.create.share
+            ? action.create.todo.title
+            : action.create.todo,
+          color: action.create.share
+            ? action.create.todo.color
+            : state.selectedTodoList.color,
           timestamp: Date.now(), //added if need to sort by when created
           todos: action.create.share ? action.create.todo.todos : [],
         };
@@ -195,7 +199,7 @@ const TodoProvider = ({ children }) => {
   );
 
   const createTodoHandler = (todo, share = false) => {
-    dispatchTodoAction({ type: 'CREATE', create: {todo, share} });
+    dispatchTodoAction({ type: 'CREATE', create: { todo, share } });
   };
 
   const readTodosHandler = () => {

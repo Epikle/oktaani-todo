@@ -41,7 +41,7 @@ const Collection = ({ collectionData, onChange, selected }) => {
     const shareData = { ...collectionData, shareId: shareId };
 
     try {
-      await fetch('http://localhost:5000/api/share', {
+      await fetch(`${process.env.REACT_APP_API_URL}/api/share`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -103,9 +103,12 @@ const Collection = ({ collectionData, onChange, selected }) => {
       {!error && (
         <Fragment>
           <h3>Your collection is now shared!</h3>
-          {/* <div className="share-img">
-        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Example" alt="QR Code" />
-      </div> */}
+          <div className="share-img">
+            <img
+              src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${process.env.REACT_APP_PAGE_URL}/share/${shareCode}`}
+              alt="QR Code"
+            />
+          </div>
           <div className="share-code">
             {process.env.REACT_APP_PAGE_URL}/share/{shareCode}{' '}
             <button onClick={copyBtnHandler}>Copy link</button>
