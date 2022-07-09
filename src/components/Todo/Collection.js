@@ -37,6 +37,8 @@ const Collection = ({ collectionData, onChange, selected }) => {
     const shareId = nanoid(6);
     setShareCode(shareId);
     console.log('Share collection...', shareCode);
+    const shareData = {...collectionData, shareId: shareId}
+    console.log(shareData);
   };
 
   const copyBtnHandler = () => {
@@ -59,14 +61,6 @@ const Collection = ({ collectionData, onChange, selected }) => {
       <p className="danger">
         Be carefull not to share something you shouldn&apos;t!
       </p>
-
-      {/* <div className="share-img">
-        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Example" alt="QR Code" />
-      </div>
-      <div className="share-code">
-        http://oktaani.com/todo/share/{shareCode}{' '}
-        <button onClick={copyBtnHandler}>Copy link</button>
-      </div> */}
       <div className="modal-btns">
         <button onClick={shareBtnHandler}>Share</button>{' '}
         <button onClick={() => setIsSharing(false)}>No</button>
