@@ -1,12 +1,19 @@
-import { useContext } from 'react';
+import { Fragment, useContext, useState } from 'react';
+import { nanoid } from 'nanoid';
 
-import Todo from './Todo';
 import TodoContext from '../../store/todo-context';
+import Todo from './Todo';
+import Modal from '../UI/Modal';
 
 import './Collection.css';
 
 const Collection = ({ collectionData, onChange, selected }) => {
   const todoCtx = useContext(TodoContext);
+  const [isSharing, setIsSharing] = useState(false);
+  const [shared, setShared] = useState(false);
+  const [shareCode, setShareCode] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const deleteBtnHandler = (id) => {
     todoCtx.deleteCollection(id);
@@ -26,11 +33,100 @@ const Collection = ({ collectionData, onChange, selected }) => {
     );
   };
 
+  const shareBtnHandler = async () => {
+    setIsLoading(true);
+    setError('');
+    const shareId = nanoid(6);
+    setShareCode(shareId);
+    const shareData = { ...collectionData, shareId: shareId };
+
+    try {
+      await fetch(`${process.env.REACT_APP_API_URL}/api/share`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ shareData }),
+      });
+    } catch (err) {
+      console.error(err);
+      setError('Something went wrong, try again...');
+    }
+
+    setIsLoading(false);
+    setIsSharing(false);
+    setShared(true);
+  };
+
+  const copyBtnHandler = () => {
+    const url = process.env.REACT_APP_PAGE_URL + '/share/' + shareCode;
+    console.log(url);
+    navigator.clipboard.writeText(url);
+  };
+
+  const openIsSharing = () => {
+    setIsSharing(true);
+  };
+
   const isDone = collectionData.todos.filter((todo) => todo.done);
   const isSelected = todoCtx.selectedTodoList.id === collectionData.id;
 
+  const sharingData = (
+    <Fragment>
+      <h3>Share this collection?</h3>
+      <p>Do you want to share your collection to someone?</p>
+      <p className="danger">
+        Make sure that you are not sharing something you shouldn&apos;t!
+      </p>
+      <div className="modal-btns">
+        <button onClick={shareBtnHandler} disabled={isLoading}>
+          Share
+        </button>{' '}
+        <button onClick={() => setIsSharing(false)} disabled={isLoading}>
+          No
+        </button>
+      </div>
+    </Fragment>
+  );
+
+  const sharedData = (
+    <Fragment>
+      {error && (
+        <Fragment>
+          <h3>Error</h3>
+          <p>{error}</p>
+          <div className="modal-btns">
+            <button onClick={() => setShared(false)}>Close</button>
+          </div>
+        </Fragment>
+      )}
+      {!error && (
+        <Fragment>
+          <h3>Your collection is now shared!</h3>
+          <div className="share-img">
+            <img
+              src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${process.env.REACT_APP_PAGE_URL}/share/${shareCode}`}
+              alt="QR Code"
+            />
+          </div>
+          <div className="share-code">
+            {process.env.REACT_APP_PAGE_URL}/share/{shareCode}{' '}
+            <button onClick={copyBtnHandler}>Copy link</button>
+          </div>
+          <div className="modal-btns">
+            <button onClick={() => setShared(false)}>Close</button>
+          </div>
+        </Fragment>
+      )}
+    </Fragment>
+  );
+
   return (
     <article>
+      {isSharing && (
+        <Modal onClick={() => setIsSharing(false)}>{sharingData}</Modal>
+      )}
+      {shared && <Modal onClick={() => setShared(false)}>{sharedData}</Modal>}
       <div className="controls">
         <button
           className={isSelected && isDone.length > 0 ? 'clear active' : 'clear'}
@@ -38,6 +134,14 @@ const Collection = ({ collectionData, onChange, selected }) => {
           disabled={!isSelected || isDone.length === 0}
         >
           <span className="material-symbols-outlined">clear_all</span>
+        </button>
+
+        <button
+          className={isSelected ? 'share active' : 'share'}
+          onClick={openIsSharing}
+          disabled={!isSelected}
+        >
+          <span className="material-symbols-outlined">share</span>
         </button>
 
         <button
