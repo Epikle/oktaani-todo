@@ -21,7 +21,7 @@ export const getShareById = async (req, res, next) => {
   try {
     sharedCollection = await Share.findOne(
       { shareId: shareId },
-      { __v: 0, _id: 0, id: 0, timestamp: 0 }
+      { __v: 0, _id: 0, shareId: 0 }
     );
   } catch (err) {
     return next(new HttpError('Something went wrong.', 500));

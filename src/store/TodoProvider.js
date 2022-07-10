@@ -40,7 +40,6 @@ const todoReducer = (state, action) => {
 
         newTodoList = oldList;
       } else {
-        console.log('here:', action.create.todo);
         const createId = nanoid();
 
         const newList = {

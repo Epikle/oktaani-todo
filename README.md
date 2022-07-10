@@ -2,5 +2,7 @@
 
 My TODO list project.
 
-## WIP
-- Refactoring code
+## TODO
+- Refactor code
+- Style share fetch page
+- Add comfirmation for delete

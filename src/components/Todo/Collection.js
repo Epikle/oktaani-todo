@@ -38,7 +38,12 @@ const Collection = ({ collectionData, onChange, selected }) => {
     setError('');
     const shareId = nanoid(6);
     setShareCode(shareId);
-    const shareData = { ...collectionData, shareId: shareId };
+    const shareData = {
+      shareId: shareId,
+      title: collectionData.title,
+      color: collectionData.color,
+      todos: collectionData.todos,
+    };
 
     try {
       await fetch(`${process.env.REACT_APP_API_URL}/api/share`, {
@@ -60,7 +65,6 @@ const Collection = ({ collectionData, onChange, selected }) => {
 
   const copyBtnHandler = () => {
     const url = process.env.REACT_APP_PAGE_URL + '/share/' + shareCode;
-    console.log(url);
     navigator.clipboard.writeText(url);
   };
 
