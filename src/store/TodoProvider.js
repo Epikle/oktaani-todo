@@ -21,7 +21,6 @@ const todoReducer = (state, action) => {
 
       //If ID then add todo to existing collection
       if (state.selectedTodoList.id && !action.create.share) {
-        console.log('Ei pitäisi olla täällä');
         const todoIndex = state.todoList.findIndex(
           (list) => list.id === state.selectedTodoList.id
         );

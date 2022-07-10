@@ -10,7 +10,7 @@ import TodoProvider from './store/TodoProvider';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <TodoProvider>
-    <BrowserRouter>
+    <BrowserRouter basename="/todo">
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/share/:id" element={<Share />} />
