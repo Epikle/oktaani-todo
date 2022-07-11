@@ -72,7 +72,7 @@ const AddTodo = () => {
                 ? 'Add new TODO list item!'
                 : 'Add a new TODO list!'
             }
-            maxLength="64"
+            maxLength="128"
           />
           <button type="submit">
             <span className="material-symbols-outlined">add_circle</span>
