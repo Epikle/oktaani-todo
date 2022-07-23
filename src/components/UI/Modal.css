@@ -32,14 +32,26 @@
   margin: 0 auto 2rem auto;
 }
 
-.share-code button {
-  padding: 0.25rem 0.5rem;
-  cursor: pointer;
+.share-code {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  align-items: center;
 }
 
-.share-code button:hover,
-.share-code button:focus {
+.share-code span {
+  user-select: all;
+}
+
+.share-code button {
+  padding: 0.25rem 0.5rem;
+
+}
+
+.share-code button:not([disabled]):hover,
+.share-code button:not([disabled]):focus {
   opacity: 0.5;
+  cursor: pointer;
 }
 
 .modal-btns {

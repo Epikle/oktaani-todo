@@ -14,6 +14,7 @@ const Collection = ({ collectionData, onChange, selected }) => {
   const [shareCode, setShareCode] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [isCopy, setIsCopy] = useState(false);
 
   const deleteBtnHandler = (id) => {
     todoCtx.deleteCollection(id);
@@ -64,12 +65,10 @@ const Collection = ({ collectionData, onChange, selected }) => {
   };
 
   const copyBtnHandler = () => {
+    if (!navigator.clipboard) return;
     const url = process.env.REACT_APP_PAGE_URL + '/share/' + shareCode;
     navigator.clipboard.writeText(url);
-  };
-
-  const openIsSharing = () => {
-    setIsSharing(true);
+    setIsCopy(true);
   };
 
   const isDone = collectionData.todos.filter((todo) => todo.done);
@@ -114,11 +113,22 @@ const Collection = ({ collectionData, onChange, selected }) => {
             />
           </div>
           <div className="share-code">
-            {process.env.REACT_APP_PAGE_URL}/share/{shareCode}{' '}
-            <button onClick={copyBtnHandler}>Copy link</button>
+            <span>
+              {process.env.REACT_APP_PAGE_URL}/share/{shareCode}
+            </span>
+            <button onClick={copyBtnHandler} disabled={isCopy}>
+              {isCopy ? 'Copied!' : 'Copy link'}
+            </button>
           </div>
           <div className="modal-btns">
-            <button onClick={() => setShared(false)}>Close</button>
+            <button
+              onClick={() => {
+                setShared(false);
+                setIsCopy(false);
+              }}
+            >
+              Close
+            </button>
           </div>
         </Fragment>
       )}
@@ -130,7 +140,16 @@ const Collection = ({ collectionData, onChange, selected }) => {
       {isSharing && (
         <Modal onClick={() => setIsSharing(false)}>{sharingData}</Modal>
       )}
-      {shared && <Modal onClick={() => setShared(false)}>{sharedData}</Modal>}
+      {shared && (
+        <Modal
+          onClick={() => {
+            setShared(false);
+            setIsCopy(false);
+          }}
+        >
+          {sharedData}
+        </Modal>
+      )}
       <div className="controls">
         <button
           className={isSelected && isDone.length > 0 ? 'clear active' : 'clear'}
@@ -142,7 +161,7 @@ const Collection = ({ collectionData, onChange, selected }) => {
 
         <button
           className={isSelected ? 'share active' : 'share'}
-          onClick={openIsSharing}
+          onClick={() => setIsSharing(true)}
           disabled={!isSelected}
         >
           <span className="material-symbols-outlined">share</span>
