@@ -17,8 +17,10 @@ const Collection = ({ collectionData, onChange, selected }) => {
   const [isCopy, setIsCopy] = useState(false);
 
   const deleteBtnHandler = (id) => {
-    todoCtx.deleteCollection(id);
-    todoCtx.setSelected(); //reset default selection
+    if (window.confirm('Are you sure you want to delete this TODO list?')) {
+      todoCtx.deleteCollection(id);
+      todoCtx.setSelected(); //reset default selection
+    }
   };
 
   const clearBtnHandler = (id) => {
