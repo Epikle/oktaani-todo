@@ -14,20 +14,23 @@ const Share = () => {
       try {
         //Fetch shared collection from db
         const response = await fetch(
-          `${process.env.REACT_APP_API_URL}/api/share/${id}`
+          `${process.env.REACT_APP_API_URL}/api/v2/oktaani-todo/share/${id}`
         );
         const responseData = await response.json();
 
-        if (responseData.sharedCollection === null) {
+        if (!response.ok) {
           console.log('No data...');
           navigate('/', { replace: true });
           return;
         }
 
         //Delete shared collection from db after collected data
-        await fetch(`${process.env.REACT_APP_API_URL}/api/share/${id}`, {
-          method: 'DELETE',
-        });
+        await fetch(
+          `${process.env.REACT_APP_API_URL}/api/v2/oktaani-todo/share/${id}`,
+          {
+            method: 'DELETE',
+          }
+        );
 
         todoCtx.createTodo(responseData.sharedCollection, true);
 

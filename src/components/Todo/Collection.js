@@ -49,13 +49,16 @@ const Collection = ({ collectionData, onChange, selected }) => {
     };
 
     try {
-      await fetch(`${process.env.REACT_APP_API_URL}/api/share`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ shareData }),
-      });
+      await fetch(
+        `${process.env.REACT_APP_API_URL}/api/v2/oktaani-todo/share`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ shareData }),
+        }
+      );
     } catch (err) {
       console.error(err);
       setError('Something went wrong, try again...');
