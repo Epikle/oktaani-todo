@@ -1,0 +1,8 @@
+@import 'src/reset';
+@import 'src/setup';
+
+body {
+  background-color: $color-bg;
+  font-family: $ff-primary;
+  font-size: $fs-normal;
+}
