@@ -6,4 +6,5 @@
 |            | 0.5h | Vite:n asennus ja valmistelu            |
 |            | 0.5h | Ulkoasun komponenttien valmistelu       |
 |            | 1h   | Ulkoasun komponenttien alustavat tyylit |
-|    yht     | 2.5h |                                         |
+|            | 1.5h | Jest asennus ja valmistelu              |
+|    yht     | 4.0h |                                         |
