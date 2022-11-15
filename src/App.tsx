@@ -1,7 +1,7 @@
 import Header from './components/UI/Header';
 import Footer from './components/UI/Footer';
 
-const App = () => {
+const App: React.FC = () => {
   return (
     <div>
       <Header />

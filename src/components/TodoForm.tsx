@@ -4,7 +4,7 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import styles from './TodoForm.module.scss';
 import { FormEvent, useRef } from 'react';
 
-const TodoForm = () => {
+const TodoForm: React.FC = () => {
   const colorInputRef = useRef<HTMLInputElement>(null);
 
   const submitHandler = (event: FormEvent) => {
