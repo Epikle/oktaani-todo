@@ -6,16 +6,18 @@ import TodoCollection from './TodoCollection';
 import styles from './TodoList.module.scss';
 
 type Props = {
-  collections: TCollection[];
+  collections: TCollection[] | [];
 };
 
 const TodoList: FC<Props> = ({ collections }) => {
   return (
     <main className={styles.main}>
       <div className={styles.container}>
-        {collections.map((collection) => (
-          <TodoCollection key={collection.id} collection={collection} />
-        ))}
+        {collections.length === 0 && <p>No todos</p>}
+        {collections.length > 0 &&
+          collections.map((collection) => (
+            <TodoCollection key={collection.id} collection={collection} />
+          ))}
       </div>
     </main>
   );
