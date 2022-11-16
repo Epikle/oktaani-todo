@@ -1,4 +1,6 @@
 import { FC, CSSProperties } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faShareNodes } from '@fortawesome/free-solid-svg-icons';
 
 import TodoItem from './TodoItem';
 import { TCollection } from '../types';
@@ -30,6 +32,11 @@ const TodoCollection: FC<Props> = ({ collection }) => {
           <TodoItem key={todo.id} todo={todo} />
         ))}
       </ul>
+      {collection.shared && (
+        <span className={styles.shared}>
+          <FontAwesomeIcon icon={faShareNodes} />
+        </span>
+      )}
     </article>
   );
 };

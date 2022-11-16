@@ -2,6 +2,7 @@ export type TCollection = {
   id: string;
   title: string;
   color: string;
+  shared: boolean;
   todos: TItem[];
 };
 

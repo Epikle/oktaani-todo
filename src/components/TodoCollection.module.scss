@@ -1,12 +1,19 @@
 @import 'src/setup';
 
 .collection {
-  background-color: $color-p-gray;
-  border-top: 6px solid goldenrod;
-  border-bottom: 3px solid goldenrod;
+  position: relative;
   padding: 0.75rem;
   color: $color-gray-800;
-  position: relative;
+  background-color: $color-p-gray;
+  border-top: 6px solid $color-gray-800;
+  border-bottom: 3px solid $color-gray-800;
+
+  .shared {
+    position: absolute;
+    top: 5px;
+    left: 0.75rem;
+    color: lighten($color: $color-gray-800, $amount: 30);
+  }
 
   &::after {
     content: attr(data-done) '/' attr(data-total);

@@ -12,4 +12,5 @@
 |            | 0.5h | Todo komponenttien toiminnallisuus dummy listoilla |
 |            | 1.5h | Header asettelu ja tyylit paremmaksi,              |
 |            |      | lisätty aria-labeleita ja titlejä inputteihin      |
-|    yht     | 7.5h |                                                    |
+|            | 1.0h | Tyylien refaktorointi, paranneltu listojen tyylejä |
+|    yht     | 8.5h |                                                    |

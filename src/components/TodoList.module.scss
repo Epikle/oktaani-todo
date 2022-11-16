@@ -2,10 +2,14 @@
 
 .main {
   flex-grow: 1;
-  padding-top: 1rem;
+  padding-top: 0.75rem;
+  padding-inline: 0.75rem;
 
   .container {
+    @include container;
+
     display: grid;
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+    gap: 0.75rem;
   }
 }
