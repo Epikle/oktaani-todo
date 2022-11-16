@@ -31,7 +31,11 @@ const TodoControls: FC = () => {
         </button>
       </li>
       <li>
-        <button aria-label="Remove collection" title="Remove collection">
+        <button
+          className={styles.trash}
+          aria-label="Remove collection"
+          title="Remove collection"
+        >
           <FontAwesomeIcon icon={faTrash} />
         </button>
       </li>

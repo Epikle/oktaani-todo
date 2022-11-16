@@ -1,16 +1,18 @@
 # Työaikakirjanpito
 
-|   Päivä    | Aika | Mitä tehty                                         |
-| :--------: | :--- | :------------------------------------------------- |
-| 15.11.2022 | 1.0h | Projektin aloitus uuteen branchiin,                |
-|            |      | Vite:n asennus ja valmistelu                       |
-|            | 1.5h | Ulkoasun komponenttien valmistelu,                 |
-|            |      | ulkoasun komponenttien alustavat tyylit            |
-|            | 1.5h | Jest asennus ja valmistelu                         |
-| 16.11.2022 | 1.5h | Header tyylejä, todo itemien alustava rakenne,     |
-|            |      | todo listojen ja controllien tyylittelyä           |
-|            | 0.5h | Todo komponenttien toiminnallisuus dummy listoilla |
-|            | 1.5h | Header asettelu ja tyylit paremmaksi,              |
-|            |      | lisätty aria-labeleita ja titlejä inputteihin      |
-|            | 1.0h | Tyylien refaktorointi, paranneltu listojen tyylejä |
-|    yht     | 8.5h |                                                    |
+|   Päivä    | Aika | Mitä tehty                                          |
+| :--------: | :--- | :-------------------------------------------------- |
+| 15.11.2022 | 1.0h | Projektin aloitus uuteen branchiin,                 |
+|            |      | Vite:n asennus ja valmistelu                        |
+|            | 1.5h | Ulkoasun komponenttien valmistelu,                  |
+|            |      | ulkoasun komponenttien alustavat tyylit             |
+|            | 1.5h | Jest asennus ja valmistelu                          |
+| 16.11.2022 | 1.5h | Header tyylejä, todo itemien alustava rakenne,      |
+|            |      | todo listojen ja controllien tyylittelyä            |
+|            | 0.5h | Todo komponenttien toiminnallisuus dummy listoilla  |
+|            | 1.5h | Header asettelu ja tyylit paremmaksi,               |
+|            |      | lisätty aria-labeleita ja titlejä inputteihin       |
+|            | 2.0h | Tyylien refaktorointi, paranneltu listojen tyylejä, |
+|            |      | valitun kokoelman tyylittelyä, nappien hover värit  |
+|            |      |                                                     |
+|    yht     | 9.5h |                                                     |

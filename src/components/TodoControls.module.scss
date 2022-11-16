@@ -2,25 +2,27 @@
 
 .controls {
   display: flex;
+  gap: 1px;
   justify-content: center;
   border-radius: $border-radius;
   overflow: hidden;
 
   li {
-    &:not(:last-of-type) {
-      border-right: 1px solid $color-p-green;
-    }
-
     button {
       @include text-green;
       @include btn-hover-focus;
       @include btn-bg-color;
+      @include transition;
 
       display: grid;
       place-content: center;
       width: 3rem;
       height: 3rem;
       font-size: 1.5rem;
+
+      &.trash:is(:hover, :focus-visible) {
+        color: $color-p-red;
+      }
     }
   }
 }

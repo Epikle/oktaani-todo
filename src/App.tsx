@@ -19,7 +19,7 @@ const DUMMY_DATA: TCollection[] = [
   {
     id: '2',
     title: 'Second Collection',
-    color: '#7c9473',
+    color: '#7b68ee',
     shared: false,
     todos: [
       { id: '21', text: 'Todo Item 1', done: false },

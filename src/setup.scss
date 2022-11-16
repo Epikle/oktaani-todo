@@ -1,5 +1,5 @@
 $color-p-green: #7c9473;
-$color-p-red: #a25b5b;
+$color-p-red: #b21807;
 $color-p-gray: #e8eae6;
 
 $color-gray-800: #252525;
@@ -41,4 +41,8 @@ $border-radius: 5px;
 
 @mixin btn-bg-color {
   background-color: darken($color: $color-p-green, $amount: 10);
+}
+
+@mixin transition($element: all) {
+  transition: $element 200ms ease-in;
 }

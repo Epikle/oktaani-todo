@@ -1,20 +1,37 @@
 @import 'src/setup';
 
 .form {
+  position: relative;
   display: flex;
   border-radius: $border-radius;
   overflow: hidden;
 
+  &::before {
+    content: attr(data-collection);
+    position: absolute;
+    top: 0;
+    left: 3.5rem;
+    font-size: 0.8rem;
+    color: $color-gray-800;
+  }
+
+  &[data-collection] .todo {
+    padding-top: 0.75rem;
+  }
+
   .color-picker {
+    @include btn-bg-color;
+
     width: 3rem;
     height: 3rem;
 
     &::-webkit-color-swatch-wrapper {
-      padding: 0;
+      padding: 5px;
     }
 
     &::-webkit-color-swatch {
-      border: none;
+      border: 2px solid $color-gray-800;
+      border-radius: 50%;
     }
 
     &:hover {
@@ -29,6 +46,7 @@
 
   .todo {
     @include text-green;
+
     flex-grow: 1;
     background-color: darken($color: $color-p-green, $amount: 5);
     padding-inline: 0.5rem;
@@ -46,6 +64,7 @@
     @include text-green;
     @include btn-hover-focus;
     @include btn-bg-color;
+    @include transition;
 
     width: 3rem;
     height: 3rem;
