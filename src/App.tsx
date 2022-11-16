@@ -7,21 +7,32 @@ import { TCollection } from './types';
 
 const DUMMY_DATA: TCollection[] = [
   {
+    id: '1',
     title: 'First Collection',
     color: '#a25b5b',
     todos: [
-      { text: 'Todo Item 1', done: false },
-      { text: 'Todo Item 2', done: true },
+      { id: '11', text: 'Todo Item 1', done: false },
+      { id: '12', text: 'Todo Item 2', done: true },
     ],
   },
-
   {
+    id: '2',
     title: 'Second Collection',
     color: '#7c9473',
     todos: [
-      { text: 'Todo Item 1', done: false },
-      { text: 'Todo Item 2', done: true },
-      { text: 'Todo Item 3', done: false },
+      { id: '21', text: 'Todo Item 1', done: false },
+      { id: '22', text: 'Todo Item 2', done: true },
+      { id: '23', text: 'Todo Item 3', done: false },
+      { id: '24', text: 'Todo Item 4', done: true },
+    ],
+  },
+  {
+    id: '3',
+    title: 'Third Collection',
+    color: 'goldenrod',
+    todos: [
+      { id: '31', text: 'Todo Item 1', done: false },
+      { id: '32', text: 'Todo Item 2', done: true },
     ],
   },
 ];
@@ -30,7 +41,7 @@ const App: FC = () => {
   return (
     <Fragment>
       <Header />
-      <TodoList todos={DUMMY_DATA} />
+      <TodoList collections={DUMMY_DATA} />
       <Footer />
     </Fragment>
   );

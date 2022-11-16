@@ -5,7 +5,6 @@
   border-top: 6px solid goldenrod;
   border-bottom: 3px solid goldenrod;
   padding: 0.75rem;
-  margin-block: 0.75rem;
   color: $color-gray-800;
   position: relative;
 
@@ -13,7 +12,7 @@
     content: attr(data-done) '/' attr(data-total);
     position: absolute;
     top: 5px;
-    right: 5px;
+    right: 0.75rem;
     font-size: 0.75rem;
     font-family: $ff-secondary;
   }

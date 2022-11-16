@@ -14,17 +14,20 @@ const TodoCollection: FC<Props> = ({ collection }) => {
     borderColor: collection.color,
   };
 
+  const doneTodos = collection.todos.filter((todo) => todo.done).length;
+  const totalTodos = collection.todos.length;
+
   return (
     <article
       className={styles.collection}
       style={listStyles}
-      data-done="1"
-      data-total="3"
+      data-done={doneTodos}
+      data-total={totalTodos}
     >
       <h2>{collection.title}</h2>
       <ul className={styles['item-list']}>
-        {collection.todos.map((todo, index) => (
-          <TodoItem key={index} todo={todo} />
+        {collection.todos.map((todo) => (
+          <TodoItem key={todo.id} todo={todo} />
         ))}
       </ul>
     </article>

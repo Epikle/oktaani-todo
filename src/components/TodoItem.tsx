@@ -11,13 +11,19 @@ const TodoItem: FC<Props> = ({ todo }) => {
   const id = useId();
   const [checked, isChecked] = useState(todo.done);
 
+  const doneInputHandler = () => {
+    console.log('changed...', todo.id);
+    isChecked((prevS) => !prevS);
+  };
+
   return (
     <li className={styles['todo-item']}>
       <input
         type="checkbox"
         id={id}
         checked={checked}
-        onChange={() => isChecked((prevS) => !prevS)}
+        onChange={doneInputHandler}
+        title={`Mark ${todo.text} as done`}
       />
       <label htmlFor={id}>{todo.text}</label>
     </li>
