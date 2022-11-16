@@ -1,0 +1,15 @@
+@import 'src/setup';
+
+.todo-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-block: 0.25rem;
+  font-family: $ff-secondary;
+
+  input {
+    width: 1.75rem;
+    height: 1.75rem;
+    accent-color: $color-gray-800;
+  }
+}

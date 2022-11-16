@@ -2,12 +2,13 @@
 
 .header {
   background-color: $color-p-gray;
-  border-bottom: 10px solid $color-p-green;
-  padding: 1rem 2rem;
+  padding: 0.75rem;
 
   .container {
     margin-inline: auto;
     max-width: 60rem;
+    display: grid;
+    gap: 0.75rem;
 
     h1 {
       font-size: 1.25rem;

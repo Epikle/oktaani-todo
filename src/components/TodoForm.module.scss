@@ -4,7 +4,6 @@
   display: flex;
   border-radius: 5px;
   overflow: hidden;
-  margin-top: 1rem;
 
   .color-picker,
   .todo,
@@ -52,6 +51,8 @@
     display: grid;
     place-content: center;
     background-color: $color-p-green;
+    color: darken($color: $color-p-green, $amount: 35);
+    font-size: 1.5rem;
 
     &:hover,
     &:focus-visible {

@@ -18,7 +18,7 @@ const TodoForm: React.FC = () => {
         type="color"
         className={styles['color-picker']}
         ref={colorInputRef}
-        defaultValue="#7c9473"
+        defaultValue="#daa520"
       />
       <input type="text" className={styles.todo} placeholder="Add a new todo" />
       <button className={styles.add}>

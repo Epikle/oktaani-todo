@@ -1,0 +1,30 @@
+@import 'src/setup';
+
+.controls {
+  display: flex;
+  justify-content: center;
+  background-color: $color-p-green;
+
+  li {
+    &:not(:last-of-type) {
+      border-right: 1px solid $color-p-green;
+    }
+
+    &:first-of-type button {
+      border-radius: 5px 0 0 5px;
+    }
+
+    &:last-of-type button {
+      border-radius: 0 5px 5px 0;
+    }
+
+    button {
+      width: 3rem;
+      height: 3rem;
+      background-color: darken($color: $color-p-green, $amount: 10);
+      border: none;
+      color: darken($color: $color-p-green, $amount: 35);
+      font-size: 1.5rem;
+    }
+  }
+}

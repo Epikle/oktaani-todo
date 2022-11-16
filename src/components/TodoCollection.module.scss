@@ -1,0 +1,30 @@
+@import 'src/setup';
+
+.collection {
+  background-color: $color-p-gray;
+  border-top: 6px solid goldenrod;
+  border-bottom: 3px solid goldenrod;
+  padding: 0.75rem;
+  margin-block: 0.75rem;
+  color: $color-gray-800;
+  position: relative;
+
+  &::after {
+    content: attr(data-done) '/' attr(data-total);
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 0.75rem;
+    font-family: $ff-secondary;
+  }
+
+  h2 {
+    text-align: center;
+    margin-bottom: 1rem;
+    font-weight: normal;
+  }
+
+  .item-list {
+    padding-left: 1rem;
+  }
+}
