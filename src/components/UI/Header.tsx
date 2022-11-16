@@ -1,8 +1,10 @@
+import { FC } from 'react';
+
 import TodoForm from '../TodoForm';
 
 import styles from './Header.module.scss';
 
-const Header: React.FC = () => {
+const Header: FC = () => {
   return (
     <header className={styles.header}>
       <div className={styles.container}>

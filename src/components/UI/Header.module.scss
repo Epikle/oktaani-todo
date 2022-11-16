@@ -1,7 +1,7 @@
 @import 'src/setup';
 
 .header {
-  background-color: $color-p-gray;
+  background-color: lighten($color: $color-p-green, $amount: 10);
   padding: 0.75rem;
 
   .container {

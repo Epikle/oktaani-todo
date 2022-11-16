@@ -1,13 +1,22 @@
+import { FC } from 'react';
+
+import { TCollection } from '../types';
 import TodoCollection from './TodoCollection';
 import TodoControls from './TodoControls';
 
 import styles from './TodoList.module.scss';
 
-const TodoList: React.FC = () => {
+type Props = {
+  todos: TCollection[];
+};
+
+const TodoList: FC<Props> = ({ todos }) => {
   return (
     <main className={styles.main}>
       <TodoControls />
-      <TodoCollection />
+      {todos.map((todo, index) => (
+        <TodoCollection key={index} collection={todo} />
+      ))}
     </main>
   );
 };

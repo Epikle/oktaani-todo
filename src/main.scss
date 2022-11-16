@@ -6,3 +6,9 @@ body {
   font-family: $ff-primary;
   font-size: $fs-normal;
 }
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}

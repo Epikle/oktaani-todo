@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faTrash,
@@ -8,7 +9,7 @@ import {
 
 import styles from './TodoControls.module.scss';
 
-const TodoControls: React.FC = () => {
+const TodoControls: FC = () => {
   return (
     <ul className={styles.controls}>
       <li>

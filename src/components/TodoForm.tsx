@@ -1,10 +1,10 @@
+import { FC, FormEvent, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 import styles from './TodoForm.module.scss';
-import { FormEvent, useRef } from 'react';
 
-const TodoForm: React.FC = () => {
+const TodoForm: FC = () => {
   const colorInputRef = useRef<HTMLInputElement>(null);
 
   const submitHandler = (event: FormEvent) => {

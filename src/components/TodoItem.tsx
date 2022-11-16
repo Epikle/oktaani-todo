@@ -1,18 +1,25 @@
-import { useId } from 'react';
+import { FC, useId, useState } from 'react';
+import { TItem } from '../types';
 
 import styles from './TodoItem.module.scss';
 
 type Props = {
-  text: string;
+  todo: TItem;
 };
 
-const TodoItem: React.FC<Props> = ({ text }) => {
+const TodoItem: FC<Props> = ({ todo }) => {
   const id = useId();
+  const [checked, isChecked] = useState(todo.done);
 
   return (
     <li className={styles['todo-item']}>
-      <input type="checkbox" id={id} />
-      <label htmlFor={id}>{text}</label>
+      <input
+        type="checkbox"
+        id={id}
+        checked={checked}
+        onChange={() => isChecked((prevS) => !prevS)}
+      />
+      <label htmlFor={id}>{todo.text}</label>
     </li>
   );
 };

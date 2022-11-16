@@ -36,11 +36,16 @@
 
   .todo {
     flex-grow: 1;
-    background-color: darken($color: $color-p-gray, $amount: 10);
+    background-color: $color-p-green;
     padding-inline: 0.5rem;
 
+    color: darken($color: $color-p-green, $amount: 35);
+
+    &::placeholder {
+      color: darken($color: $color-p-green, $amount: 20);
+    }
+
     &:focus-visible {
-      background-color: darken($color: $color-p-gray, $amount: 20);
       box-shadow: inset 0 0 0 2px black;
     }
   }
@@ -50,7 +55,7 @@
     height: 3rem;
     display: grid;
     place-content: center;
-    background-color: $color-p-green;
+    background-color: darken($color: $color-p-green, $amount: 10);
     color: darken($color: $color-p-green, $amount: 35);
     font-size: 1.5rem;
 
