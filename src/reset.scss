@@ -38,6 +38,18 @@ select {
   font: inherit;
 }
 
+input,
+button {
+  border: none;
+  outline: none;
+}
+
+button {
+  &:hover {
+    cursor: pointer;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html:focus-within {
     scroll-behavior: auto;

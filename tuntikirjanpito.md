@@ -10,4 +10,6 @@
 | 16.11.2022 | 1.5h | Header tyylejä, todo itemien alustava rakenne,     |
 |            |      | todo listojen ja controllien tyylittelyä           |
 |            | 0.5h | Todo komponenttien toiminnallisuus dummy listoilla |
-|    yht     | 6.0h |                                                    |
+|            | 1.0h | Header asettelu ja tyylit paremmaksi,              |
+|            |      | lisätty aria-labeleita                             |
+|    yht     | 7.0h |                                                    |

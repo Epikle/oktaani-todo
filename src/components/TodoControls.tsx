@@ -13,22 +13,25 @@ const TodoControls: FC = () => {
   return (
     <ul className={styles.controls}>
       <li>
-        <button>
+        <button aria-label="Remove done items" title="Remove done items">
           <FontAwesomeIcon icon={faListCheck} />
         </button>
       </li>
       <li>
-        <button>
+        <button aria-label="Share collection" title="Share collection">
           <FontAwesomeIcon icon={faShareNodes} />
         </button>
       </li>
       <li>
-        <button>
+        <button
+          aria-label="Edit collection title"
+          title="Edit collection title"
+        >
           <FontAwesomeIcon icon={faPen} />
         </button>
       </li>
       <li>
-        <button>
+        <button aria-label="Remove collection" title="Remove collection">
           <FontAwesomeIcon icon={faTrash} />
         </button>
       </li>

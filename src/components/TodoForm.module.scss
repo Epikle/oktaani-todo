@@ -5,27 +5,21 @@
   border-radius: 5px;
   overflow: hidden;
 
-  .color-picker,
-  .todo,
-  .add {
-    border: none;
-    outline: none;
-  }
-
-  .color-picker,
-  .add {
-    &:hover {
-      cursor: pointer;
-    }
-  }
-
   .color-picker {
     width: 3rem;
     height: 3rem;
-    background-color: darken($color: $color-p-gray, $amount: 10);
+    position: relative;
 
     &::-webkit-color-swatch-wrapper {
-      padding: 0px;
+      padding: 0;
+    }
+
+    &::-webkit-color-swatch {
+      border: none;
+    }
+
+    &:hover {
+      cursor: pointer;
     }
 
     &:focus-visible {
@@ -36,7 +30,7 @@
 
   .todo {
     flex-grow: 1;
-    background-color: $color-p-green;
+    background-color: darken($color: $color-p-green, $amount: 5);
     padding-inline: 0.5rem;
 
     color: darken($color: $color-p-green, $amount: 35);
@@ -61,7 +55,7 @@
 
     &:hover,
     &:focus-visible {
-      background-color: darken($color: $color-p-green, $amount: 10);
+      background-color: darken($color: $color-p-green, $amount: 15);
     }
 
     &:focus-visible {

@@ -16,12 +16,18 @@ const TodoForm: FC = () => {
     <form className={styles.form} onSubmit={submitHandler}>
       <input
         type="color"
+        title="Set todo collection color"
         className={styles['color-picker']}
         ref={colorInputRef}
-        defaultValue="#daa520"
+        defaultValue="#64785c"
       />
-      <input type="text" className={styles.todo} placeholder="Add a new todo" />
-      <button className={styles.add}>
+      <input
+        type="text"
+        className={styles.todo}
+        placeholder="Add a new todo"
+        title="Add a new todo"
+      />
+      <button className={styles.add} aria-label="Add" title="Add">
         <FontAwesomeIcon icon={faPlus} />
       </button>
     </form>
