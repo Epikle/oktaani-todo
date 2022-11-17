@@ -7,9 +7,15 @@ import {
   faListCheck,
 } from '@fortawesome/free-solid-svg-icons';
 
+import { useAppSelector } from '../hooks/useRedux';
+
 import styles from './TodoControls.module.scss';
 
 const TodoControls: FC = () => {
+  const selectedCollection = useAppSelector((state) => state.selected);
+
+  if (!selectedCollection.selected) return null;
+
   return (
     <ul className={styles.controls}>
       <li>

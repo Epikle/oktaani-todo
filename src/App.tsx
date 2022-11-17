@@ -5,16 +5,14 @@ import Footer from './components/UI/Footer';
 import TodoList from './components/TodoList';
 import { useAppSelector, useAppDispatch } from './hooks/useRedux';
 import { initTodos } from './context/todoSlice';
-import { TCollection } from './types';
+import * as todoService from './services/todo';
 
 const App: FC = () => {
   const dispatch = useAppDispatch();
   const collections = useAppSelector((state) => state.todo);
 
   useEffect(() => {
-    const collections = localStorage.getItem('oktaani-todo') || '[]';
-    const parsedCollections: TCollection[] | [] = JSON.parse(collections);
-    dispatch(initTodos(parsedCollections));
+    dispatch(initTodos(todoService.getTodosFromLS()));
   }, []);
 
   return (
