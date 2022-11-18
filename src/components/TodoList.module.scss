@@ -4,6 +4,7 @@
   flex-grow: 1;
   padding-top: 0.75rem;
   padding-inline: 0.75rem;
+  overflow-y: auto;
 
   .container {
     @include container;

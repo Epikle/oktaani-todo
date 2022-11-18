@@ -17,4 +17,6 @@
 |            | 0.5h  | Redux Toolkitin valmistelu käyttöön                  |
 | 17.11.2022 | 1.0h  | Listan lisäys stateen, valitulle listalle oma slice  |
 |            | 0.5h  | Stateen mahdollisuus lisätä ja poistaa valittu lista |
-|    yht     | 11.5h |                                                      |
+| 18.11.2022 | 0.5h  | AutoAnimatella animaatioiden lisäys                  |
+|            | 0.5h  | Lisäys napin tyylit jos ei tekstiä inputissa         |
+|    yht     | 12.5h |                                                      |

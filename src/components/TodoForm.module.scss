@@ -62,7 +62,8 @@
     }
   }
 
-  .add {
+  .add,
+  .blur {
     @include text-green;
     @include btn-hover-focus;
     @include btn-bg-color;
@@ -73,5 +74,46 @@
     display: grid;
     place-content: center;
     font-size: 1.5rem;
+
+    svg {
+      animation: test2 300ms ease forwards;
+    }
+
+    &.blur {
+      background-color: $color-p-red;
+      color: wheat;
+
+      &:hover,
+      &:focus-visible {
+        background-color: $color-p-red;
+      }
+
+      svg {
+        animation: test 300ms ease forwards;
+      }
+    }
+
+    &.hide {
+      width: 0;
+      color: transparent;
+    }
+  }
+}
+
+@keyframes test {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(45deg);
+  }
+}
+
+@keyframes test2 {
+  from {
+    transform: rotate(45deg);
+  }
+  to {
+    transform: rotate(0deg);
   }
 }
