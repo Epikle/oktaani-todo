@@ -18,5 +18,6 @@
 | 17.11.2022 | 1.0h  | Listan lisäys stateen, valitulle listalle oma slice  |
 |            | 0.5h  | Stateen mahdollisuus lisätä ja poistaa valittu lista |
 | 18.11.2022 | 0.5h  | AutoAnimatella animaatioiden lisäys                  |
-|            | 0.5h  | Lisäys napin tyylit jos ei tekstiä inputissa         |
-|    yht     | 12.5h |                                                      |
+|            | 2.0h  | Lisäys napin tyylit jos ei tekstiä inputissa,        |
+|            |       | header elementtien animointi                         |
+|    yht     | 14.0h |                                                      |

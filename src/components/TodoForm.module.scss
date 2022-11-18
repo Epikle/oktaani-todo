@@ -6,14 +6,20 @@
   border-radius: $border-radius;
   overflow: hidden;
 
+  &::before {
+    @include transition;
+    content: attr(data-collection);
+    position: absolute;
+    top: 0;
+    left: 3.5rem;
+    font-size: 0.8rem;
+    color: $color-gray-800;
+    opacity: 0;
+  }
+
   &.selected {
     &::before {
-      content: attr(data-collection);
-      position: absolute;
-      top: 0;
-      left: 3.5rem;
-      font-size: 0.8rem;
-      color: $color-gray-800;
+      opacity: 1;
     }
 
     .todo {
@@ -48,6 +54,7 @@
 
   .todo {
     @include text-green;
+    @include transition;
 
     flex-grow: 1;
     background-color: darken($color: $color-p-green, $amount: 5);
@@ -76,12 +83,12 @@
     font-size: 1.5rem;
 
     svg {
-      animation: test2 300ms ease forwards;
+      @include transition;
     }
 
     &.blur {
       background-color: $color-p-red;
-      color: wheat;
+      color: $color-p-gray;
 
       &:hover,
       &:focus-visible {
@@ -89,31 +96,14 @@
       }
 
       svg {
-        animation: test 300ms ease forwards;
+        transform: rotate(45deg);
       }
     }
 
     &.hide {
-      width: 0;
+      transform: translateX(3rem);
+      width: 0rem;
       color: transparent;
     }
-  }
-}
-
-@keyframes test {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(45deg);
-  }
-}
-
-@keyframes test2 {
-  from {
-    transform: rotate(45deg);
-  }
-  to {
-    transform: rotate(0deg);
   }
 }

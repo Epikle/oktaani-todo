@@ -1,5 +1,5 @@
-import { FC, FormEvent, useEffect, useRef, useState } from 'react';
-import autoAnimate from '@formkit/auto-animate';
+import { FC, FormEvent, useRef, useState } from 'react';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
@@ -14,11 +14,6 @@ const TodoForm: FC = () => {
   const [todoInput, setTodoInput] = useState('');
   const dispatch = useAppDispatch();
   const selectedCollection = useAppSelector((state) => state.selected);
-  const parent = useRef(null);
-
-  useEffect(() => {
-    parent.current && autoAnimate(parent.current);
-  }, [parent]);
 
   const submitHandler = (event: FormEvent) => {
     event.preventDefault();
@@ -31,47 +26,42 @@ const TodoForm: FC = () => {
           color: colorVal,
         }),
       );
+
       setTodoInput('');
     }
-  };
-
-  const blurBtnHandler = () => {
-    dispatch(resetSelection());
   };
 
   const placeholderText = selectedCollection.selected
     ? `Add a new todo to ${selectedCollection.title}`
     : `Add a new collection`;
 
+  const isBtnDisabled =
+    !selectedCollection.selected && todoInput.trim().length === 0;
+
   const isAddBtn =
-    !selectedCollection.selected ||
-    (selectedCollection.selected && todoInput.trim().length > 0);
+    (selectedCollection.selected && todoInput.trim().length > 0) ||
+    todoInput.trim().length > 0;
 
-  const btnStyles = isAddBtn ? styles.add : [styles.add, styles.blur].join(' ');
+  const showAddBtn =
+    selectedCollection.selected && todoInput.trim().length === 0
+      ? styles.blur
+      : styles.hide;
 
-  const test = isAddBtn ? () => submitHandler : blurBtnHandler;
+  const btnStyles = isAddBtn ? styles.add : [styles.add, showAddBtn].join(' ');
 
-  const test2 =
-    selectedCollection.selected || todoInput.trim().length > 0
-      ? btnStyles
-      : [btnStyles, styles.hide].join(' ');
+  const btnHandler = isAddBtn
+    ? submitHandler
+    : () => dispatch(resetSelection());
 
-  const btn = (
-    <button className={test2} aria-label="Add" title="Add" onClick={test}>
-      <FontAwesomeIcon icon={faPlus} />
-    </button>
-  );
+  const formStyles = selectedCollection.selected
+    ? [styles.form, styles.selected].join(' ')
+    : styles.form;
 
   return (
     <form
-      className={
-        selectedCollection.selected
-          ? [styles.form, styles.selected].join(' ')
-          : styles.form
-      }
+      className={formStyles}
       onSubmit={submitHandler}
       data-collection={selectedCollection.title}
-      ref={parent}
     >
       <input
         type="color"
@@ -88,7 +78,15 @@ const TodoForm: FC = () => {
         value={todoInput}
         onChange={(e) => setTodoInput(e.target.value)}
       />
-      {btn}
+      <button
+        className={btnStyles}
+        aria-label="Add"
+        title="Add"
+        onClick={btnHandler}
+        disabled={isBtnDisabled}
+      >
+        <FontAwesomeIcon icon={faPlus} />
+      </button>
     </form>
   );
 };

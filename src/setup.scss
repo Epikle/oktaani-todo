@@ -43,6 +43,6 @@ $border-radius: 5px;
   background-color: darken($color: $color-p-green, $amount: 10);
 }
 
-@mixin transition($element: all) {
-  transition: $element 200ms ease-in;
+@mixin transition($element: all, $timing: 200ms) {
+  transition: $element $timing ease-in;
 }
