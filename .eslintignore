@@ -2,4 +2,5 @@ node_modules/
 dist/
 .prettierrc.json
 .eslintrc.json
+cypress.config.ts
 env.d.ts

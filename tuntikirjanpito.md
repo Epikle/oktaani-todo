@@ -23,4 +23,5 @@
 | 22.11.2022 | 1.0h  | Listojen poisto mahdollisuus, tallennus localstorage, |
 |            |       | listan tyylejä paremmaksi                             |
 |            | 1.0h  | Itemin lisäys listaan, itemin merkitseminen tehdyksi  |
-|    yht     | 16.0h |                                                       |
+|            | 1.0h  | Cypress asennus ja valmistelu                         |
+|    yht     | 17.0h |                                                       |

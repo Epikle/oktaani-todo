@@ -5,6 +5,7 @@
     "plugin:import/recommended",
     "plugin:jsx-a11y/recommended",
     "plugin:@typescript-eslint/recommended",
+    "plugin:jest/recommended",
     "eslint-config-prettier"
   ],
   "settings": {
@@ -22,5 +23,6 @@
     "react/jsx-uses-react": "off",
     "react/react-in-jsx-scope": "off",
     "react/prop-types": "off"
-  }
+  },
+  "ignorePatterns": ["cypress/**/*"]
 }
