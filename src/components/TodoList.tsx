@@ -3,15 +3,12 @@ import autoAnimate from '@formkit/auto-animate';
 
 import TodoCollection from './TodoCollection';
 import Footer from './UI/Footer';
-import { TCollection } from '../types';
 
 import styles from './TodoList.module.scss';
+import { useAppSelector } from '../hooks/useRedux';
 
-type Props = {
-  collections: TCollection[] | [];
-};
-
-const TodoList: FC<Props> = ({ collections }) => {
+const TodoList: FC = () => {
+  const collections = useAppSelector((state) => state.todo);
   const parent = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

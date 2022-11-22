@@ -6,7 +6,7 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { useAppDispatch, useAppSelector } from '../hooks/useRedux';
 
 import styles from './TodoForm.module.scss';
-import { createCollection } from '../context/todoSlice';
+import { createCollection, createItem } from '../context/todoSlice';
 import { resetSelection } from '../context/selectedSlice';
 
 const TodoForm: FC = () => {
@@ -20,12 +20,18 @@ const TodoForm: FC = () => {
     const colorVal = colorInputRef.current?.value || '#FF0000';
 
     if (todoInput.trim().length > 0) {
-      dispatch(
-        createCollection({
-          title: todoInput,
-          color: colorVal,
-        }),
-      );
+      if (selectedCollection.selected) {
+        dispatch(
+          createItem({ id: selectedCollection.id, item: { text: todoInput } }),
+        );
+      } else {
+        dispatch(
+          createCollection({
+            title: todoInput,
+            color: colorVal,
+          }),
+        );
+      }
 
       setTodoInput('');
     }

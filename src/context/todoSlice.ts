@@ -1,8 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
-import { TCollection, TNewCollectionEntry } from '../types';
-import { createCollectionEntry, saveCollectionsToLS } from '../services/todo';
+import { TCollection, TItemEntry, TNewCollectionEntry } from '../types';
+import {
+  createCollectionEntry,
+  createItemEntry,
+  saveCollectionsToLS,
+} from '../services/todo';
 
 const initialState: TCollection[] | [] = [];
 
@@ -42,10 +46,48 @@ export const todoSlice = createSlice({
 
       return [...filteredCollectionList];
     },
+    createItem: (
+      state,
+      action: PayloadAction<{ id: string; item: TItemEntry }>,
+    ) => {
+      const { id, item } = action.payload;
+
+      const selectedCollection = state.find(
+        (collection) => collection.id === id,
+      );
+
+      if (!selectedCollection) return state;
+
+      const createdItem = createItemEntry(item);
+      selectedCollection.todos = [createdItem, ...selectedCollection.todos];
+      saveCollectionsToLS(state);
+
+      return state;
+    },
+    toggleItemDone: (state, action: PayloadAction<{ id: string }>) => {
+      const { id } = action.payload;
+
+      const toggleItem = state
+        .map((collection) => collection.todos)
+        .flat()
+        .find((item) => item.id === id);
+
+      if (!toggleItem) return state;
+
+      toggleItem.done = !toggleItem.done;
+      saveCollectionsToLS(state);
+
+      return state;
+    },
   },
 });
 
-export const { initTodos, createCollection, deleteCollection } =
-  todoSlice.actions;
+export const {
+  initTodos,
+  createCollection,
+  deleteCollection,
+  createItem,
+  toggleItemDone,
+} = todoSlice.actions;
 
 export default todoSlice.reducer;

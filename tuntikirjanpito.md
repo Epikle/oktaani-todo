@@ -22,4 +22,5 @@
 |            |       | header elementtien animointi                          |
 | 22.11.2022 | 1.0h  | Listojen poisto mahdollisuus, tallennus localstorage, |
 |            |       | listan tyylejä paremmaksi                             |
-|    yht     | 14.0h |                                                       |
+|            | 1.0h  | Itemin lisäys listaan, itemin merkitseminen tehdyksi  |
+|    yht     | 16.0h |                                                       |

@@ -1,4 +1,7 @@
 import { FC, useId, useState } from 'react';
+import { toggleItemDone } from '../context/todoSlice';
+
+import { useAppDispatch } from '../hooks/useRedux';
 import { TItem } from '../types';
 
 import styles from './TodoItem.module.scss';
@@ -10,9 +13,10 @@ type Props = {
 const TodoItem: FC<Props> = ({ todo }) => {
   const id = useId();
   const [checked, isChecked] = useState(todo.done);
+  const dispatch = useAppDispatch();
 
   const doneInputHandler = () => {
-    console.log('changed...', todo.id);
+    dispatch(toggleItemDone({ id: todo.id }));
     isChecked((prevS) => !prevS);
   };
 

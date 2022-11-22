@@ -1,6 +1,6 @@
 import { nanoid } from 'nanoid';
 
-import { TCollection, TNewCollectionEntry } from '../types';
+import { TCollection, TItem, TItemEntry, TNewCollectionEntry } from '../types';
 
 const LS_NAME = 'oktaani-todo';
 
@@ -16,6 +16,16 @@ export const createCollectionEntry = (obj: TNewCollectionEntry) => {
     shared: false,
     todos: [],
     ...obj,
+  };
+
+  return createdCollection;
+};
+
+export const createItemEntry = (item: TItemEntry) => {
+  const createdCollection: TItem = {
+    id: nanoid(),
+    done: false,
+    ...item,
   };
 
   return createdCollection;
