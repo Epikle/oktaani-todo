@@ -9,6 +9,6 @@ body {
 
 #root {
   height: 100vh;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: max-content 1fr;
 }

@@ -7,12 +7,20 @@ import {
   faListCheck,
 } from '@fortawesome/free-solid-svg-icons';
 
-import { useAppSelector } from '../hooks/useRedux';
+import { useAppDispatch, useAppSelector } from '../hooks/useRedux';
+import { deleteCollection } from '../context/todoSlice';
+import { resetSelection } from '../context/selectedSlice';
 
 import styles from './TodoControls.module.scss';
 
 const TodoControls: FC = () => {
   const selectedCollection = useAppSelector((state) => state.selected);
+  const dispatch = useAppDispatch();
+
+  const deleteBtnHandler = () => {
+    dispatch(deleteCollection({ id: selectedCollection.id }));
+    dispatch(resetSelection());
+  };
 
   if (!selectedCollection.selected) return null;
 
@@ -41,6 +49,7 @@ const TodoControls: FC = () => {
           className={styles.trash}
           aria-label="Remove collection"
           title="Remove collection"
+          onClick={deleteBtnHandler}
         >
           <FontAwesomeIcon icon={faTrash} />
         </button>
