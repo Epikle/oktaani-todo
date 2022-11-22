@@ -24,4 +24,5 @@
 |            |       | listan tyylejä paremmaksi                             |
 |            | 1.0h  | Itemin lisäys listaan, itemin merkitseminen tehdyksi  |
 |            | 1.0h  | Cypress asennus ja valmistelu                         |
-|    yht     | 17.0h |                                                       |
+|            | 0.5h  | Listan hover tyylejä                                  |
+|    yht     | 17.5h |                                                       |

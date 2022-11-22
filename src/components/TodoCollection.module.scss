@@ -3,7 +3,7 @@
 .collection {
   height: max-content;
   position: relative;
-  padding: 0.75rem;
+  padding-block: 0.75rem;
   color: $color-gray-800;
   background-color: $color-p-gray;
   border-top: 6px solid $color-gray-800;
@@ -34,9 +34,5 @@
       background-color: transparent;
       text-decoration: underline;
     }
-  }
-
-  .item-list {
-    padding-left: 1rem;
   }
 }

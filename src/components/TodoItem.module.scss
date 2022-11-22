@@ -2,15 +2,26 @@
 
 .todo-item {
   display: flex;
+  justify-content: flex-start;
   align-items: center;
   gap: 1rem;
-  padding-block: 0.25rem;
+  margin-block: 0.5rem;
+  padding-inline: 1rem 0.75rem;
   font-family: $ff-secondary;
+  @include transition(background-color, 200ms);
+
+  &:hover {
+    background-color: darken($color: $color-p-gray, $amount: 5);
+  }
 
   input {
-    width: 1.75rem;
-    height: 1.75rem;
+    min-width: 1.75rem;
+    min-height: 1.75rem;
     accent-color: $color-gray-800;
+
+    &:hover {
+      cursor: pointer;
+    }
 
     &:checked {
       + label {
@@ -21,7 +32,11 @@
   }
 
   label {
-    @include transition(all, 300ms);
     flex-grow: 1;
+    padding-block: 0.25rem;
+
+    &:hover {
+      cursor: pointer;
+    }
   }
 }
