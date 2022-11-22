@@ -25,4 +25,5 @@
 |            | 1.0h  | Itemin lisäys listaan, itemin merkitseminen tehdyksi  |
 |            | 1.0h  | Cypress asennus ja valmistelu                         |
 |            | 0.5h  | Listan hover tyylejä                                  |
-|    yht     | 17.5h |                                                       |
+|            | 2.0h  | Testien toimintaan saaminen, redux-toolkit ja nanoid  |
+|    yht     | 19.5h |                                                       |
