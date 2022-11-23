@@ -29,4 +29,5 @@
 | 23.11.2022 | 0.5h  | Cypress e2e testejä                                   |
 |            | 2.0h  | Listan värinvaihto ja titlen vaihto toimii,           |
 |            |       | estetty tekstin overflow                              |
-|    yht     | 22.0h |                                                       |
+|            | 1.0h  | Tehtyjen itemien poisto listalta                      |
+|    yht     | 23.0h |                                                       |

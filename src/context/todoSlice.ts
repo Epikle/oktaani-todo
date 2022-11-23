@@ -98,6 +98,17 @@ export const todoSlice = createSlice({
 
       return state;
     },
+    removeDoneItems: (state, action: PayloadAction<{ id: string }>) => {
+      const { id } = action.payload;
+
+      const removeItem = state.find((collection) => collection.id === id);
+      if (!removeItem) return state;
+
+      removeItem.todos = [...removeItem.todos.filter((item) => !item.done)];
+      saveCollectionsToLS(state);
+
+      return state;
+    },
   },
 });
 
@@ -108,6 +119,7 @@ export const {
   createItem,
   toggleItemDone,
   editCollection,
+  removeDoneItems,
 } = todoSlice.actions;
 
 export default todoSlice.reducer;

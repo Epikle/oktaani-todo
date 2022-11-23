@@ -8,7 +8,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import { useAppDispatch, useAppSelector } from '../hooks/useRedux';
-import { deleteCollection } from '../context/todoSlice';
+import { deleteCollection, removeDoneItems } from '../context/todoSlice';
 import {
   resetSelection,
   setSelectedCollectionEdit,
@@ -31,12 +31,20 @@ const TodoControls: FC = () => {
     dispatch(setSelectedCollectionEdit({ edit: !selectedCollection.edit }));
   };
 
+  const removeDoneBtnHandler = () => {
+    dispatch(removeDoneItems({ id: selectedCollection.id }));
+  };
+
   if (!selectedCollection.selected) return null;
 
   return (
     <ul className={styles.controls}>
       <li>
-        <button aria-label="Remove done items" title="Remove done items">
+        <button
+          aria-label="Remove done items"
+          title="Remove done items"
+          onClick={removeDoneBtnHandler}
+        >
           <FontAwesomeIcon icon={faListCheck} />
         </button>
       </li>
