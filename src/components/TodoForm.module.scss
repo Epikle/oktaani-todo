@@ -15,6 +15,10 @@
     font-size: 0.8rem;
     color: $color-gray-800;
     opacity: 0;
+    width: calc(100% - 7rem);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 
   &.selected {

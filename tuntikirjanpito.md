@@ -26,4 +26,7 @@
 |            | 1.0h  | Cypress asennus ja valmistelu                         |
 |            | 0.5h  | Listan hover tyylejä                                  |
 |            | 2.0h  | Testien toimintaan saaminen, redux-toolkit ja nanoid  |
-|    yht     | 19.5h |                                                       |
+| 23.11.2022 | 0.5h  | Cypress e2e testejä                                   |
+|            | 2.0h  | Listan värinvaihto ja titlen vaihto toimii,           |
+|            |       | estetty tekstin overflow                              |
+|    yht     | 22.0h |                                                       |

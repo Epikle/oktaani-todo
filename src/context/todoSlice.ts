@@ -1,7 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
-import { TCollection, TItemEntry, TNewCollectionEntry } from '../types';
+import {
+  TCollection,
+  TItemEntry,
+  TNewCollectionEntry,
+  TSelectedEntry,
+} from '../types';
 import {
   createCollectionEntry,
   createItemEntry,
@@ -79,6 +84,20 @@ export const todoSlice = createSlice({
 
       return state;
     },
+    editCollection: (state, action: PayloadAction<TSelectedEntry>) => {
+      const { id, title, color } = action.payload;
+
+      const collection = state.find((collection) => collection.id === id);
+
+      if (collection) {
+        collection.title = title;
+        collection.color = color;
+
+        saveCollectionsToLS(state);
+      }
+
+      return state;
+    },
   },
 });
 
@@ -88,6 +107,7 @@ export const {
   deleteCollection,
   createItem,
   toggleItemDone,
+  editCollection,
 } = todoSlice.actions;
 
 export default todoSlice.reducer;

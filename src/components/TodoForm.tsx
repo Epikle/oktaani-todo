@@ -1,4 +1,4 @@
-import { FC, FormEvent, useRef, useState } from 'react';
+import { FC, FormEvent, useEffect, useRef, useState } from 'react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -6,20 +6,60 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { useAppDispatch, useAppSelector } from '../hooks/useRedux';
 
 import styles from './TodoForm.module.scss';
-import { createCollection, createItem } from '../context/todoSlice';
-import { resetSelection } from '../context/selectedSlice';
+import {
+  createCollection,
+  createItem,
+  editCollection,
+} from '../context/todoSlice';
+import {
+  resetSelection,
+  setSelectedCollectionEdit,
+} from '../context/selectedSlice';
+
+const DEFAULT_COLOR = '#7b68ee';
 
 const TodoForm: FC = () => {
   const colorInputRef = useRef<HTMLInputElement>(null);
+  const [tempColor, setTempColor] = useState(DEFAULT_COLOR);
   const [todoInput, setTodoInput] = useState('');
   const dispatch = useAppDispatch();
   const selectedCollection = useAppSelector((state) => state.selected);
+
+  useEffect(() => {
+    if (selectedCollection.edit) {
+      setTodoInput(selectedCollection.title);
+      return;
+    }
+    setTodoInput('');
+  }, [selectedCollection.edit]);
+
+  useEffect(() => {
+    if (!colorInputRef.current) return;
+    if (selectedCollection.color) {
+      setTempColor(colorInputRef.current.value);
+      colorInputRef.current.value = selectedCollection.color;
+      return;
+    }
+    colorInputRef.current.value = tempColor;
+  }, [selectedCollection.color]);
 
   const submitHandler = (event: FormEvent) => {
     event.preventDefault();
     const colorVal = colorInputRef.current?.value || '#FF0000';
 
     if (todoInput.trim().length > 0) {
+      if (selectedCollection.edit) {
+        dispatch(
+          editCollection({
+            id: selectedCollection.id,
+            title: todoInput,
+            color: colorVal,
+          }),
+        );
+
+        dispatch(setSelectedCollectionEdit({ edit: false }));
+        return;
+      }
       if (selectedCollection.selected) {
         dispatch(
           createItem({ id: selectedCollection.id, item: { text: todoInput } }),
@@ -55,7 +95,7 @@ const TodoForm: FC = () => {
 
   const btnStyles = isAddBtn ? styles.add : [styles.add, showAddBtn].join(' ');
 
-  const btnHandler = isAddBtn
+  const addBtnHandler = isAddBtn
     ? submitHandler
     : () => dispatch(resetSelection());
 
@@ -74,7 +114,7 @@ const TodoForm: FC = () => {
         title="Set todo collection color"
         className={styles['color-picker']}
         ref={colorInputRef}
-        defaultValue="#7b68ee"
+        defaultValue={DEFAULT_COLOR}
       />
       <input
         type="text"
@@ -88,7 +128,7 @@ const TodoForm: FC = () => {
         className={btnStyles}
         aria-label="Add"
         title="Add"
-        onClick={btnHandler}
+        onClick={addBtnHandler}
         disabled={isBtnDisabled}
       >
         <FontAwesomeIcon icon={faPlus} />

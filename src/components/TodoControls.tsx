@@ -9,7 +9,10 @@ import {
 
 import { useAppDispatch, useAppSelector } from '../hooks/useRedux';
 import { deleteCollection } from '../context/todoSlice';
-import { resetSelection } from '../context/selectedSlice';
+import {
+  resetSelection,
+  setSelectedCollectionEdit,
+} from '../context/selectedSlice';
 
 import styles from './TodoControls.module.scss';
 
@@ -18,8 +21,14 @@ const TodoControls: FC = () => {
   const dispatch = useAppDispatch();
 
   const deleteBtnHandler = () => {
-    dispatch(deleteCollection({ id: selectedCollection.id }));
-    dispatch(resetSelection());
+    if (confirm('Are you sure?')) {
+      dispatch(deleteCollection({ id: selectedCollection.id }));
+      dispatch(resetSelection());
+    }
+  };
+
+  const editBtnHandler = () => {
+    dispatch(setSelectedCollectionEdit({ edit: !selectedCollection.edit }));
   };
 
   if (!selectedCollection.selected) return null;
@@ -40,6 +49,7 @@ const TodoControls: FC = () => {
         <button
           aria-label="Edit collection title"
           title="Edit collection title"
+          onClick={editBtnHandler}
         >
           <FontAwesomeIcon icon={faPen} />
         </button>
