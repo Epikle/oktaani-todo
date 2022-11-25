@@ -4,12 +4,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShareNodes } from '@fortawesome/free-solid-svg-icons';
 
 import TodoItem from './TodoItem';
-import { useAppDispatch, useAppSelector } from '../hooks/useRedux';
-import { TCollection } from '../types';
+import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
+import { TCollection } from '../../types';
 import {
   resetSelection,
   setSelectedCollection,
-} from '../context/selectedSlice';
+} from '../../context/selectedSlice';
 
 import styles from './TodoCollection.module.scss';
 

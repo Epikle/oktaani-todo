@@ -1,11 +1,11 @@
 import { FC, useEffect, useRef } from 'react';
 import autoAnimate from '@formkit/auto-animate';
 
-import TodoCollection from './TodoCollection';
+import TodoCollection from './TodoCollection/TodoCollection';
 import Footer from './UI/Footer';
+import { useAppSelector } from '../hooks/useRedux';
 
 import styles from './TodoList.module.scss';
-import { useAppSelector } from '../hooks/useRedux';
 
 const TodoList: FC = () => {
   const collections = useAppSelector((state) => state.todo);

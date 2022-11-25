@@ -1,8 +1,8 @@
 import { FC, useId, useState } from 'react';
-import { toggleItemDone } from '../context/todoSlice';
+import { toggleItemDone } from '../../context/todoSlice';
 
-import { useAppDispatch } from '../hooks/useRedux';
-import { TItem } from '../types';
+import { useAppDispatch } from '../../hooks/useRedux';
+import { TItem } from '../../types';
 
 import styles from './TodoItem.module.scss';
 

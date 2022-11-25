@@ -2,16 +2,17 @@ import { FC, FormEvent, useEffect, useRef, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
-import { useAppDispatch, useAppSelector } from '../hooks/useRedux';
+import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
 import {
   createCollection,
   createItem,
   editCollection,
-} from '../context/todoSlice';
+} from '../../context/todoSlice';
 import {
   resetSelection,
+  setSelectedCollection,
   setSelectedCollectionEdit,
-} from '../context/selectedSlice';
+} from '../../context/selectedSlice';
 
 import styles from './TodoForm.module.scss';
 
@@ -30,7 +31,7 @@ const TodoForm: FC = () => {
       return;
     }
     setTodoInput('');
-  }, [selectedCollection.edit]);
+  }, [selectedCollection.edit, selectedCollection.title]);
 
   useEffect(() => {
     if (!colorInputRef.current) return;
@@ -49,13 +50,13 @@ const TodoForm: FC = () => {
     if (todoInput.trim().length === 0) return;
 
     if (selectedCollection.edit) {
-      dispatch(
-        editCollection({
-          id: selectedCollection.id,
-          title: todoInput,
-          color: colorVal,
-        }),
-      );
+      const editedCollection = {
+        id: selectedCollection.id,
+        title: todoInput,
+        color: colorVal,
+      };
+      dispatch(editCollection(editedCollection));
+      dispatch(setSelectedCollection(editedCollection));
       dispatch(setSelectedCollectionEdit({ edit: false }));
 
       return;

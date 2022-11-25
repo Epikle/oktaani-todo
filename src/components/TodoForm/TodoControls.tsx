@@ -7,12 +7,12 @@ import {
   faListCheck,
 } from '@fortawesome/free-solid-svg-icons';
 
-import { useAppDispatch, useAppSelector } from '../hooks/useRedux';
-import { deleteCollection, removeDoneItems } from '../context/todoSlice';
+import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
+import { deleteCollection, removeDoneItems } from '../../context/todoSlice';
 import {
   resetSelection,
   setSelectedCollectionEdit,
-} from '../context/selectedSlice';
+} from '../../context/selectedSlice';
 
 import styles from './TodoControls.module.scss';
 
