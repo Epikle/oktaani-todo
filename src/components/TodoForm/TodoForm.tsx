@@ -35,13 +35,19 @@ const TodoForm: FC = () => {
 
   useEffect(() => {
     if (!colorInputRef.current) return;
-    if (selectedCollection.color) {
-      setTempColor(colorInputRef.current.value);
-      colorInputRef.current.value = selectedCollection.color;
+    if (!selectedCollection.color) {
+      colorInputRef.current.value = tempColor;
       return;
     }
-    colorInputRef.current.value = tempColor;
+
+    colorInputRef.current.value = selectedCollection.color;
   }, [selectedCollection.color]);
+
+  const tempColorHandler = () => {
+    if (!selectedCollection.color && colorInputRef.current) {
+      setTempColor(colorInputRef.current.value);
+    }
+  };
 
   const submitHandler = (event: FormEvent) => {
     event.preventDefault();
@@ -123,6 +129,7 @@ const TodoForm: FC = () => {
         className={styles['color-picker']}
         ref={colorInputRef}
         defaultValue={DEFAULT_COLOR}
+        onBlur={tempColorHandler}
       />
       <input
         type="text"
