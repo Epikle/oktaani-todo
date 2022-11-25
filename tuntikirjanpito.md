@@ -33,4 +33,5 @@
 | 25.11.2022 | 1.5h  | Komponenttien uudelleen järjestystä kansioihin,        |
 |            |       | Bugien korjausta: title ei päivittynyt vaihdon jälkeen |
 |            |       | oikein, värinvaihto ei palauttanut oletusväriä oikein  |
-|    yht     | 24.5h |                                                        |
+|            | 1.0h  | Komponenttien refaktorointi helpommin testattavaksi    |
+|    yht     | 25.5h |                                                        |

@@ -44,9 +44,19 @@ const TodoForm: FC = () => {
   }, [selectedCollection.color]);
 
   const tempColorHandler = () => {
-    if (!selectedCollection.color && colorInputRef.current) {
+    if (!colorInputRef.current) return;
+    if (!selectedCollection.color) {
       setTempColor(colorInputRef.current.value);
+      return;
     }
+
+    const editedCollection = {
+      id: selectedCollection.id,
+      title: selectedCollection.title,
+      color: colorInputRef.current.value,
+    };
+
+    dispatch(editCollection(editedCollection));
   };
 
   const submitHandler = (event: FormEvent) => {
