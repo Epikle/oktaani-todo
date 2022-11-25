@@ -34,4 +34,5 @@
 |            |       | Bugien korjausta: title ei päivittynyt vaihdon jälkeen |
 |            |       | oikein, värinvaihto ei palauttanut oletusväriä oikein  |
 |            | 1.0h  | Komponenttien refaktorointi helpommin testattavaksi    |
-|    yht     | 25.5h |                                                        |
+|            | 0.5h  | Poistonapin testejä                                    |
+|    yht     | 26.0h |                                                        |

@@ -10,22 +10,19 @@ import BtnEdit from './BtnEdit';
 import BtnDelete from './BtnDelete';
 
 const TodoControls: FC = () => {
-  const selectedCollection = useAppSelector((state) => state.selected);
+  const { selected, id, edit } = useAppSelector((state) => state.selected);
   const dispatch = useAppDispatch();
 
-  if (!selectedCollection.selected) return null;
+  if (!selected) return null;
 
   return (
     <ul className={styles.controls}>
-      <BtnRemoveDone
-        selectedCollection={selectedCollection}
-        dispatch={dispatch}
-      />
+      <BtnRemoveDone collectionId={id} dispatch={dispatch} />
       <BtnShare />
-      <BtnEdit selectedCollection={selectedCollection} dispatch={dispatch} />
+      <BtnEdit collectionEdit={edit} dispatch={dispatch} />
       <BtnDelete
         className={styles.trash}
-        selectedCollection={selectedCollection}
+        collectionId={id}
         dispatch={dispatch}
       />
     </ul>

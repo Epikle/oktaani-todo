@@ -4,16 +4,15 @@ import { faListCheck } from '@fortawesome/free-solid-svg-icons';
 
 import { removeDoneItems } from '../../../context/todoSlice';
 import { AppDispatch } from '../../../context/store';
-import { TSelected } from '../../../types';
 
 type Props = {
   dispatch: AppDispatch;
-  selectedCollection: TSelected;
+  collectionId: string;
 };
 
-const BtnRemoveDone: FC<Props> = ({ dispatch, selectedCollection }) => {
+const BtnRemoveDone: FC<Props> = ({ dispatch, collectionId }) => {
   const removeDoneBtnHandler = () => {
-    dispatch(removeDoneItems({ id: selectedCollection.id }));
+    dispatch(removeDoneItems({ id: collectionId }));
   };
 
   return (

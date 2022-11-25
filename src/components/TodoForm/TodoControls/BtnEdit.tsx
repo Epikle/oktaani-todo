@@ -4,16 +4,15 @@ import { faPen } from '@fortawesome/free-solid-svg-icons';
 
 import { setSelectedCollectionEdit } from '../../../context/selectedSlice';
 import { AppDispatch } from '../../../context/store';
-import { TSelected } from '../../../types';
 
 type Props = {
   dispatch: AppDispatch;
-  selectedCollection: TSelected;
+  collectionEdit: boolean;
 };
 
-const BtnEdit: FC<Props> = ({ dispatch, selectedCollection }) => {
+const BtnEdit: FC<Props> = ({ dispatch, collectionEdit }) => {
   const editBtnHandler = () => {
-    dispatch(setSelectedCollectionEdit({ edit: !selectedCollection.edit }));
+    dispatch(setSelectedCollectionEdit({ edit: !collectionEdit }));
   };
 
   return (
@@ -22,6 +21,7 @@ const BtnEdit: FC<Props> = ({ dispatch, selectedCollection }) => {
         aria-label="Edit collection title"
         title="Edit collection title"
         onClick={editBtnHandler}
+        data-testid="btn-edit"
       >
         <FontAwesomeIcon icon={faPen} />
       </button>
