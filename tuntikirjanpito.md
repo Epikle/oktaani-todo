@@ -35,4 +35,5 @@
 |            |       | oikein, värinvaihto ei palauttanut oletusväriä oikein  |
 |            | 1.0h  | Komponenttien refaktorointi helpommin testattavaksi    |
 |            | 0.5h  | Poistonapin testejä                                    |
-|    yht     | 26.0h |                                                        |
+| 27.11.2022 | 2.0h  | Custom button komponentti testeillä, TodoItem testejä  |
+|    yht     | 28.0h |                                                        |

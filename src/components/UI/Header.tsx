@@ -1,7 +1,7 @@
 import { FC, useEffect, useRef } from 'react';
 import autoAnimate from '@formkit/auto-animate';
 
-import TodoControls from '../TodoForm/TodoControls/TodoControls';
+import TodoControls from '../TodoForm/TodoControls';
 import TodoForm from '../TodoForm/TodoForm';
 
 import styles from './Header.module.scss';

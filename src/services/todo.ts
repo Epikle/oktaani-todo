@@ -10,6 +10,10 @@ export const getTodosFromLS = () => {
   return parsedCollections;
 };
 
+export const saveCollectionsToLS = (collections: TCollection[]): void => {
+  localStorage.setItem(LS_NAME, JSON.stringify(collections));
+};
+
 export const createCollectionEntry = (obj: TNewCollectionEntry) => {
   const createdCollection: TCollection = {
     id: nanoid(),
@@ -29,8 +33,4 @@ export const createItemEntry = (item: TItemEntry) => {
   };
 
   return createdCollection;
-};
-
-export const saveCollectionsToLS = (collections: TCollection[]): void => {
-  localStorage.setItem(LS_NAME, JSON.stringify(collections));
 };

@@ -18,17 +18,17 @@ type Props = {
 };
 
 const TodoCollection: FC<Props> = ({ collection }) => {
+  const { id, title, color, shared } = collection;
   const dispatch = useAppDispatch();
   const selectedCollection = useAppSelector((state) => state.selected);
   const isSelected = selectedCollection.id === collection.id;
   const parent = useRef<HTMLUListElement>(null);
 
   const listStyles: CSSProperties = {
-    borderColor: collection.color,
+    borderColor: color,
   };
-
   const headingStyles: CSSProperties = {
-    textDecorationColor: collection.color,
+    textDecorationColor: color,
   };
 
   const selectedCollectionHandler = () => {
@@ -36,8 +36,6 @@ const TodoCollection: FC<Props> = ({ collection }) => {
       dispatch(resetSelection());
       return;
     }
-
-    const { id, title, color } = collection;
     dispatch(setSelectedCollection({ id, title, color }));
   };
 
@@ -57,7 +55,7 @@ const TodoCollection: FC<Props> = ({ collection }) => {
     >
       <h2>
         <button onClick={selectedCollectionHandler} style={headingStyles}>
-          {collection.title}
+          {title}
         </button>
       </h2>
       <ul className={styles['item-list']} ref={parent}>
@@ -65,7 +63,7 @@ const TodoCollection: FC<Props> = ({ collection }) => {
           <TodoItem key={todo.id} todo={todo} />
         ))}
       </ul>
-      {collection.shared && (
+      {shared && (
         <span className={styles.shared}>
           <FontAwesomeIcon icon={faShareNodes} />
         </span>

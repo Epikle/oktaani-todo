@@ -10,14 +10,17 @@ type Props = {
   todo: TItem;
 };
 
-const TodoItem: FC<Props> = ({ todo }) => {
-  const id = useId();
-  const [checked, isChecked] = useState(todo.done);
-  const dispatch = useAppDispatch();
+type ItemProps = Omit<TItem, 'id'> & {
+  onChange: () => void;
+};
 
-  const doneInputHandler = () => {
-    dispatch(toggleItemDone({ id: todo.id }));
+export const Item: FC<ItemProps> = ({ onChange, text, done }) => {
+  const id = useId();
+  const [checked, isChecked] = useState(done);
+
+  const changeHandler = () => {
     isChecked((prevS) => !prevS);
+    onChange();
   };
 
   return (
@@ -26,12 +29,23 @@ const TodoItem: FC<Props> = ({ todo }) => {
         type="checkbox"
         id={id}
         checked={checked}
-        onChange={doneInputHandler}
-        title={`Mark ${todo.text} as done`}
+        onChange={changeHandler}
+        title={`Mark ${text} as done`}
       />
-      <label htmlFor={id}>{todo.text}</label>
+      <label htmlFor={id}>{text}</label>
     </li>
   );
+};
+
+const TodoItem: FC<Props> = ({ todo }) => {
+  const { id, text, done } = todo;
+  const dispatch = useAppDispatch();
+
+  const doneInputHandler = () => {
+    dispatch(toggleItemDone({ id }));
+  };
+
+  return <Item text={text} done={done} onChange={doneInputHandler} />;
 };
 
 export default TodoItem;
