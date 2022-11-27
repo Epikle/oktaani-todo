@@ -15,6 +15,7 @@ import {
 } from '../../context/selectedSlice';
 
 import styles from './TodoForm.module.scss';
+import Button from '../UI/Button';
 
 const DEFAULT_COLOR = '#7b68ee';
 
@@ -149,15 +150,14 @@ const TodoForm: FC = () => {
         value={todoInput}
         onChange={(e) => setTodoInput(e.target.value)}
       />
-      <button
+
+      <Button
         className={btnStyles}
-        aria-label={isAddBtn ? 'Add' : 'Cancel'}
         title={isAddBtn ? 'Add' : 'Cancel'}
         onClick={addBtnHandler}
         disabled={isBtnDisabled}
-      >
-        <FontAwesomeIcon icon={faPlus} />
-      </button>
+        content={<FontAwesomeIcon icon={faPlus} />}
+      />
     </form>
   );
 };

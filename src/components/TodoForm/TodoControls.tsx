@@ -38,26 +38,34 @@ const TodoControls: FC = () => {
   if (!selected) return null;
   return (
     <ul className={styles.controls} data-testid="todo-controls">
-      <Button
-        title="Remove done items"
-        onClick={removeDoneBtnHandler}
-        content={<FontAwesomeIcon icon={faListCheck} />}
-      />
-      <Button
-        title="Share collection"
-        content={<FontAwesomeIcon icon={faShareNodes} />}
-      />
-      <Button
-        title="Edit collection title"
-        onClick={editBtnHandler}
-        content={<FontAwesomeIcon icon={faPen} />}
-      />
-      <Button
-        title="Remove collection"
-        onClick={deleteBtnHandler}
-        className={styles.trash}
-        content={<FontAwesomeIcon icon={faTrash} />}
-      />
+      <li>
+        <Button
+          title="Remove done items"
+          onClick={removeDoneBtnHandler}
+          content={<FontAwesomeIcon icon={faListCheck} />}
+        />
+      </li>
+      <li>
+        <Button
+          title="Share collection"
+          content={<FontAwesomeIcon icon={faShareNodes} />}
+        />
+      </li>
+      <li>
+        <Button
+          title="Edit collection title"
+          onClick={editBtnHandler}
+          content={<FontAwesomeIcon icon={faPen} />}
+        />
+      </li>
+      <li>
+        <Button
+          title="Remove collection"
+          onClick={deleteBtnHandler}
+          className={styles.trash}
+          content={<FontAwesomeIcon icon={faTrash} />}
+        />
+      </li>
     </ul>
   );
 };

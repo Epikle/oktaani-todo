@@ -1,26 +1,29 @@
 import { FC } from 'react';
 
-type Props = {
-  className?: string;
-  title?: string;
+type Props = React.ComponentPropsWithoutRef<'button'> & {
   testId?: string;
-  onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   content: React.ReactNode;
 };
 
-const Button: FC<Props> = ({ className, title, testId, onClick, content }) => {
+const Button: FC<Props> = ({
+  className,
+  title,
+  testId,
+  onClick,
+  content,
+  ...rest
+}) => {
   return (
-    <li>
-      <button
-        className={className}
-        aria-label={title}
-        title={title}
-        onClick={onClick}
-        data-testid={testId}
-      >
-        {content}
-      </button>
-    </li>
+    <button
+      className={className}
+      aria-label={title}
+      title={title}
+      onClick={onClick}
+      data-testid={testId}
+      {...rest}
+    >
+      {content}
+    </button>
   );
 };
 
