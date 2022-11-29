@@ -1,0 +1,56 @@
+@import 'src/setup';
+
+.settings {
+  display: flex;
+  gap: 1px;
+  justify-content: flex-end;
+  border-radius: $border-radius;
+  overflow: hidden;
+
+  .hidden-btns {
+    @include transition;
+
+    width: 0;
+    transform: translateX(100%);
+
+    ul {
+      display: flex;
+      gap: 1px;
+    }
+
+    &.selected {
+      width: 100%;
+      transform: translateX(0);
+    }
+  }
+
+  li {
+    &:last-child {
+      z-index: 10;
+    }
+  }
+
+  .gear {
+    @include text-green;
+    @include btn-hover-focus;
+    @include btn-bg-color;
+    @include transition;
+
+    display: grid;
+    place-content: center;
+    width: 3rem;
+    height: 3rem;
+    font-size: 1.5rem;
+    z-index: 10;
+
+    svg {
+      @include transition;
+    }
+
+    &.selected {
+      svg {
+        transform: rotate(45deg);
+      }
+    }
+  }
+}

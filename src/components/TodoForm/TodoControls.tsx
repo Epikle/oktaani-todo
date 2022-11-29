@@ -18,7 +18,7 @@ import {
 import styles from './TodoControls.module.scss';
 
 const TodoControls: FC = () => {
-  const { selected, id, edit } = useAppSelector((state) => state.selected);
+  const { id, edit } = useAppSelector((state) => state.selected);
   const dispatch = useAppDispatch();
 
   const removeDoneBtnHandler = () => {
@@ -35,7 +35,6 @@ const TodoControls: FC = () => {
     }
   };
 
-  if (!selected) return null;
   return (
     <ul className={styles.controls} data-testid="todo-controls">
       <li>

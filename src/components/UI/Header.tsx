@@ -3,10 +3,13 @@ import autoAnimate from '@formkit/auto-animate';
 
 import TodoControls from '../TodoForm/TodoControls';
 import TodoForm from '../TodoForm/TodoForm';
+import { useAppSelector } from '../../hooks/useRedux';
 
 import styles from './Header.module.scss';
+import Settings from './Settings/Settings';
 
 const Header: FC = () => {
+  const { selected } = useAppSelector((state) => state.selected);
   const parent = useRef(null);
 
   useEffect(() => {
@@ -22,7 +25,7 @@ const Header: FC = () => {
               oktaani<strong>TODO</strong>
             </h1>
           </div>
-          <TodoControls />
+          {selected ? <TodoControls /> : <Settings />}
         </div>
         <TodoForm />
       </div>
