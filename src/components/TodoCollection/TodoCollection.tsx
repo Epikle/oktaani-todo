@@ -12,13 +12,14 @@ import {
 } from '../../context/selectedSlice';
 
 import styles from './TodoCollection.module.scss';
+import { formatDate } from '../../utils/utils';
 
 type Props = {
   collection: TCollection;
 };
 
 const TodoCollection: FC<Props> = ({ collection }) => {
-  const { id, title, color, shared } = collection;
+  const { id, title, color, shared, created } = collection;
   const dispatch = useAppDispatch();
   const selectedCollection = useAppSelector((state) => state.selected);
   const isSelected = selectedCollection.id === collection.id;
@@ -46,12 +47,16 @@ const TodoCollection: FC<Props> = ({ collection }) => {
   const doneTodos = collection.todos.filter((todo) => todo.done).length;
   const totalTodos = collection.todos.length;
   const showDone = totalTodos > 0 ? `${doneTodos}/${totalTodos}` : '';
+  const articleStyles = selectedCollection.selected
+    ? [styles.collection, styles.selected].join(' ')
+    : styles.collection;
 
   return (
     <article
-      className={styles.collection}
+      className={articleStyles}
       style={listStyles}
       data-done={showDone}
+      data-created={`created ${formatDate(created)}`}
     >
       <h2>
         <button onClick={selectedCollectionHandler} style={headingStyles}>

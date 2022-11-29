@@ -3,6 +3,7 @@ import { toggleItemDone } from '../../context/todoSlice';
 
 import { useAppDispatch } from '../../hooks/useRedux';
 import { TItem } from '../../types';
+import { formatDate } from '../../utils/utils';
 
 import styles from './TodoItem.module.scss';
 
@@ -14,7 +15,7 @@ type ItemProps = Omit<TItem, 'id'> & {
   onChange: () => void;
 };
 
-export const Item: FC<ItemProps> = ({ onChange, text, done }) => {
+export const Item: FC<ItemProps> = ({ onChange, text, done, created }) => {
   const id = useId();
   const [checked, isChecked] = useState(done);
 
@@ -32,20 +33,22 @@ export const Item: FC<ItemProps> = ({ onChange, text, done }) => {
         onChange={changeHandler}
         title={`Mark ${text} as done`}
       />
-      <label htmlFor={id}>{text}</label>
+      <label htmlFor={id} title={`Created ${formatDate(created)}`}>
+        {text}
+      </label>
     </li>
   );
 };
 
 const TodoItem: FC<Props> = ({ todo }) => {
-  const { id, text, done } = todo;
+  const { id } = todo;
   const dispatch = useAppDispatch();
 
   const doneInputHandler = () => {
     dispatch(toggleItemDone({ id }));
   };
 
-  return <Item text={text} done={done} onChange={doneInputHandler} />;
+  return <Item {...todo} onChange={doneInputHandler} />;
 };
 
 export default TodoItem;

@@ -36,4 +36,5 @@
 |            | 1.0h  | Komponenttien refaktorointi helpommin testattavaksi    |
 |            | 0.5h  | Poistonapin testejä                                    |
 | 27.11.2022 | 2.5h  | Custom button komponentti testeillä, TodoItem testejä  |
-|    yht     | 28.5h |                                                        |
+| 29.11.2022 | 1.0h  | Luontiajan lisäys listalle ja itemille                 |
+|    yht     | 29.5h |                                                        |

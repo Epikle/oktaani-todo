@@ -19,6 +19,7 @@ export const createCollectionEntry = (obj: TNewCollectionEntry) => {
     id: nanoid(),
     shared: false,
     todos: [],
+    created: Date(),
     ...obj,
   };
 
@@ -29,6 +30,7 @@ export const createItemEntry = (item: TItemEntry) => {
   const createdCollection: TItem = {
     id: nanoid(),
     done: false,
+    created: Date(),
     ...item,
   };
 
