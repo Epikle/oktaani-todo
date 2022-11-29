@@ -51,12 +51,15 @@ const TodoCollection: FC<Props> = ({ collection }) => {
     ? [styles.collection, styles.selected].join(' ')
     : styles.collection;
 
+  const showCreated =
+    isSelected && formatDate(created) ? `created ${formatDate(created)}` : '';
+
   return (
     <article
       className={articleStyles}
       style={listStyles}
       data-done={showDone}
-      data-created={`created ${formatDate(created)}`}
+      data-created={showCreated}
     >
       <h2>
         <button onClick={selectedCollectionHandler} style={headingStyles}>

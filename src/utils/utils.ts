@@ -1,11 +1,12 @@
-export const formatDate = (date: string): string => {
+export const formatDate = (
+  date: string,
+  options?: Intl.DateTimeFormatOptions,
+): string | null => {
   const dateObj = new Date(date);
-  // const options: Intl.DateTimeFormatOptions = {
-  //   weekday: 'long',
-  //   year: 'numeric',
-  //   month: 'long',
-  //   day: 'numeric',
-  // };
 
-  return dateObj.toLocaleDateString();
+  if (!date || !(dateObj instanceof Date)) {
+    return null;
+  }
+
+  return dateObj.toLocaleDateString(undefined, options);
 };

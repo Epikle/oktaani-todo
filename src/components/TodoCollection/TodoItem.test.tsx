@@ -8,6 +8,7 @@ describe('TodoItem', () => {
   const itemSetup = {
     text: 'Test item',
     done: false,
+    created: Date(),
   };
   const onChange = jest.fn();
 

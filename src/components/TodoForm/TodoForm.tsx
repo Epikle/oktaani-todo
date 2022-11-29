@@ -18,6 +18,8 @@ import styles from './TodoForm.module.scss';
 import Button from '../UI/Button';
 
 const DEFAULT_COLOR = '#7b68ee';
+const COLLECTION_LENGTH = 100;
+const ITEM_LENGTH = 300;
 
 const TodoForm: FC = () => {
   const colorInputRef = useRef<HTMLInputElement>(null);
@@ -25,6 +27,7 @@ const TodoForm: FC = () => {
   const [todoInput, setTodoInput] = useState('');
   const dispatch = useAppDispatch();
   const selectedCollection = useAppSelector((state) => state.selected);
+  const trimmedInput = todoInput.trim().replace(/\s+/g, ' ');
 
   useEffect(() => {
     if (selectedCollection.edit) {
@@ -64,12 +67,12 @@ const TodoForm: FC = () => {
     event.preventDefault();
     const colorVal = colorInputRef.current?.value || DEFAULT_COLOR;
 
-    if (todoInput.trim().length === 0) return;
+    if (trimmedInput.length === 0) return;
 
     if (selectedCollection.edit) {
       const editedCollection = {
         id: selectedCollection.id,
-        title: todoInput,
+        title: trimmedInput,
         color: colorVal,
       };
       dispatch(editCollection(editedCollection));
@@ -81,7 +84,7 @@ const TodoForm: FC = () => {
 
     if (selectedCollection.selected) {
       dispatch(
-        createItem({ id: selectedCollection.id, item: { text: todoInput } }),
+        createItem({ id: selectedCollection.id, item: { text: trimmedInput } }),
       );
       setTodoInput('');
 
@@ -90,7 +93,7 @@ const TodoForm: FC = () => {
 
     dispatch(
       createCollection({
-        title: todoInput,
+        title: trimmedInput,
         color: colorVal,
       }),
     );
@@ -103,18 +106,20 @@ const TodoForm: FC = () => {
     : `Add a new collection`;
 
   const isBtnDisabled =
-    !selectedCollection.selected && todoInput.trim().length === 0;
+    !selectedCollection.selected && trimmedInput.length === 0;
 
   const isAddBtn =
-    (selectedCollection.selected && todoInput.trim().length > 0) ||
-    todoInput.trim().length > 0;
+    (selectedCollection.selected && trimmedInput.length > 0) ||
+    trimmedInput.length > 0;
 
-  const showAddBtn =
-    selectedCollection.selected && todoInput.trim().length === 0
+  const showAddBtnStyles =
+    selectedCollection.selected && trimmedInput.length === 0
       ? styles.blur
       : styles.hide;
 
-  const btnStyles = isAddBtn ? styles.add : [styles.add, showAddBtn].join(' ');
+  const btnStyles = isAddBtn
+    ? styles.add
+    : [styles.add, showAddBtnStyles].join(' ');
 
   const addBtnHandler = isAddBtn
     ? submitHandler
@@ -123,6 +128,14 @@ const TodoForm: FC = () => {
   const formStyles = selectedCollection.selected
     ? [styles.form, styles.selected].join(' ')
     : styles.form;
+
+  const maxLength =
+    !selectedCollection.selected || selectedCollection.edit
+      ? COLLECTION_LENGTH
+      : ITEM_LENGTH;
+
+  const inputLengthText = `${todoInput.length}/${maxLength}`;
+  const showInputLength = isAddBtn ? inputLengthText : '';
 
   return (
     <form
@@ -133,6 +146,7 @@ const TodoForm: FC = () => {
           ? `Editing: ${selectedCollection.title}`
           : selectedCollection.title
       }
+      data-length={showInputLength}
     >
       <input
         type="color"
@@ -149,6 +163,7 @@ const TodoForm: FC = () => {
         title={placeholderText}
         value={todoInput}
         onChange={(e) => setTodoInput(e.target.value)}
+        maxLength={maxLength}
       />
 
       <Button
