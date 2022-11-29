@@ -39,6 +39,7 @@
 | 29.11.2022 | 1.0h  | Luontiajan lisäys listalle ja itemille                 |
 |            | 2.0   | Asetusnappin lisäys jonka alta löytyy napit            |
 |            |       | dark modelle ja kielen vaihdolle                       |
-|            | 1.0h  | Luontiajan näytön korjaus mikäli virheellinen/puuttuu, |
-|            |       | inputtiin lisätty merkkilaskuri                        |
-|    yht     | 32.5h |                                                        |
+|            | 1.5h  | Luontiajan näytön korjaus mikäli virheellinen/puuttuu, |
+|            |       | inputtiin lisätty merkkilaskuri,                       |
+|            |       | meta-tagit sosiaalisille medialle                      |
+|    yht     | 33.0h |                                                        |
