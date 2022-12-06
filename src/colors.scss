@@ -1,0 +1,36 @@
+:root {
+  --color-p-green: hsl(104, 13%, 52%);
+  --color-p-green-d-5: hsl(104, 13%, 47%);
+  --color-p-green-d-10: hsl(104, 13%, 42%);
+  --color-p-green-d-15: hsl(104, 13%, 37%);
+  --color-p-green-d-20: hsl(104, 13%, 32%);
+  --color-p-green-d-35: hsl(104, 13%, 17%);
+  --color-p-red: hsl(6, 92%, 36%);
+  --color-p-red-d-15: hsl(6, 92%, 21%);
+  --color-p-gray: hsl(90, 9%, 91%);
+  --color-p-gray-d-5: hsl(90, 9%, 86%);
+
+  --color-gray-800: hsl(0, 0%, 15%);
+  --color-gray-800-l-30: hsl(0, 0%, 45%);
+
+  --color-bg-header: var(--color-p-green);
+  --color-bg-collection: var(--color-p-gray);
+  --color-bg-body: hsl(96, 5%, 81%);
+  --color-text-p: var(--color-gray-800);
+  --color-text-n: var(--color-gray-800);
+
+  --ff-primary: 'Oswald', sans-serif;
+  --ff-secondary: 'Arvo', serif;
+  --fs-normal: 1rem;
+
+  --border-radius: 5px;
+}
+
+.dark-mode {
+  --color-bg-header: hsl(96, 5%, 20%);
+  --color-bg-collection: hsl(96, 5%, 10%);
+  --color-bg-body: hsl(96, 5%, 5%);
+
+  --color-text-p: white;
+  --color-text-n: white;
+}

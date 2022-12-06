@@ -1,14 +1,14 @@
 @import 'src/reset';
-@import 'src/setup';
+@import 'src/colors';
 
 body {
-  background-color: $color-bg;
-  font-family: $ff-primary;
-  font-size: $fs-normal;
+  font-family: var(--ff-primary);
+  font-size: var(--fs-normal);
 }
 
-#root {
+.content {
   height: 100vh;
   display: grid;
   grid-template-rows: max-content 1fr;
+  background-color: var(--color-bg-body);
 }

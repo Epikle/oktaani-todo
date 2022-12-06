@@ -1,9 +1,9 @@
-@import 'src/setup';
+@import 'src/mixin';
 
 .header {
-  background-color: $color-p-green;
+  background-color: var(--color-bg-header);
   padding: 0.75rem;
-  border-bottom: 3px solid darken($color: $color-p-green, $amount: 10);
+  border-bottom: 3px solid var(--color-p-green-d-10);
 
   .container {
     @include container;
@@ -18,14 +18,10 @@
       height: 3rem;
 
       h1 {
-        @include text-green;
         font-size: 1.5rem;
         font-weight: normal;
         user-select: none;
-
-        strong {
-          color: $color-gray-800;
-        }
+        color: var(--color-text-p);
       }
     }
   }

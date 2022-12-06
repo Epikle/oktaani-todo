@@ -42,4 +42,5 @@
 |            | 1.5h  | Luontiajan näytön korjaus mikäli virheellinen/puuttuu, |
 |            |       | inputtiin lisätty merkkilaskuri,                       |
 |            |       | meta-tagit sosiaalisille medialle                      |
-|    yht     | 33.0h |                                                        |
+| 6.12.2022  | 2.0h  | Aloitettu lisäämään dark-modea varten tyylejä          |
+|    yht     | 35.0h |                                                        |

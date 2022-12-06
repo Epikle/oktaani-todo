@@ -1,4 +1,4 @@
-import { Fragment, FC, useEffect } from 'react';
+import { FC, useEffect } from 'react';
 
 import Header from './components/UI/Header';
 import TodoList from './components/TodoList';
@@ -9,6 +9,7 @@ import * as todoService from './services/todo';
 const App: FC = () => {
   const dispatch = useAppDispatch();
   const selected = useAppSelector((state) => state.selected);
+  const { darkMode } = useAppSelector((state) => state.settings);
 
   const title = selected.title
     ? `${selected.title} | oktaaniTODO`
@@ -21,10 +22,10 @@ const App: FC = () => {
   }, []);
 
   return (
-    <Fragment>
+    <div className={darkMode ? 'content dark-mode' : 'content'}>
       <Header />
       <TodoList />
-    </Fragment>
+    </div>
   );
 };
 

@@ -1,18 +1,18 @@
-@import 'src/setup';
+@import 'src/mixin';
 
 .collection {
   position: relative;
   padding-block: 1.25rem 0.75rem;
-  color: $color-gray-800;
-  background-color: $color-p-gray;
-  border-top: 6px solid $color-gray-800;
-  border-bottom: 3px solid $color-gray-800;
+  color: var(--color-text-n);
+  background-color: var(--color-bg-collection);
+  border-top: 6px solid var(--color-gray-800);
+  border-bottom: 3px solid var(--color-gray-800);
 
   .shared {
     position: absolute;
     top: 5px;
     left: 0.75rem;
-    color: lighten($color: $color-gray-800, $amount: 30);
+    color: var(--color-gray-800-l-30);
   }
 
   &::before {
@@ -21,7 +21,7 @@
     top: 5px;
     right: 0.75rem;
     font-size: 0.7rem;
-    font-family: $ff-secondary;
+    font-family: var(--ff-secondary);
     opacity: 0.6;
   }
 
@@ -33,7 +33,7 @@
     right: 0.75rem;
     font-size: 0.7rem;
     font-style: italic;
-    font-family: $ff-secondary;
+    font-family: var(--ff-secondary);
     opacity: 0;
   }
 
@@ -54,6 +54,7 @@
       text-decoration: underline;
       word-wrap: break-word;
       width: 100%;
+      color: var(--color-text-p);
     }
   }
 }

@@ -1,9 +1,9 @@
-@import 'src/setup';
+@import 'src/mixin';
 
 .form {
   position: relative;
   display: flex;
-  border-radius: $border-radius;
+  border-radius: var(--border-radius);
   overflow: hidden;
 
   &::before {
@@ -13,7 +13,7 @@
     top: 0;
     left: 3.5rem;
     font-size: 0.8rem;
-    color: $color-gray-800;
+    color: var(--color-gray-800);
     opacity: 0;
     width: calc(100% - 9.4rem);
     overflow: hidden;
@@ -27,7 +27,7 @@
     top: 0;
     right: 3.2rem;
     font-size: 0.8rem;
-    color: $color-gray-800;
+    color: var(--color-gray-800);
   }
 
   &.selected {
@@ -55,7 +55,7 @@
     height: 3rem;
 
     &::-moz-color-swatch {
-      border: 2px solid $color-gray-800;
+      border: 2px solid var(--color-gray-800);
       border-radius: 50%;
     }
 
@@ -64,7 +64,7 @@
     }
 
     &::-webkit-color-swatch {
-      border: 2px solid $color-gray-800;
+      border: 2px solid var(--color-gray-800);
       border-radius: 50%;
     }
 
@@ -83,11 +83,11 @@
     @include transition;
 
     flex-grow: 1;
-    background-color: darken($color: $color-p-green, $amount: 5);
+    background-color: var(--color-p-green-d-5);
     padding-inline: 0.5rem;
 
     &::placeholder {
-      color: darken($color: $color-p-green, $amount: 20);
+      color: var(--color-p-green-d-20);
     }
 
     &:focus-visible {
@@ -113,12 +113,12 @@
     }
 
     &.blur {
-      background-color: $color-p-red;
-      color: $color-p-gray;
+      background-color: var(--color-p-red);
+      color: var(--color-p-gray);
 
       &:hover,
       &:focus-visible {
-        background-color: $color-p-red;
+        background-color: var(--color-p-red-d-15);
       }
 
       svg {

@@ -1,0 +1,34 @@
+@mixin container {
+  max-width: 60rem;
+  margin-inline: auto;
+}
+
+@mixin focus-border {
+  box-shadow: inset 0 0 0 2px var(--color-gray-800);
+}
+
+@mixin text-green {
+  color: var(--color-p-green-d-35);
+}
+
+@mixin bg-focus {
+  background-color: var(--color-p-green-d-15);
+}
+
+@mixin btn-hover-focus {
+  &:is(:hover, :focus-visible) {
+    @include bg-focus;
+  }
+
+  &:focus-visible {
+    @include focus-border;
+  }
+}
+
+@mixin btn-bg-color {
+  background-color: var(--color-p-green-d-10);
+}
+
+@mixin transition($element: all, $timing: 200ms) {
+  transition: $element $timing ease-in;
+}

@@ -1,9 +1,7 @@
-@import 'src/setup';
-
 .footer {
   padding: 1rem 0.5rem;
   text-align: center;
   user-select: none;
   font-size: 0.75rem;
-  color: $color-gray-800;
+  color: var(--color-gray-800);
 }

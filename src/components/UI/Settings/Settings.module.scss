@@ -1,10 +1,10 @@
-@import 'src/setup';
+@import 'src/mixin';
 
 .settings {
   display: flex;
   gap: 1px;
   justify-content: flex-end;
-  border-radius: $border-radius;
+  border-radius: var(--border-radius);
   overflow: hidden;
 
   .hidden-btns {

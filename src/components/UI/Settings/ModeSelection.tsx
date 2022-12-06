@@ -1,20 +1,23 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
 
 import Button from '../Button';
+import { useAppDispatch, useAppSelector } from '../../../hooks/useRedux';
 
 import styles from './ModeSelection.module.scss';
+import { setSettings } from '../../../context/settingsSlice';
 
 type Props = {
   disabled: boolean;
 };
 
 const ModeSelection: FC<Props> = ({ disabled }) => {
-  const [darkMode, setDarkMode] = useState(false);
+  const { language, darkMode } = useAppSelector((state) => state.settings);
+  const dispatch = useAppDispatch();
 
   const modeBtnHandler = () => {
-    setDarkMode((prevS) => !prevS);
+    dispatch(setSettings({ language, darkMode: !darkMode }));
   };
 
   return (
