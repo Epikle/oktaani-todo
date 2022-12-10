@@ -3,6 +3,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEarthAmericas } from '@fortawesome/free-solid-svg-icons';
 
 import Button from '../Button';
+import { useAppSelector } from '../../../hooks/useRedux';
+import useLanguage from '../../../hooks/useLanguage';
 
 import styles from './LanguageSelection.module.scss';
 
@@ -11,13 +13,16 @@ type Props = {
 };
 
 const LanguageSelection: FC<Props> = ({ disabled }) => {
+  const { language } = useAppSelector((state) => state.settings);
+  const { nextLang } = useLanguage();
+
   const languageBtnHandler = () => {
-    console.log('change language...');
+    nextLang();
   };
 
   return (
     <Button
-      data-language="en-us"
+      data-language={language}
       className={styles.language}
       aria-label="Change language"
       onClick={languageBtnHandler}

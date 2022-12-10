@@ -1,8 +1,8 @@
 import { FC, useId, useState } from 'react';
-import { toggleItemDone } from '../../context/todoSlice';
 
-import { useAppDispatch } from '../../hooks/useRedux';
-import { TItem } from '../../types';
+import { toggleItemDone } from '../../context/todoSlice';
+import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
+import { Languages, TItem } from '../../types';
 import { formatDate } from '../../utils/utils';
 
 import styles from './TodoItem.module.scss';
@@ -13,9 +13,16 @@ type Props = {
 
 type ItemProps = Omit<TItem, 'id'> & {
   onChange: () => void;
+  language: Languages;
 };
 
-export const Item: FC<ItemProps> = ({ onChange, text, done, created }) => {
+export const Item: FC<ItemProps> = ({
+  onChange,
+  text,
+  done,
+  created,
+  language,
+}) => {
   const id = useId();
   const [checked, isChecked] = useState(done);
 
@@ -33,7 +40,7 @@ export const Item: FC<ItemProps> = ({ onChange, text, done, created }) => {
         onChange={changeHandler}
         title={`Mark ${text} as done`}
       />
-      <label htmlFor={id} title={`Created ${formatDate(created)}`}>
+      <label htmlFor={id} title={`Created ${formatDate(created, language)}`}>
         {text}
       </label>
     </li>
@@ -43,12 +50,13 @@ export const Item: FC<ItemProps> = ({ onChange, text, done, created }) => {
 const TodoItem: FC<Props> = ({ todo }) => {
   const { id } = todo;
   const dispatch = useAppDispatch();
+  const { language } = useAppSelector((state) => state.settings);
 
   const doneInputHandler = () => {
     dispatch(toggleItemDone({ id }));
   };
 
-  return <Item {...todo} onChange={doneInputHandler} />;
+  return <Item {...todo} onChange={doneInputHandler} language={language} />;
 };
 
 export default TodoItem;

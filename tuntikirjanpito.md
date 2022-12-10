@@ -43,4 +43,6 @@
 |            |       | inputtiin lisätty merkkilaskuri,                       |
 |            |       | meta-tagit sosiaalisille medialle                      |
 | 6.12.2022  | 2.0h  | Aloitettu lisäämään dark-modea varten tyylejä          |
-|    yht     | 35.0h |                                                        |
+| 10.12.2022 | 2.5h  | Kielen vaihto toimii, enää tarvitsee kääntää kaikki    |
+| 10.12.2022 | 1.0h  | Testien korjausta                                      |
+|    yht     | 38.5h |                                                        |

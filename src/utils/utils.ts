@@ -1,5 +1,8 @@
+import { Languages } from '../types';
+
 export const formatDate = (
   date: string,
+  locale: Languages,
   options?: Intl.DateTimeFormatOptions,
 ): string | null => {
   const dateObj = new Date(date);
@@ -8,5 +11,5 @@ export const formatDate = (
     return null;
   }
 
-  return dateObj.toLocaleDateString(undefined, options);
+  return dateObj.toLocaleDateString(locale, options);
 };

@@ -16,6 +16,7 @@ import {
 
 import styles from './TodoForm.module.scss';
 import Button from '../UI/Button';
+import useLanguage from '../../hooks/useLanguage';
 
 const DEFAULT_COLOR = '#7b68ee';
 const COLLECTION_LENGTH = 100;
@@ -28,6 +29,7 @@ const TodoForm: FC = () => {
   const dispatch = useAppDispatch();
   const selectedCollection = useAppSelector((state) => state.selected);
   const trimmedInput = todoInput.trim().replace(/\s+/g, ' ');
+  const { text } = useLanguage();
 
   useEffect(() => {
     if (selectedCollection.edit) {
@@ -102,8 +104,8 @@ const TodoForm: FC = () => {
   };
 
   const placeholderText = selectedCollection.selected
-    ? `Add a new todo to ${selectedCollection.title}`
-    : `Add a new collection`;
+    ? `${text.header.newTodo} ${selectedCollection.title}`
+    : text.header.newCollection;
 
   const isBtnDisabled =
     !selectedCollection.selected && trimmedInput.length === 0;
@@ -150,7 +152,7 @@ const TodoForm: FC = () => {
     >
       <input
         type="color"
-        title="Set todo collection color"
+        title={text.header.setColorTitle}
         className={styles['color-picker']}
         ref={colorInputRef}
         defaultValue={DEFAULT_COLOR}
@@ -168,7 +170,7 @@ const TodoForm: FC = () => {
 
       <Button
         className={btnStyles}
-        title={isAddBtn ? 'Add' : 'Cancel'}
+        title={isAddBtn ? text.common.add : text.common.cancel}
         onClick={addBtnHandler}
         disabled={isBtnDisabled}
         content={<FontAwesomeIcon icon={faPlus} />}

@@ -30,3 +30,26 @@ export type TNewCollectionEntry = Omit<
 export type TSelectedEntry = Omit<TSelected, 'edit' | 'selected'>;
 
 export type TItemEntry = Omit<TItem, 'id' | 'done' | 'created'>;
+
+export type Languages = 'en-us' | 'fi';
+
+export type Texts = {
+  header: {
+    newCollection: string;
+    newTodo: string;
+    setColorTitle: string;
+  };
+  collection: {
+    created: string;
+  };
+  common: {
+    cancel: string;
+    add: string;
+  };
+};
+
+export type Settings = {
+  availableLanguages: Languages[];
+  language: Languages;
+  darkMode: boolean;
+};

@@ -4,11 +4,13 @@ import type { PreloadedState } from '@reduxjs/toolkit';
 import todoReducer from './todoSlice';
 import selectedReducer from './selectedSlice';
 import settingsReducer from './settingsSlice';
+import languageReducer from './languageSlice';
 
 const rootReducer = combineReducers({
   todo: todoReducer,
   selected: selectedReducer,
   settings: settingsReducer,
+  language: languageReducer,
 });
 
 export const setupStore = (preloadedState?: PreloadedState<RootState>) => {

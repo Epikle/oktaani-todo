@@ -13,6 +13,7 @@ import {
 
 import styles from './TodoCollection.module.scss';
 import { formatDate } from '../../utils/utils';
+import useLanguage from '../../hooks/useLanguage';
 
 type Props = {
   collection: TCollection;
@@ -22,8 +23,10 @@ const TodoCollection: FC<Props> = ({ collection }) => {
   const { id, title, color, shared, created } = collection;
   const dispatch = useAppDispatch();
   const selectedCollection = useAppSelector((state) => state.selected);
+  const { language } = useAppSelector((state) => state.settings);
   const isSelected = selectedCollection.id === collection.id;
   const parent = useRef<HTMLUListElement>(null);
+  const { text } = useLanguage();
 
   const listStyles: CSSProperties = {
     borderColor: color,
@@ -52,7 +55,9 @@ const TodoCollection: FC<Props> = ({ collection }) => {
     : styles.collection;
 
   const showCreated =
-    isSelected && formatDate(created) ? `created ${formatDate(created)}` : '';
+    isSelected && formatDate(created, language)
+      ? `${text.collection.created} ${formatDate(created, language)}`
+      : '';
 
   return (
     <article
