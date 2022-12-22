@@ -11,7 +11,7 @@
   @include transition(background-color, 200ms);
 
   &:hover {
-    background-color: var(--color-p-gray-d-5);
+    background-color: var(--color-todo-item-hover);
   }
 
   input {

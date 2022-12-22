@@ -159,7 +159,7 @@ const TodoForm: FC = () => {
         onBlur={tempColorHandler}
       />
       <input
-        type="text"
+        type="search"
         className={styles.todo}
         placeholder={placeholderText}
         title={placeholderText}
@@ -167,7 +167,6 @@ const TodoForm: FC = () => {
         onChange={(e) => setTodoInput(e.target.value)}
         maxLength={maxLength}
       />
-
       <Button
         className={btnStyles}
         title={isAddBtn ? text.common.add : text.common.cancel}

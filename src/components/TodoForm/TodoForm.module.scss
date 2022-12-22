@@ -13,7 +13,7 @@
     top: 0;
     left: 3.5rem;
     font-size: 0.8rem;
-    color: var(--color-gray-800);
+    color: var(--color-text-n-800);
     opacity: 0;
     width: calc(100% - 9.4rem);
     overflow: hidden;
@@ -27,7 +27,7 @@
     top: 0;
     right: 3.2rem;
     font-size: 0.8rem;
-    color: var(--color-gray-800);
+    color: var(--color-text-n-800);
   }
 
   &.selected {
@@ -83,15 +83,19 @@
     @include transition;
 
     flex-grow: 1;
-    background-color: var(--color-p-green-d-5);
+    background-color: var(--color-bg-todo-input);
     padding-inline: 0.5rem;
 
     &::placeholder {
-      color: var(--color-p-green-d-20);
+      color: var(--color-placeholder-todo-input);
     }
 
     &:focus-visible {
       @include focus-border;
+    }
+
+    &::-webkit-search-cancel-button {
+      filter: brightness(0);
     }
   }
 

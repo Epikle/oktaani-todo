@@ -14,10 +14,19 @@
   --color-gray-800-l-30: hsl(0, 0%, 45%);
 
   --color-bg-header: var(--color-p-green);
+  --color-border-header: var(--color-p-green-d-10);
   --color-bg-collection: var(--color-p-gray);
   --color-bg-body: hsl(96, 5%, 81%);
+  --color-todo-item-hover: var(--color-p-gray-d-5);
   --color-text-p: var(--color-gray-800);
   --color-text-n: var(--color-gray-800);
+
+  --color-bg-btn: var(--color-p-green-d-10);
+  --color-text-green: var(--color-p-green-d-35);
+  --color-bg-focus: var(--color-p-green-d-15);
+  --color-bg-todo-input: var(--color-p-green-d-5);
+  --color-placeholder-todo-input: var(--color-p-green-d-20);
+  --color-focus-border: var(--color-gray-800);
 
   --ff-primary: 'Oswald', sans-serif;
   --ff-secondary: 'Arvo', serif;
@@ -27,10 +36,21 @@
 }
 
 .dark-mode {
-  --color-bg-header: hsl(96, 5%, 20%);
-  --color-bg-collection: hsl(96, 5%, 10%);
-  --color-bg-body: hsl(96, 5%, 5%);
+  --color-bg-header: hsl(216, 18%, 10%);
+  --color-bg-collection: hsl(216, 18%, 10%);
+  --color-bg-body: hsl(0, 0%, 7%);
+  --color-border-header: hsl(216, 18%, 20%);
 
-  --color-text-p: white;
-  --color-text-n: white;
+  --color-todo-item-hover: hsl(216, 18%, 20%);
+
+  --color-bg-btn: hsl(216, 18%, 20%);
+  --color-text-green: hsl(0, 0%, 80%);
+  --color-bg-focus: hsl(216, 18%, 25%);
+  --color-bg-todo-input: hsl(216, 18%, 30%);
+  --color-placeholder-todo-input: hsl(0, 0%, 70%);
+  --color-focus-border: hsl(216, 18%, 50%);
+
+  --color-text-p: hsl(0, 0%, 90%);
+  --color-text-n: hsl(0, 0%, 80%);
+  --color-text-n-800: hsl(0, 0%, 60%);
 }

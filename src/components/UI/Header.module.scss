@@ -3,7 +3,7 @@
 .header {
   background-color: var(--color-bg-header);
   padding: 0.75rem;
-  border-bottom: 3px solid var(--color-p-green-d-10);
+  border-bottom: 3px solid var(--color-border-header);
 
   .container {
     @include container;
