@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "lint": "eslint . --ext .ts,.tsx",
     "test": "jest --detectOpenHandles -i",
-    "cypress:open": "cypress open"
+    "cypress:open": "cypress open",
+    "cypress:e2e": "cypress run"
   },
   "dependencies": {
     "@formkit/auto-animate": "^1.0.0-beta.5",

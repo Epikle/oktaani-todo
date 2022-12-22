@@ -4,6 +4,8 @@ import '@testing-library/jest-dom/extend-expect';
 import { Item } from './TodoItem';
 import { act } from 'react-dom/test-utils';
 import { Languages } from '../../types';
+import { Provider } from 'react-redux';
+import { setupStore } from '../../context/store';
 
 describe('TodoItem', () => {
   const itemSetup = {
@@ -15,7 +17,11 @@ describe('TodoItem', () => {
   };
 
   it('Item is showing with all attributes', () => {
-    render(<Item {...itemSetup} />);
+    render(
+      <Provider store={setupStore()}>
+        <Item {...itemSetup} />
+      </Provider>,
+    );
 
     const item = screen.getByLabelText(itemSetup.text);
 
@@ -24,7 +30,11 @@ describe('TodoItem', () => {
   });
 
   it('When clicked label should call handlerFn', () => {
-    render(<Item {...itemSetup} />);
+    render(
+      <Provider store={setupStore()}>
+        <Item {...itemSetup} />
+      </Provider>,
+    );
 
     const checkbox = screen.getByRole('checkbox');
     const item = screen.getByLabelText(itemSetup.text);
@@ -38,7 +48,11 @@ describe('TodoItem', () => {
   });
 
   it('Should render checkbox already checked', () => {
-    render(<Item {...itemSetup} done={true} />);
+    render(
+      <Provider store={setupStore()}>
+        <Item {...itemSetup} done={true} />
+      </Provider>,
+    );
 
     const checkbox = screen.getByRole('checkbox');
 
