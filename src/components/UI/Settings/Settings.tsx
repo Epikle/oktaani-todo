@@ -5,11 +5,13 @@ import { faGear } from '@fortawesome/free-solid-svg-icons';
 import LanguageSelection from './LanguageSelection';
 import ModeSelection from './ModeSelection';
 import Button from '../Button';
+import useLanguage from '../../../hooks/useLanguage';
 
 import styles from './Settings.module.scss';
 
 const Settings: FC = () => {
   const [showSettings, setShowSettings] = useState(false);
+  const { text } = useLanguage();
 
   const settingsBtnHandler = () => {
     setShowSettings((prevS) => !prevS);
@@ -40,7 +42,7 @@ const Settings: FC = () => {
         <Button
           className={settingsBtnStyles}
           onClick={settingsBtnHandler}
-          aria-label="Settings"
+          title={text.controls.settings}
           content={<FontAwesomeIcon icon={faGear} />}
         />
       </li>

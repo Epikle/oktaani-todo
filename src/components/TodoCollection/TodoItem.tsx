@@ -1,6 +1,7 @@
 import { FC, useId, useState } from 'react';
 
 import { toggleItemDone } from '../../context/todoSlice';
+import useLanguage from '../../hooks/useLanguage';
 import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
 import { Languages, TItem } from '../../types';
 import { formatDate } from '../../utils/utils';
@@ -18,13 +19,14 @@ type ItemProps = Omit<TItem, 'id'> & {
 
 export const Item: FC<ItemProps> = ({
   onChange,
-  text,
+  text: todoText,
   done,
   created,
   language,
 }) => {
   const id = useId();
   const [checked, isChecked] = useState(done);
+  const { text } = useLanguage();
 
   const changeHandler = () => {
     isChecked((prevS) => !prevS);
@@ -38,10 +40,13 @@ export const Item: FC<ItemProps> = ({
         id={id}
         checked={checked}
         onChange={changeHandler}
-        title={`Mark ${text} as done`}
+        title={text.todo.markDone.replace('[]', todoText)}
       />
-      <label htmlFor={id} title={`Created ${formatDate(created, language)}`}>
-        {text}
+      <label
+        htmlFor={id}
+        title={`${text.collection.created} ${formatDate(created, language)}`}
+      >
+        {todoText}
       </label>
     </li>
   );

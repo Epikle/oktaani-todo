@@ -23,6 +23,14 @@
       &.trash:is(:hover, :focus-visible) {
         color: var(--color-p-red);
       }
+
+      &:disabled {
+        cursor: not-allowed;
+
+        &:is(:hover, :focus-visible) {
+          background-color: var(--color-bg-btn);
+        }
+      }
     }
   }
 }

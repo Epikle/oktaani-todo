@@ -39,8 +39,21 @@ export type Texts = {
     newTodo: string;
     setColorTitle: string;
   };
+  controls: {
+    settings: string;
+    changeColorMode: string;
+    language: string;
+    removeCol: string;
+    editCol: string;
+    shareCol: string;
+    removeDone: string;
+    deleteConfirm: string;
+  };
   collection: {
     created: string;
+  };
+  todo: {
+    markDone: string;
   };
   common: {
     cancel: string;

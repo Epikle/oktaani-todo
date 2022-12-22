@@ -4,9 +4,10 @@ import { faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
 
 import Button from '../Button';
 import { useAppDispatch, useAppSelector } from '../../../hooks/useRedux';
+import { setSettings } from '../../../context/settingsSlice';
+import useLanguage from '../../../hooks/useLanguage';
 
 import styles from './ModeSelection.module.scss';
-import { setSettings } from '../../../context/settingsSlice';
 
 type Props = {
   disabled: boolean;
@@ -15,6 +16,7 @@ type Props = {
 const ModeSelection: FC<Props> = ({ disabled }) => {
   const { language, darkMode } = useAppSelector((state) => state.settings);
   const dispatch = useAppDispatch();
+  const { text } = useLanguage();
 
   const modeBtnHandler = () => {
     dispatch(setSettings({ language, darkMode: !darkMode }));
@@ -24,7 +26,7 @@ const ModeSelection: FC<Props> = ({ disabled }) => {
     <Button
       className={styles.mode}
       onClick={modeBtnHandler}
-      aria-label="Change mode"
+      title={text.controls.changeColorMode}
       disabled={disabled}
       content={
         darkMode ? (

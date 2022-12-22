@@ -14,12 +14,14 @@ import {
   resetSelection,
   setSelectedCollectionEdit,
 } from '../../context/selectedSlice';
+import useLanguage from '../../hooks/useLanguage';
 
 import styles from './TodoControls.module.scss';
 
 const TodoControls: FC = () => {
   const { id, edit } = useAppSelector((state) => state.selected);
   const dispatch = useAppDispatch();
+  const { text } = useLanguage();
 
   const removeDoneBtnHandler = () => {
     dispatch(removeDoneItems({ id }));
@@ -29,7 +31,7 @@ const TodoControls: FC = () => {
   };
 
   const deleteBtnHandler = () => {
-    if (confirm('Are you sure?')) {
+    if (confirm(text.controls.deleteConfirm)) {
       dispatch(deleteCollection({ id }));
       dispatch(resetSelection());
     }
@@ -39,27 +41,28 @@ const TodoControls: FC = () => {
     <ul className={styles.controls} data-testid="todo-controls">
       <li>
         <Button
-          title="Remove done items"
+          title={text.controls.removeDone}
           onClick={removeDoneBtnHandler}
           content={<FontAwesomeIcon icon={faListCheck} />}
         />
       </li>
       <li>
         <Button
-          title="Share collection"
+          disabled
+          title={text.controls.shareCol}
           content={<FontAwesomeIcon icon={faShareNodes} />}
         />
       </li>
       <li>
         <Button
-          title="Edit collection title"
+          title={text.controls.editCol}
           onClick={editBtnHandler}
           content={<FontAwesomeIcon icon={faPen} />}
         />
       </li>
       <li>
         <Button
-          title="Remove collection"
+          title={text.controls.removeCol}
           onClick={deleteBtnHandler}
           className={styles.trash}
           content={<FontAwesomeIcon icon={faTrash} />}
