@@ -63,6 +63,9 @@ export type Texts = {
 
 export type Settings = {
   availableLanguages: Languages[];
-  language: Languages;
+  languageName: Languages;
+  language: Texts;
   darkMode: boolean;
 };
+
+export type SettingsLS = Omit<Settings, 'availableLanguages' | 'language'>;

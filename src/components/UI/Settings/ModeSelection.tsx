@@ -14,12 +14,12 @@ type Props = {
 };
 
 const ModeSelection: FC<Props> = ({ disabled }) => {
-  const { language, darkMode } = useAppSelector((state) => state.settings);
+  const { languageName, darkMode } = useAppSelector((state) => state.settings);
   const dispatch = useAppDispatch();
   const { text } = useLanguage();
 
   const modeBtnHandler = () => {
-    dispatch(setSettings({ language, darkMode: !darkMode }));
+    dispatch(setSettings({ languageName, darkMode: !darkMode }));
   };
 
   return (

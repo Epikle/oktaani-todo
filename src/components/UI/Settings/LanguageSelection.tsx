@@ -13,7 +13,7 @@ type Props = {
 };
 
 const LanguageSelection: FC<Props> = ({ disabled }) => {
-  const { language } = useAppSelector((state) => state.settings);
+  const { languageName } = useAppSelector((state) => state.settings);
   const { text, nextLang } = useLanguage();
 
   const languageBtnHandler = () => {
@@ -22,7 +22,7 @@ const LanguageSelection: FC<Props> = ({ disabled }) => {
 
   return (
     <Button
-      data-language={language}
+      data-language={languageName}
       className={styles.language}
       title={text.controls.language}
       onClick={languageBtnHandler}

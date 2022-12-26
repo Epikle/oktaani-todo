@@ -80,6 +80,7 @@ export const todoSlice = createSlice({
       if (!toggleItem) return state;
 
       toggleItem.done = !toggleItem.done;
+
       saveCollectionsToLS(state);
 
       return state;

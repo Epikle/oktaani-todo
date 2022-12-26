@@ -1,9 +1,9 @@
 import { FC, useEffect, useRef } from 'react';
 import autoAnimate from '@formkit/auto-animate';
 
-import TodoCollection from './TodoCollection/TodoCollection';
-import Footer from './UI/Footer';
-import { useAppSelector } from '../hooks/useRedux';
+import TodoCollection from '../TodoCollection/TodoCollection';
+import Footer from '../UI/Footer';
+import { useAppSelector } from '../../hooks/useRedux';
 
 import styles from './TodoList.module.scss';
 

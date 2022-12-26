@@ -55,13 +55,13 @@ export const Item: FC<ItemProps> = ({
 const TodoItem: FC<Props> = ({ todo }) => {
   const { id } = todo;
   const dispatch = useAppDispatch();
-  const { language } = useAppSelector((state) => state.settings);
+  const { languageName } = useAppSelector((state) => state.settings);
 
   const doneInputHandler = () => {
     dispatch(toggleItemDone({ id }));
   };
 
-  return <Item {...todo} onChange={doneInputHandler} language={language} />;
+  return <Item {...todo} onChange={doneInputHandler} language={languageName} />;
 };
 
 export default TodoItem;
