@@ -2,7 +2,7 @@
 
 describe('oktaniTODO', () => {
   beforeEach(() => {
-    cy.visit('http://127.0.0.1:5173/todo-demo/');
+    cy.visit('http://127.0.0.1:4173/todo-demo/');
   });
 
   it('displays collection named First Collection default', () => {
