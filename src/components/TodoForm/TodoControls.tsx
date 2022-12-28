@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faListCheck,
   faPen,
-  faShareNodes,
+  // faShareNodes,
   faTrash,
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -46,13 +46,13 @@ const TodoControls: FC = () => {
           content={<FontAwesomeIcon icon={faListCheck} />}
         />
       </li>
-      <li>
+      {/* <li>
         <Button
           disabled
           title={text.controls.shareCol}
           content={<FontAwesomeIcon icon={faShareNodes} />}
         />
-      </li>
+      </li> */}
       <li>
         <Button
           title={text.controls.editCol}
