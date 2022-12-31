@@ -1,6 +1,11 @@
 import { nanoid } from 'nanoid';
 
-import { TCollection, TItem, TItemEntry, TNewCollectionEntry } from '../types';
+import type {
+  TCollection,
+  TItem,
+  TItemEntry,
+  TNewCollectionEntry,
+} from '../types';
 import { isStorageAvailable } from '../utils/utils';
 
 const LS_NAME = 'oktaani-todo';

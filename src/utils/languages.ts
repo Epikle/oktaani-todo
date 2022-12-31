@@ -1,4 +1,4 @@
-import { Languages, Texts } from '../types';
+import type { Languages, Texts } from '../types';
 
 export const languages: Record<Languages, Texts> = {
   'en-us': {

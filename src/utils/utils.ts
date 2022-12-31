@@ -1,4 +1,4 @@
-import { Languages, SettingsLS } from '../types';
+import type { Languages } from '../types';
 import { languages } from './languages';
 
 export const formatDate = (
@@ -15,28 +15,23 @@ export const formatDate = (
   return dateObj.toLocaleDateString(locale, options);
 };
 
-export const validateSettings = (
-  settings: Record<string, unknown>,
-): SettingsLS => {
-  const settingsEntry: SettingsLS = {
-    languageName: isLanguage(settings.languageName),
-    darkMode: isBoolean(settings.darkMode),
-  };
-
-  return settingsEntry;
+export const isValidSettings = (settings: unknown) => {
+  return (
+    settings !== null &&
+    typeof settings === 'object' &&
+    'languageName' in settings &&
+    'darkMode' in settings &&
+    isLanguage(settings.languageName) &&
+    isBoolean(settings.darkMode)
+  );
 };
 
-const isLanguage = (val: unknown): Languages => {
-  if (!Object.hasOwn(languages, val as string)) {
-    throw new Error('Not language');
-  }
-
-  return val as Languages;
+const isLanguage = (val: unknown) => {
+  return val !== null && typeof val === 'string' && val in languages;
 };
 
-const isBoolean = (val: unknown): boolean => {
-  if (typeof val !== 'boolean') throw new Error('Not boolean');
-  return val;
+const isBoolean = (val: unknown) => {
+  return typeof val === 'boolean';
 };
 
 export const isStorageAvailable = () => {
