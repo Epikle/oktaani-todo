@@ -1,9 +1,9 @@
 import { FC, useId, useState } from 'react';
 
+import type { Languages, TItem } from '../../types';
 import { toggleItemDone } from '../../context/todoSlice';
 import useLanguage from '../../hooks/useLanguage';
 import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
-import { Languages, TItem } from '../../types';
 import { formatDate } from '../../utils/utils';
 
 import styles from './TodoItem.module.scss';

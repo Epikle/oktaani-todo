@@ -1,10 +1,10 @@
 import { render, screen } from '@testing-library/react';
+import { act } from 'react-dom/test-utils';
+import { Provider } from 'react-redux';
 import '@testing-library/jest-dom/extend-expect';
 
+import type { Languages } from '../../types';
 import { Item } from './TodoItem';
-import { act } from 'react-dom/test-utils';
-import { Languages } from '../../types';
-import { Provider } from 'react-redux';
 import { setupStore } from '../../context/store';
 
 describe('TodoItem', () => {

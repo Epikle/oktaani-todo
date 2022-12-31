@@ -13,7 +13,7 @@ export const getSettingsFromLS = () => {
     if (!isValidSettings(parsedSettings)) {
       throw new Error('localStorage data is not valid, using default values!');
     }
-    return parsedSettings;
+    return parsedSettings as SettingsLS;
   } catch (error) {
     console.error(error);
     return null;
