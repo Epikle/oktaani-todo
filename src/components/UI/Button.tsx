@@ -1,6 +1,6 @@
-import { FC } from 'react';
+import { FC, ComponentPropsWithoutRef } from 'react';
 
-type Props = React.ComponentPropsWithoutRef<'button'> & {
+type Props = ComponentPropsWithoutRef<'button'> & {
   testId?: string;
   content: React.ReactNode;
 };

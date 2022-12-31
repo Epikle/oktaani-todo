@@ -1,11 +1,9 @@
 import type { SettingsLS } from '../types';
-import { isStorageAvailable, isValidSettings } from '../utils/utils';
+import { isValidSettings } from '../utils/utils';
 
 const LS_NAME = 'oktaani-todo-settings';
-const isLSAvailable = isStorageAvailable();
 
 export const getSettingsFromLS = () => {
-  if (!isLSAvailable) return null;
   const settings = localStorage.getItem(LS_NAME);
   if (!settings) return null;
   try {
@@ -21,6 +19,5 @@ export const getSettingsFromLS = () => {
 };
 
 export const saveSettingsToLS = (settings: SettingsLS) => {
-  if (!isLSAvailable) return;
   localStorage.setItem(LS_NAME, JSON.stringify(settings));
 };

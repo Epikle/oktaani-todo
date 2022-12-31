@@ -1,5 +1,5 @@
+import type { Languages } from '../types';
 import { setSettings, setLanguage } from '../context/settingsSlice';
-import { Languages } from '../types';
 import { languages } from '../utils/languages';
 import { useAppDispatch, useAppSelector } from './useRedux';
 

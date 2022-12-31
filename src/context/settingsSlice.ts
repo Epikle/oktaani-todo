@@ -1,6 +1,7 @@
-import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { Languages, Settings, SettingsLS, Texts } from '../types';
+import { createSlice } from '@reduxjs/toolkit';
+
+import type { Languages, Settings, SettingsLS, Texts } from '../types';
 import { languages } from '../utils/languages';
 import { saveSettingsToLS } from '../services/settings';
 

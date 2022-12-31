@@ -2,10 +2,10 @@ import { FC, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGear } from '@fortawesome/free-solid-svg-icons';
 
+import useLanguage from '../../../hooks/useLanguage';
 import LanguageSelection from './LanguageSelection';
 import ModeSelection from './ModeSelection';
 import Button from '../Button';
-import useLanguage from '../../../hooks/useLanguage';
 
 import styles from './Settings.module.scss';
 

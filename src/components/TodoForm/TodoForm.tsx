@@ -13,10 +13,10 @@ import {
   setSelectedCollection,
   setSelectedCollectionEdit,
 } from '../../context/selectedSlice';
+import useLanguage from '../../hooks/useLanguage';
+import Button from '../UI/Button';
 
 import styles from './TodoForm.module.scss';
-import Button from '../UI/Button';
-import useLanguage from '../../hooks/useLanguage';
 
 const DEFAULT_COLOR = '#7b68ee';
 const COLLECTION_LENGTH = 100;

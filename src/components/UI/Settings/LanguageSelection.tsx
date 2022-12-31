@@ -2,9 +2,9 @@ import { FC } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEarthAmericas } from '@fortawesome/free-solid-svg-icons';
 
-import Button from '../Button';
 import { useAppSelector } from '../../../hooks/useRedux';
 import useLanguage from '../../../hooks/useLanguage';
+import Button from '../Button';
 
 import styles from './LanguageSelection.module.scss';
 

@@ -1,7 +1,7 @@
-import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
-import { TSelectedEntry } from '../types';
+import type { TSelectedEntry } from '../types';
 
 const initialState = {
   id: '',

@@ -3,17 +3,17 @@ import autoAnimate from '@formkit/auto-animate';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShareNodes } from '@fortawesome/free-solid-svg-icons';
 
-import TodoItem from './TodoItem';
-import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
-import { TCollection } from '../../types';
+import type { TCollection } from '../../types';
 import {
   resetSelection,
   setSelectedCollection,
 } from '../../context/selectedSlice';
+import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
+import useLanguage from '../../hooks/useLanguage';
+import { formatDate } from '../../utils/utils';
+import TodoItem from './TodoItem';
 
 import styles from './TodoCollection.module.scss';
-import { formatDate } from '../../utils/utils';
-import useLanguage from '../../hooks/useLanguage';
 
 type Props = {
   collection: TCollection;

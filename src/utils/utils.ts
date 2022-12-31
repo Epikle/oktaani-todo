@@ -26,12 +26,12 @@ export const isValidSettings = (settings: unknown) => {
   );
 };
 
-const isLanguage = (val: unknown) => {
-  return val !== null && typeof val === 'string' && val in languages;
+const isLanguage = (value: unknown) => {
+  return value !== null && typeof value === 'string' && value in languages;
 };
 
-const isBoolean = (val: unknown) => {
-  return typeof val === 'boolean';
+const isBoolean = (value: unknown) => {
+  return typeof value === 'boolean';
 };
 
 export const isStorageAvailable = () => {

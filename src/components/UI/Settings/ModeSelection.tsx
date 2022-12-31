@@ -2,10 +2,10 @@ import { FC } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
 
-import Button from '../Button';
 import { useAppDispatch, useAppSelector } from '../../../hooks/useRedux';
 import { setSettings } from '../../../context/settingsSlice';
 import useLanguage from '../../../hooks/useLanguage';
+import Button from '../Button';
 
 import styles from './ModeSelection.module.scss';
 

@@ -1,13 +1,13 @@
 import { FC, useEffect } from 'react';
 
-import Header from './components/UI/Header';
-import TodoList from './components/TodoList/TodoList';
 import { useAppDispatch, useAppSelector } from './hooks/useRedux';
 import { initTodos } from './context/todoSlice';
 import { initSettings } from './context/settingsSlice';
 import * as todoService from './services/todo';
 import * as settingsService from './services/settings';
 import { isStorageAvailable } from './utils/utils';
+import Header from './components/UI/Header';
+import TodoList from './components/TodoList/TodoList';
 import Overlay from './components/UI/Overlay';
 
 const App: FC = () => {

@@ -7,14 +7,14 @@ import {
   faTrash,
 } from '@fortawesome/free-solid-svg-icons';
 
-import Button from '../UI/Button';
 import { deleteCollection, removeDoneItems } from '../../context/todoSlice';
-import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
 import {
   resetSelection,
   setSelectedCollectionEdit,
 } from '../../context/selectedSlice';
+import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
 import useLanguage from '../../hooks/useLanguage';
+import Button from '../UI/Button';
 
 import styles from './TodoControls.module.scss';
 

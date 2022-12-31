@@ -1,12 +1,12 @@
 import { FC, useEffect, useRef } from 'react';
 import autoAnimate from '@formkit/auto-animate';
 
+import { useAppSelector } from '../../hooks/useRedux';
 import TodoControls from '../TodoForm/TodoControls';
 import TodoForm from '../TodoForm/TodoForm';
-import { useAppSelector } from '../../hooks/useRedux';
+import Settings from './Settings/Settings';
 
 import styles from './Header.module.scss';
-import Settings from './Settings/Settings';
 
 const Header: FC = () => {
   const { selected } = useAppSelector((state) => state.selected);
