@@ -4,13 +4,25 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { Languages, Settings, SettingsLS, Texts } from '../types';
 import { languages } from '../utils/languages';
 import { saveSettingsToLS } from '../services/settings';
+import { isLanguage } from '../utils/utils';
 
 const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+const getLanguage = (): [Languages, Texts] => {
+  const language = navigator.language.toLowerCase();
+
+  if (isLanguage(language)) {
+    return [language as Languages, languages[language as Languages]];
+  }
+
+  return ['en-us', languages['en-us']];
+};
+
+const [languageName, language] = getLanguage();
 
 const initialState: Settings = {
   availableLanguages: Object.keys(languages) as Languages[], //ISO639-1
-  languageName: 'en-us',
-  language: languages['en-us'],
+  languageName,
+  language,
   darkMode: isDarkMode,
 };
 

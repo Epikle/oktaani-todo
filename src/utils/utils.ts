@@ -26,7 +26,7 @@ export const isValidSettings = (settings: unknown) => {
   );
 };
 
-const isLanguage = (value: unknown) => {
+export const isLanguage = (value: unknown) => {
   return value !== null && typeof value === 'string' && value in languages;
 };
 

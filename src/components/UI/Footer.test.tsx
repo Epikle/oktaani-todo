@@ -7,6 +7,6 @@ describe('Footer', () => {
   it('Footer shows copyright', () => {
     render(<Footer />);
 
-    expect(screen.getByText('2022 © oktaani.com')).toBeInTheDocument();
+    expect(screen.getByText('2023 © oktaani.com')).toBeInTheDocument();
   });
 });
