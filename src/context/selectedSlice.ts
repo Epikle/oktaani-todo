@@ -9,6 +9,7 @@ const initialState = {
   color: '',
   edit: false,
   selected: false,
+  hasDone: false,
 };
 
 export const selectedSlice = createSlice({
@@ -24,6 +25,9 @@ export const selectedSlice = createSlice({
     ) => {
       return { ...state, ...action.payload };
     },
+    setHasDone: (state, action: PayloadAction<boolean>) => {
+      return { ...state, hasDone: action.payload };
+    },
     resetSelection: () => initialState,
   },
 });
@@ -32,6 +36,7 @@ export const {
   setSelectedCollection,
   setSelectedCollectionEdit,
   resetSelection,
+  setHasDone,
 } = selectedSlice.actions;
 
 export default selectedSlice.reducer;

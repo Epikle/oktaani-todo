@@ -6,6 +6,7 @@ import { faShareNodes } from '@fortawesome/free-solid-svg-icons';
 import type { TCollection } from '../../types';
 import {
   resetSelection,
+  setHasDone,
   setSelectedCollection,
 } from '../../context/selectedSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
@@ -40,6 +41,8 @@ const TodoCollection: FC<Props> = ({ collection }) => {
       dispatch(resetSelection());
       return;
     }
+
+    dispatch(setHasDone(!!doneTodos));
     dispatch(setSelectedCollection({ id, title, color }));
   };
 
@@ -58,6 +61,12 @@ const TodoCollection: FC<Props> = ({ collection }) => {
     isSelected && formatDate(created, languageName)
       ? `${text.collection.created} ${formatDate(created, languageName)}`
       : '';
+
+  useEffect(() => {
+    if (isSelected) {
+      dispatch(setHasDone(!!doneTodos));
+    }
+  }, [doneTodos]);
 
   return (
     <article

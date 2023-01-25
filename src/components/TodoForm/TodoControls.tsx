@@ -19,7 +19,7 @@ import Button from '../UI/Button';
 import styles from './TodoControls.module.scss';
 
 const TodoControls: FC = () => {
-  const { id, edit } = useAppSelector((state) => state.selected);
+  const { id, edit, hasDone } = useAppSelector((state) => state.selected);
   const dispatch = useAppDispatch();
   const { text } = useLanguage();
 
@@ -44,6 +44,7 @@ const TodoControls: FC = () => {
           title={text.controls.removeDone}
           onClick={removeDoneBtnHandler}
           content={<FontAwesomeIcon icon={faListCheck} />}
+          disabled={!hasDone}
         />
       </li>
       {/* <li>
