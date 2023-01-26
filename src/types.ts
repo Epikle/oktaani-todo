@@ -24,7 +24,7 @@ export type TSelected = {
 
 export type TNewCollectionEntry = Omit<
   TCollection,
-  'id' | 'shared' | 'todos' | 'created'
+  'shared' | 'todos' | 'created'
 >;
 
 export type TSelectedEntry = Omit<TSelected, 'edit' | 'selected'>;

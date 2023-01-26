@@ -1,6 +1,7 @@
 import { FC, FormEvent, useEffect, useRef, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { nanoid } from 'nanoid';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
 import {
@@ -93,12 +94,14 @@ const TodoForm: FC = () => {
       return;
     }
 
-    dispatch(
-      createCollection({
-        title: trimmedInput,
-        color: colorVal,
-      }),
-    );
+    const newCollectionEntry = {
+      title: trimmedInput,
+      color: colorVal,
+      id: nanoid(),
+    };
+
+    dispatch(createCollection(newCollectionEntry));
+    dispatch(setSelectedCollection(newCollectionEntry));
 
     setTodoInput('');
   };

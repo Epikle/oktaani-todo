@@ -1,5 +1,6 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
+import { nanoid } from 'nanoid';
 
 import type {
   TCollection,
@@ -25,6 +26,7 @@ export const todoSlice = createSlice({
           createCollectionEntry({
             title: 'First Collection',
             color: '#7c9473',
+            id: nanoid(),
           }),
         ];
 

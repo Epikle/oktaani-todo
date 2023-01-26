@@ -21,7 +21,6 @@ export const saveCollectionsToLS = (collections: TCollection[]) => {
 
 export const createCollectionEntry = (entry: TNewCollectionEntry) => {
   const createdCollection: TCollection = {
-    id: nanoid(),
     shared: false,
     todos: [],
     created: Date(),
