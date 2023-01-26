@@ -59,6 +59,7 @@ const TodoControls: FC = () => {
           title={text.controls.editCol}
           onClick={editBtnHandler}
           content={<FontAwesomeIcon icon={faPen} />}
+          className={edit ? styles['edit-active'] : ''}
         />
       </li>
       <li>
