@@ -162,7 +162,7 @@ const TodoForm: FC = () => {
         onBlur={tempColorHandler}
       />
       <input
-        type="search"
+        type="text"
         className={styles.todo}
         placeholder={placeholderText}
         title={placeholderText}

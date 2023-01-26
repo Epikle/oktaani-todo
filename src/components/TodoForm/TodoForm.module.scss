@@ -93,10 +93,6 @@
     &:focus-visible {
       @include focus-border;
     }
-
-    &::-webkit-search-cancel-button {
-      filter: brightness(0);
-    }
   }
 
   .add,
