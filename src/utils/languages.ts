@@ -19,13 +19,16 @@ export const languages: Record<Languages, Texts> = {
     },
     collection: {
       created: 'created',
+      empty: 'No collections, start by creating one.',
     },
     todo: {
       markDone: 'Mark [] as done',
     },
     common: {
+      confirm: 'Confirm',
       cancel: 'Cancel',
       add: 'Add',
+      editing: 'Editing',
     },
   },
   fi: {
@@ -46,13 +49,16 @@ export const languages: Record<Languages, Texts> = {
     },
     collection: {
       created: 'luotu',
+      empty: 'Ei kokoelmia, aloita luomalla uusi.',
     },
     todo: {
       markDone: 'Merkkaa [] tehdyksi',
     },
     common: {
+      confirm: 'Vahvista',
       cancel: 'Peruuta',
       add: 'Lisää',
+      editing: 'Muokkaa',
     },
   },
 };

@@ -7,18 +7,19 @@ import {
   faTrash,
 } from '@fortawesome/free-solid-svg-icons';
 
-import { deleteCollection, removeDoneItems } from '../../context/todoSlice';
-import {
-  resetSelection,
-  setSelectedCollectionEdit,
-} from '../../context/selectedSlice';
+import { removeDoneItems } from '../../context/todoSlice';
+import { setSelectedCollectionEdit } from '../../context/selectedSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
 import useLanguage from '../../hooks/useLanguage';
 import Button from '../UI/Button';
 
 import styles from './TodoControls.module.scss';
 
-const TodoControls: FC = () => {
+type Props = {
+  deleteBtnHandler(): void;
+};
+
+const TodoControls: FC<Props> = ({ deleteBtnHandler }) => {
   const { id, edit, hasDone } = useAppSelector((state) => state.selected);
   const dispatch = useAppDispatch();
   const { text } = useLanguage();
@@ -28,13 +29,6 @@ const TodoControls: FC = () => {
   };
   const editBtnHandler = () => {
     dispatch(setSelectedCollectionEdit({ edit: !edit }));
-  };
-
-  const deleteBtnHandler = () => {
-    if (confirm(text.controls.deleteConfirm)) {
-      dispatch(deleteCollection({ id }));
-      dispatch(resetSelection());
-    }
   };
 
   return (

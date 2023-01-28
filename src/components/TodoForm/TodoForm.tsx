@@ -148,7 +148,7 @@ const TodoForm: FC = () => {
       onSubmit={submitHandler}
       data-collection={
         selectedCollection.edit
-          ? `Editing: ${selectedCollection.title}`
+          ? `${text.common.editing}: ${selectedCollection.title}`
           : selectedCollection.title
       }
       data-length={showInputLength}

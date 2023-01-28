@@ -51,13 +51,16 @@ export type Texts = {
   };
   collection: {
     created: string;
+    empty: string;
   };
   todo: {
     markDone: string;
   };
   common: {
+    confirm: string;
     cancel: string;
     add: string;
+    editing: string;
   };
 };
 
