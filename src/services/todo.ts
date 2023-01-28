@@ -6,17 +6,34 @@ import type {
   TItemEntry,
   TNewCollectionEntry,
 } from '../types';
+import { isValidCollections } from '../utils/utils';
 
 const LS_NAME = 'oktaani-todo';
 
-export const getTodosFromLS = () => {
-  const collections = localStorage.getItem(LS_NAME) || '[]';
-  const parsedCollections: TCollection[] | [] = JSON.parse(collections);
-  return parsedCollections;
+export const getTodosFromLS = (): [] | TCollection[] => {
+  try {
+    const collections = localStorage.getItem(LS_NAME);
+    if (!collections) return [];
+
+    const parsedCollections = JSON.parse(collections) as unknown;
+
+    if (!isValidCollections(parsedCollections)) {
+      throw new Error('localStorage data is not valid, using default values!');
+    }
+
+    return parsedCollections as TCollection[];
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
 };
 
 export const saveCollectionsToLS = (collections: TCollection[]) => {
-  localStorage.setItem(LS_NAME, JSON.stringify(collections));
+  try {
+    localStorage.setItem(LS_NAME, JSON.stringify(collections));
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 export const createCollectionEntry = (entry: TNewCollectionEntry) => {

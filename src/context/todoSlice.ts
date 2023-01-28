@@ -25,7 +25,7 @@ export const todoSlice = createSlice({
         const createdEntry = [
           createCollectionEntry({
             title: 'First Collection',
-            color: '#7c9473',
+            color: '#7b68ee',
             id: nanoid(),
           }),
         ];

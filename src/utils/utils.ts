@@ -15,6 +15,27 @@ export const formatDate = (
   return dateObj.toLocaleDateString(locale, options);
 };
 
+export const isValidCollections = (collections: unknown) => {
+  if (!collections || !Array.isArray(collections)) return false;
+
+  return collections.every(
+    (collection) =>
+      typeof collection === 'object' &&
+      'color' in collection &&
+      'created' in collection &&
+      'id' in collection &&
+      'shared' in collection &&
+      'title' in collection &&
+      'todos' in collection &&
+      isBoolean(collection.shared) &&
+      typeof collection.color === 'string' &&
+      typeof collection.created === 'string' &&
+      typeof collection.id === 'string' &&
+      typeof collection.title === 'string' &&
+      typeof collection.todos === 'object',
+  );
+};
+
 export const isValidSettings = (settings: unknown) => {
   return (
     settings !== null &&
