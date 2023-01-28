@@ -53,7 +53,7 @@ const TodoCollection: FC<Props> = ({ collection }) => {
   const doneTodos = collection.todos.filter((todo) => todo.done).length;
   const totalTodos = collection.todos.length;
   const showDone = totalTodos > 0 ? `${doneTodos}/${totalTodos}` : '';
-  const articleStyles = selectedCollection.selected
+  const articleStyles = isSelected
     ? [styles.collection, styles.selected].join(' ')
     : styles.collection;
 

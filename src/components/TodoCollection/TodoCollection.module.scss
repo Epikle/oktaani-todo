@@ -1,6 +1,7 @@
 @import 'src/mixin';
 
 .collection {
+  @include transition;
   position: relative;
   padding-block: 1.25rem 0.75rem;
   color: var(--color-text-n);
@@ -38,6 +39,7 @@
   }
 
   &.selected {
+    box-shadow: 0 0 0 3px var(--color-text-p);
     &::after {
       opacity: 0.6;
     }
