@@ -23,36 +23,20 @@
 
 In the project directory, you can run:
 
-### `npm install`
+- `npm install` <br /> Install the project dependencies.
 
-Install the project dependencies.
+- `npm run dev` <br /> Runs the app in the development mode. With Vite the default port is 5173.<br />
+  Open [ http://localhost:5173/](http://localhost:5173/) to view it in the browser.<br />
+  The page will reload if you make edits.
 
-### `npm run dev`
+- `npm run lint` <br /> Uses ESLint to analyze code and find problems.
 
-Runs the app in the development mode. With Vite the default port is 5173.<br />
-Open [ http://localhost:5173/](http://localhost:5173/) to view it in the browser.<br />
-The page will reload if you make edits.
+- `npm run test` <br /> Launches the Jest test runner and runs all tests.
 
-### `npm run lint`
+- `npm run cypress:open` <br /> Launches the Cypress Launchpad window.
 
-Uses ESLint to analyze code and find problems.
+- `npm run cypress:e2e` <br /> Runs all the e2e tests.
 
-### `npm run test`
+- `npm run build` <br /> Builds the app for production to the `dist` folder.
 
-Launches the Jest test runner and runs all tests.
-
-### `npm run cypress:open`
-
-Launches the Cypress Launchpad window.
-
-### `npm run cypress:e2e`
-
-Runs all the e2e tests.
-
-### `npm run build`
-
-Builds the app for production to the `dist` folder.
-
-### `npm run preview`
-
-You can preview the builded production version.
+- `npm run preview` <br /> You can preview the builded production version.
