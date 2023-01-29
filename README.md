@@ -1,6 +1,8 @@
 # oktaaniTODO - TS edition - WIP
 
-- [oktaaniTODO | DEMO](https://oktaani.com/todo-demo/)
+[oktaaniTODO | DEMO](https://oktaani.com/todo-demo/)
+
+![Preview image](https://raw.githubusercontent.com/Epikle/oktaani-todo/main/public/oktaani-todo-meta.png)
 
 ## My process
 
