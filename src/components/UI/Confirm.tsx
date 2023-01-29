@@ -22,7 +22,7 @@ const Confirm: FC<Props> = ({ confirm, cancel }) => {
   return (
     <div className={styles.confirm}>
       <div className={styles.text}>
-        <FontAwesomeIcon icon={faCircleQuestion} />
+        <FontAwesomeIcon icon={faCircleQuestion} size="xl" />
         {text.controls.deleteConfirm}
       </div>
       <ul className={styles.controls}>
