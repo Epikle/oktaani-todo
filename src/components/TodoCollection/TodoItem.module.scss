@@ -23,6 +23,10 @@
       cursor: pointer;
     }
 
+    &:focus-visible {
+      @include focus-border;
+    }
+
     &:checked {
       + label {
         text-decoration: 3px line-through var(--color-gray-800);

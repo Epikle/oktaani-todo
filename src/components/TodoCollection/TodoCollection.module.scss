@@ -57,6 +57,10 @@
       word-wrap: break-word;
       width: 100%;
       color: var(--color-text-p);
+
+      &:focus-visible {
+        @include focus-border;
+      }
     }
   }
 }

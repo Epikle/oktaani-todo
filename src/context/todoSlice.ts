@@ -24,7 +24,7 @@ export const todoSlice = createSlice({
       if (action.payload.length === 0) {
         const createdEntry = [
           createCollectionEntry({
-            title: 'First Collection',
+            title: '✨ First Collection ✨',
             color: '#7b68ee',
             id: nanoid(),
           }),
