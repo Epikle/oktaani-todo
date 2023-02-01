@@ -22,19 +22,19 @@ const ModeSelection: FC<Props> = ({ disabled }) => {
     dispatch(setSettings({ languageName, darkMode: !darkMode }));
   };
 
+  const modeBtnContent = darkMode ? (
+    <FontAwesomeIcon icon={faSun} />
+  ) : (
+    <FontAwesomeIcon icon={faMoon} />
+  );
+
   return (
     <Button
       className={styles.mode}
       onClick={modeBtnHandler}
       title={text.controls.changeColorMode}
       disabled={disabled}
-      content={
-        darkMode ? (
-          <FontAwesomeIcon icon={faSun} />
-        ) : (
-          <FontAwesomeIcon icon={faMoon} />
-        )
-      }
+      content={modeBtnContent}
     />
   );
 };

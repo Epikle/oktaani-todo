@@ -16,16 +16,12 @@ const LanguageSelection: FC<Props> = ({ disabled }) => {
   const { languageName } = useAppSelector((state) => state.settings);
   const { text, nextLang } = useLanguage();
 
-  const languageBtnHandler = () => {
-    nextLang();
-  };
-
   return (
     <Button
       data-language={languageName}
       className={styles.language}
       title={text.controls.language}
-      onClick={languageBtnHandler}
+      onClick={nextLang}
       disabled={disabled}
       content={<FontAwesomeIcon icon={faEarthAmericas} />}
     />

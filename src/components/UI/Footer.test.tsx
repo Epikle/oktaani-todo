@@ -7,6 +7,10 @@ describe('Footer', () => {
   it('Footer shows copyright', () => {
     render(<Footer />);
 
-    expect(screen.getByText('2023 © oktaani.com')).toBeInTheDocument();
+    const currentYear = new Date().getFullYear();
+
+    expect(
+      screen.getByText(`${currentYear} © oktaani.com`),
+    ).toBeInTheDocument();
   });
 });

@@ -12,8 +12,8 @@ import Button from './Button';
 import styles from './Confirm.module.scss';
 
 type Props = {
-  confirm(): void;
-  cancel(): void;
+  confirm: () => void;
+  cancel: () => void;
 };
 
 const Confirm: FC<Props> = ({ confirm, cancel }) => {

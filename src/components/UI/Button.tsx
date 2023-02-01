@@ -1,8 +1,8 @@
 import { FC, ComponentPropsWithoutRef } from 'react';
 
 type Props = ComponentPropsWithoutRef<'button'> & {
-  testId?: string;
   content: React.ReactNode;
+  testId?: string;
 };
 
 const Button: FC<Props> = ({
