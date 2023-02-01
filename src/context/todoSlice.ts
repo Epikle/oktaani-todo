@@ -20,6 +20,20 @@ export const todoSlice = createSlice({
   name: 'todo',
   initialState,
   reducers: {
+    changeOrder: (
+      state,
+      action: PayloadAction<{ dragIndex: number; hoverIndex: number }>,
+    ) => {
+      const { dragIndex, hoverIndex } = action.payload;
+
+      const movingCollection = state[dragIndex];
+      state.splice(dragIndex, 1);
+      state.splice(hoverIndex, 0, movingCollection);
+
+      saveCollectionsToLS(state);
+
+      return state;
+    },
     initTodos: (_state, action: PayloadAction<TCollection[] | []>) => {
       if (action.payload.length === 0) {
         const createdEntry = [
@@ -116,6 +130,7 @@ export const todoSlice = createSlice({
 });
 
 export const {
+  changeOrder,
   initTodos,
   createCollection,
   deleteCollection,

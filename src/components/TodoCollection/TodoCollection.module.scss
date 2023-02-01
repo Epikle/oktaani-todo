@@ -9,6 +9,19 @@
   border-top: 6px solid var(--color-gray-800);
   border-bottom: 3px solid var(--color-gray-800);
 
+  .move {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-text-p);
+    background-color: transparent;
+
+    &:hover {
+      cursor: move;
+    }
+  }
+
   .shared {
     position: absolute;
     top: 5px;

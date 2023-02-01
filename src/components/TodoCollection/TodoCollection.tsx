@@ -1,9 +1,11 @@
 import { FC, CSSProperties, useEffect, useRef } from 'react';
 import autoAnimate from '@formkit/auto-animate';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faShareNodes } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faShareNodes } from '@fortawesome/free-solid-svg-icons';
+import { useDrag, useDrop } from 'react-dnd';
+import type { Identifier, XYCoord } from 'dnd-core';
 
-import type { TCollection } from '../../types';
+import { ItemTypes, TCollection } from '../../types';
 import {
   resetSelection,
   setHasDone,
@@ -18,16 +20,77 @@ import styles from './TodoCollection.module.scss';
 
 type Props = {
   collection: TCollection;
+  index: number;
+  moveCollection: (dragIndex: number, hoverIndex: number) => void;
 };
 
-const TodoCollection: FC<Props> = ({ collection }) => {
+type DragItem = {
+  index: number;
+  id: string;
+  type: string;
+};
+
+const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
   const { id, title, color, shared, created } = collection;
   const dispatch = useAppDispatch();
   const selectedCollection = useAppSelector((state) => state.selected);
   const { languageName } = useAppSelector((state) => state.settings);
   const isSelected = selectedCollection.id === collection.id;
+  const isEditing = selectedCollection.edit;
   const parent = useRef<HTMLUListElement>(null);
   const { text } = useLanguage();
+
+  const ref = useRef<HTMLElement>(null);
+  const [{ handlerId }, drop] = useDrop<
+    DragItem,
+    void,
+    { handlerId: Identifier | null }
+  >({
+    accept: ItemTypes.COLLECTION,
+    collect: (monitor) => ({
+      handlerId: monitor.getHandlerId(),
+    }),
+    hover: (item: DragItem, monitor) => {
+      if (!ref.current) return;
+
+      const dragIndex = item.index;
+      const hoverIndex = index;
+
+      if (dragIndex === hoverIndex) return;
+
+      const hoverBoundingRect = ref.current?.getBoundingClientRect();
+      const hoverMiddleY =
+        (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+      const clientOffset = monitor.getClientOffset();
+      const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top;
+
+      // Only perform the move when the mouse has crossed half of the items height
+      // When dragging downwards, only move when the cursor is below 50%
+      // When dragging upwards, only move when the cursor is above 50%
+
+      // Dragging downwards
+      if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
+        return;
+      }
+
+      // Dragging upwards
+      if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
+        return;
+      }
+
+      moveCollection(dragIndex, hoverIndex);
+
+      item.index = hoverIndex;
+    },
+  });
+
+  const [{ opacity }, drag] = useDrag({
+    type: ItemTypes.COLLECTION,
+    item: () => ({ id, index }),
+    collect: (monitor) => ({
+      opacity: monitor.isDragging() ? 0.2 : 1,
+    }),
+  });
 
   const listStyles: CSSProperties = {
     borderColor: color,
@@ -68,10 +131,14 @@ const TodoCollection: FC<Props> = ({ collection }) => {
     }
   }, [doneTodos]);
 
+  drag(drop(ref));
+
   return (
     <article
+      ref={ref}
+      data-handler-id={handlerId}
       className={articleStyles}
-      style={listStyles}
+      style={{ ...listStyles, opacity }}
       data-done={showDone}
       data-created={showCreated}
     >
@@ -85,6 +152,11 @@ const TodoCollection: FC<Props> = ({ collection }) => {
           <TodoItem key={todo.id} todo={todo} />
         ))}
       </ul>
+      {isSelected && isEditing && (
+        <button className={styles.move}>
+          <FontAwesomeIcon icon={faBars} size="2x" />
+        </button>
+      )}
       {shared && (
         <span className={styles.shared}>
           <FontAwesomeIcon icon={faShareNodes} />

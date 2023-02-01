@@ -72,3 +72,7 @@ export type Settings = {
 };
 
 export type SettingsLS = Omit<Settings, 'availableLanguages' | 'language'>;
+
+export const ItemTypes = {
+  COLLECTION: 'collection',
+};
