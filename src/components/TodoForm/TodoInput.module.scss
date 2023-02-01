@@ -1,0 +1,22 @@
+@import 'src/mixin';
+
+.todo {
+  @include text-green;
+  @include transition;
+
+  flex-grow: 1;
+  background-color: var(--color-bg-todo-input);
+  padding-inline: 0.5rem;
+
+  &::placeholder {
+    color: var(--color-placeholder-todo-input);
+  }
+
+  &:focus-visible {
+    @include focus-border;
+  }
+
+  &.selected {
+    padding-top: 0.75rem;
+  }
+}

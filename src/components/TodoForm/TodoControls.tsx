@@ -16,7 +16,7 @@ import Button from '../UI/Button';
 import styles from './TodoControls.module.scss';
 
 type Props = {
-  deleteBtnHandler(): void;
+  deleteBtnHandler: () => void;
 };
 
 const TodoControls: FC<Props> = ({ deleteBtnHandler }) => {
@@ -27,6 +27,7 @@ const TodoControls: FC<Props> = ({ deleteBtnHandler }) => {
   const removeDoneBtnHandler = () => {
     dispatch(removeDoneItems({ id }));
   };
+
   const editBtnHandler = () => {
     dispatch(setSelectedCollectionEdit({ edit: !edit }));
   };

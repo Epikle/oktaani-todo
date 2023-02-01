@@ -1,4 +1,4 @@
-import { FC, FormEvent, useEffect, useRef, useState } from 'react';
+import { FC, FormEvent, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { nanoid } from 'nanoid';
@@ -16,6 +16,8 @@ import {
 } from '../../context/selectedSlice';
 import useLanguage from '../../hooks/useLanguage';
 import Button from '../UI/Button';
+import ColorChooser from './ColorChooser';
+import TodoInput from './TodoInput';
 
 import styles from './TodoForm.module.scss';
 
@@ -24,13 +26,12 @@ const COLLECTION_LENGTH = 100;
 const ITEM_LENGTH = 300;
 
 const TodoForm: FC = () => {
-  const colorInputRef = useRef<HTMLInputElement>(null);
-  const [tempColor, setTempColor] = useState(DEFAULT_COLOR);
+  const [color, setColor] = useState(DEFAULT_COLOR);
   const [todoInput, setTodoInput] = useState('');
   const dispatch = useAppDispatch();
   const selectedCollection = useAppSelector((state) => state.selected);
-  const trimmedInput = todoInput.trim().replace(/\s+/g, ' ');
   const { text } = useLanguage();
+  const trimmedInput = todoInput.trim().replace(/\s+/g, ' ');
 
   useEffect(() => {
     if (selectedCollection.edit) {
@@ -40,48 +41,19 @@ const TodoForm: FC = () => {
     setTodoInput('');
   }, [selectedCollection.edit, selectedCollection.title]);
 
-  useEffect(() => {
-    if (!colorInputRef.current) return;
-    if (!selectedCollection.color) {
-      colorInputRef.current.value = tempColor;
-      return;
-    }
-
-    colorInputRef.current.value = selectedCollection.color;
-  }, [selectedCollection.color]);
-
-  const tempColorHandler = () => {
-    if (!colorInputRef.current) return;
-    if (!selectedCollection.color) {
-      setTempColor(colorInputRef.current.value);
-      return;
-    }
-
-    const editedCollection = {
-      id: selectedCollection.id,
-      title: selectedCollection.title,
-      color: colorInputRef.current.value,
-    };
-
-    dispatch(editCollection(editedCollection));
-  };
-
   const submitHandler = (event: FormEvent) => {
     event.preventDefault();
-    const colorVal = colorInputRef.current?.value || DEFAULT_COLOR;
-
     if (trimmedInput.length === 0) return;
 
     if (selectedCollection.edit) {
       const editedCollection = {
         id: selectedCollection.id,
         title: trimmedInput,
-        color: colorVal,
+        color,
       };
       dispatch(editCollection(editedCollection));
       dispatch(setSelectedCollection(editedCollection));
       dispatch(setSelectedCollectionEdit({ edit: false }));
-
       return;
     }
 
@@ -90,13 +62,12 @@ const TodoForm: FC = () => {
         createItem({ id: selectedCollection.id, item: { text: trimmedInput } }),
       );
       setTodoInput('');
-
       return;
     }
 
     const newCollectionEntry = {
       title: trimmedInput,
-      color: colorVal,
+      color,
       id: nanoid(),
     };
 
@@ -105,10 +76,6 @@ const TodoForm: FC = () => {
 
     setTodoInput('');
   };
-
-  const placeholderText = selectedCollection.selected
-    ? `${text.header.newTodo} ${selectedCollection.title}`
-    : text.header.newCollection;
 
   const isBtnDisabled =
     !selectedCollection.selected && trimmedInput.length === 0;
@@ -153,23 +120,22 @@ const TodoForm: FC = () => {
       }
       data-length={showInputLength}
     >
-      <input
-        type="color"
-        title={text.header.setColorTitle}
-        className={styles['color-picker']}
-        ref={colorInputRef}
-        defaultValue={DEFAULT_COLOR}
-        onBlur={tempColorHandler}
+      <ColorChooser
+        color={color}
+        setColor={setColor}
+        defaultColor={DEFAULT_COLOR}
+        text={text}
+        selectedCollection={selectedCollection}
       />
-      <input
-        type="text"
-        className={styles.todo}
-        placeholder={placeholderText}
-        title={placeholderText}
-        value={todoInput}
-        onChange={(e) => setTodoInput(e.target.value)}
+
+      <TodoInput
+        todoInput={todoInput}
+        setTodoInput={setTodoInput}
+        selectedCollection={selectedCollection}
+        text={text}
         maxLength={maxLength}
       />
+
       <Button
         className={btnStyles}
         title={isAddBtn ? text.common.add : text.common.cancel}

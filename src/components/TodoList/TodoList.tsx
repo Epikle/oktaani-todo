@@ -2,13 +2,13 @@ import { FC, useCallback, useEffect, useRef } from 'react';
 import autoAnimate from '@formkit/auto-animate';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
+import { TCollection } from '../../types';
+import { changeOrder } from '../../context/todoSlice';
+import useLanguage from '../../hooks/useLanguage';
 import TodoCollection from '../TodoCollection/TodoCollection';
 import Footer from '../UI/Footer';
 
 import styles from './TodoList.module.scss';
-import useLanguage from '../../hooks/useLanguage';
-import { TCollection } from '../../types';
-import { changeOrder } from '../../context/todoSlice';
 
 const TodoList: FC = () => {
   const collections = useAppSelector((state) => state.todo);
@@ -39,14 +39,14 @@ const TodoList: FC = () => {
   return (
     <main className={styles.main}>
       <div className={styles.container}>
-        {collections.length === 0 && (
-          <div className={styles.empty}>{text.collection.empty}</div>
-        )}
         <div className={styles.collections} ref={parent}>
-          {collections.length > 0 &&
+          {collections.length > 0 ? (
             collections.map((collection, index) =>
               renderCollection(collection, index),
-            )}
+            )
+          ) : (
+            <div className={styles.empty}>{text.collection.empty}</div>
+          )}
         </div>
         <Footer />
       </div>
