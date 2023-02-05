@@ -1,4 +1,4 @@
-import { Dispatch, FC, SetStateAction } from 'react';
+import { Dispatch, FC, SetStateAction, useEffect, useRef } from 'react';
 
 import type { Texts, TSelected } from '../../types';
 
@@ -19,6 +19,7 @@ const TodoInput: FC<Props> = ({
   text,
   maxLength,
 }) => {
+  const ref = useRef<HTMLInputElement>(null);
   const placeholderText = selectedCollection.selected
     ? `${text.header.newTodo} ${selectedCollection.title}`
     : text.header.newCollection;
@@ -27,8 +28,15 @@ const TodoInput: FC<Props> = ({
     ? [styles.todo, styles.selected].join(' ')
     : styles.todo;
 
+  useEffect(() => {
+    if (selectedCollection.selected && ref.current) {
+      ref.current.focus();
+    }
+  }, [selectedCollection]);
+
   return (
     <input
+      ref={ref}
       type="text"
       className={styleClasses}
       placeholder={placeholderText}
