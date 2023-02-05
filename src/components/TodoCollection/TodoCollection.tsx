@@ -41,6 +41,7 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
   const { text } = useLanguage();
 
   const ref = useRef<HTMLElement>(null);
+
   const [{ handlerId }, drop] = useDrop<
     DragItem,
     void,
@@ -64,16 +65,10 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
       const clientOffset = monitor.getClientOffset();
       const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top;
 
-      // Only perform the move when the mouse has crossed half of the items height
-      // When dragging downwards, only move when the cursor is below 50%
-      // When dragging upwards, only move when the cursor is above 50%
-
-      // Dragging downwards
       if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
         return;
       }
 
-      // Dragging upwards
       if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
         return;
       }
@@ -84,7 +79,7 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
     },
   });
 
-  const [{ opacity }, drag] = useDrag({
+  const [{ opacity }, drag, preview] = useDrag({
     type: ItemTypes.COLLECTION,
     item: () => ({ id, index }),
     collect: (monitor) => ({
@@ -131,7 +126,7 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
     }
   }, [doneTodos]);
 
-  drag(drop(ref));
+  preview(drop(ref));
 
   return (
     <article
@@ -153,7 +148,7 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
         ))}
       </ul>
       {isSelected && isEditing && (
-        <button className={styles.move}>
+        <button className={styles.move} ref={drag}>
           <FontAwesomeIcon icon={faBars} size="2x" />
         </button>
       )}

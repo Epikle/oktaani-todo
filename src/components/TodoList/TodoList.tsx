@@ -1,8 +1,7 @@
-import { FC, useCallback, useEffect, useRef } from 'react';
+import { FC, useEffect, useRef } from 'react';
 import autoAnimate from '@formkit/auto-animate';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
-import { TCollection } from '../../types';
 import { changeOrder } from '../../context/todoSlice';
 import useLanguage from '../../hooks/useLanguage';
 import TodoCollection from '../TodoCollection/TodoCollection';
@@ -13,8 +12,8 @@ import styles from './TodoList.module.scss';
 const TodoList: FC = () => {
   const collections = useAppSelector((state) => state.todo);
   const parent = useRef<HTMLDivElement>(null);
-  const { text } = useLanguage();
   const dispatch = useAppDispatch();
+  const { text } = useLanguage();
 
   useEffect(() => {
     parent.current && autoAnimate(parent.current);
@@ -24,26 +23,19 @@ const TodoList: FC = () => {
     dispatch(changeOrder({ dragIndex, hoverIndex }));
   };
 
-  const renderCollection = useCallback(
-    (collection: TCollection, index: number) => (
-      <TodoCollection
-        key={collection.id}
-        collection={collection}
-        index={index}
-        moveCollection={moveCollection}
-      />
-    ),
-    [],
-  );
-
   return (
     <main className={styles.main}>
       <div className={styles.container}>
         <div className={styles.collections} ref={parent}>
           {collections.length > 0 ? (
-            collections.map((collection, index) =>
-              renderCollection(collection, index),
-            )
+            collections.map((collection, index) => (
+              <TodoCollection
+                key={collection.id}
+                collection={collection}
+                index={index}
+                moveCollection={moveCollection}
+              />
+            ))
           ) : (
             <div className={styles.empty}>{text.collection.empty}</div>
           )}

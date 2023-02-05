@@ -12,7 +12,7 @@ describe('TodoItem', () => {
     text: 'Test item',
     done: false,
     created: Date(),
-    onChange: jest.fn(),
+    onDone: jest.fn(),
     language: 'en-us' as Languages,
   };
 
@@ -26,7 +26,7 @@ describe('TodoItem', () => {
     const item = screen.getByLabelText(itemSetup.text);
 
     expect(item).toBeInTheDocument();
-    expect(itemSetup.onChange).toHaveBeenCalledTimes(0);
+    expect(itemSetup.onDone).toHaveBeenCalledTimes(0);
   });
 
   it('When clicked label should call handlerFn', () => {
@@ -43,7 +43,7 @@ describe('TodoItem', () => {
     });
 
     expect(item).toBeInTheDocument();
-    expect(itemSetup.onChange).toHaveBeenCalledTimes(1);
+    expect(itemSetup.onDone).toHaveBeenCalledTimes(1);
     expect(checkbox).toBeChecked();
   });
 

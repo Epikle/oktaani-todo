@@ -13,24 +13,24 @@ type Props = {
 };
 
 type ItemProps = Omit<TItem, 'id'> & {
-  onChange: () => void;
+  onDone: () => void;
   language: Languages;
 };
 
 export const Item: FC<ItemProps> = ({
-  onChange,
+  onDone,
   text: todoText,
   done,
   created,
   language,
 }) => {
   const id = useId();
-  const [checked, isChecked] = useState(done);
+  const [isDone, setIsDone] = useState(done);
   const { text } = useLanguage();
 
-  const changeHandler = () => {
-    isChecked((prevS) => !prevS);
-    onChange();
+  const todoDoneHandler = () => {
+    setIsDone((prevS) => !prevS);
+    onDone();
   };
 
   return (
@@ -38,8 +38,8 @@ export const Item: FC<ItemProps> = ({
       <input
         type="checkbox"
         id={id}
-        checked={checked}
-        onChange={changeHandler}
+        checked={isDone}
+        onChange={todoDoneHandler}
         title={text.todo.markDone.replace('[]', todoText)}
       />
       <label
@@ -61,7 +61,7 @@ const TodoItem: FC<Props> = ({ todo }) => {
     dispatch(toggleItemDone({ id }));
   };
 
-  return <Item {...todo} onChange={doneInputHandler} language={languageName} />;
+  return <Item {...todo} onDone={doneInputHandler} language={languageName} />;
 };
 
 export default TodoItem;

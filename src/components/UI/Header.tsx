@@ -41,15 +41,15 @@ const Header: FC = () => {
             </h1>
           </div>
           {selected ? (
-            <TodoControls deleteBtnHandler={deleteBtnHandler} />
+            <TodoControls onDelete={deleteBtnHandler} />
           ) : (
             <Settings />
           )}
         </div>
         {isConfirm ? (
           <Confirm
-            confirm={deleteConfirmBtnHandler}
-            cancel={deleteBtnHandler}
+            onConfirm={deleteConfirmBtnHandler}
+            onCancel={deleteBtnHandler}
           />
         ) : (
           <TodoForm />

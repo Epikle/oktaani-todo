@@ -16,10 +16,10 @@ import Button from '../UI/Button';
 import styles from './TodoControls.module.scss';
 
 type Props = {
-  deleteBtnHandler: () => void;
+  onDelete: () => void;
 };
 
-const TodoControls: FC<Props> = ({ deleteBtnHandler }) => {
+const TodoControls: FC<Props> = ({ onDelete }) => {
   const { id, edit, hasDone } = useAppSelector((state) => state.selected);
   const dispatch = useAppDispatch();
   const { text } = useLanguage();
@@ -60,7 +60,7 @@ const TodoControls: FC<Props> = ({ deleteBtnHandler }) => {
       <li>
         <Button
           title={text.controls.removeCol}
-          onClick={deleteBtnHandler}
+          onClick={onDelete}
           className={styles.trash}
           content={<FontAwesomeIcon icon={faTrash} />}
         />

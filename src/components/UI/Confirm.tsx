@@ -12,11 +12,11 @@ import Button from './Button';
 import styles from './Confirm.module.scss';
 
 type Props = {
-  confirm: () => void;
-  cancel: () => void;
+  onConfirm: () => void;
+  onCancel: () => void;
 };
 
-const Confirm: FC<Props> = ({ confirm, cancel }) => {
+const Confirm: FC<Props> = ({ onConfirm, onCancel }) => {
   const { text } = useLanguage();
 
   return (
@@ -30,7 +30,7 @@ const Confirm: FC<Props> = ({ confirm, cancel }) => {
           <Button
             title={text.common.confirm}
             content={<FontAwesomeIcon icon={faCheck} />}
-            onClick={confirm}
+            onClick={onConfirm}
           />
         </li>
         <li>
@@ -38,7 +38,7 @@ const Confirm: FC<Props> = ({ confirm, cancel }) => {
             className={styles['cancel-btn']}
             title={text.common.cancel}
             content={<FontAwesomeIcon icon={faXmark} />}
-            onClick={cancel}
+            onClick={onCancel}
           />
         </li>
       </ul>
