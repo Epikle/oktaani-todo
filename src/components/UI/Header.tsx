@@ -18,7 +18,7 @@ const Header: FC = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    parent.current && autoAnimate(parent.current);
+    if (parent.current) autoAnimate(parent.current);
   }, [parent]);
 
   const deleteBtnHandler = () => {

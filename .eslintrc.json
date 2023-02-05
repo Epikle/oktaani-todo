@@ -3,6 +3,9 @@
     "eslint:recommended",
     "plugin:react/recommended",
     "plugin:import/recommended",
+    "airbnb",
+    "airbnb-typescript",
+    "airbnb/hooks",
     "plugin:jsx-a11y/recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:jest/recommended",
@@ -22,7 +25,32 @@
   "rules": {
     "react/jsx-uses-react": "off",
     "react/react-in-jsx-scope": "off",
-    "react/prop-types": "off"
+    "react/prop-types": "off",
+    "react/require-default-props": "off",
+    "react/function-component-definition": [
+      2,
+      {
+        "namedComponents": "arrow-function",
+        "unnamedComponents": "arrow-function"
+      }
+    ],
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": [
+          "test.{ts,tsx}",
+          "test-*.{ts,tsx}",
+          "**/*{.,_}{test,spec}.{ts,tsx}",
+          "**/jest.config.ts",
+          "**/jest.setup.ts",
+          "**/test-utils.tsx"
+        ],
+        "optionalDependencies": false
+      }
+    ]
   },
-  "ignorePatterns": ["cypress/**/*"]
+  "ignorePatterns": ["cypress/**/*"],
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  }
 }

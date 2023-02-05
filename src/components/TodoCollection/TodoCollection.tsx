@@ -75,6 +75,7 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
 
       moveCollection(dragIndex, hoverIndex);
 
+      // eslint-disable-next-line
       item.index = hoverIndex;
     },
   });
@@ -94,6 +95,8 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
     textDecorationColor: color,
   };
 
+  const doneTodos = collection.todos.filter((todo) => todo.done).length;
+
   const selectedCollectionHandler = () => {
     if (isSelected) {
       dispatch(resetSelection());
@@ -105,10 +108,9 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
   };
 
   useEffect(() => {
-    parent.current && autoAnimate(parent.current);
+    if (parent.current) autoAnimate(parent.current);
   }, [parent]);
 
-  const doneTodos = collection.todos.filter((todo) => todo.done).length;
   const totalTodos = collection.todos.length;
   const showDone = totalTodos > 0 ? `${doneTodos}/${totalTodos}` : '';
   const articleStyles = isSelected
@@ -124,7 +126,7 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
     if (isSelected) {
       dispatch(setHasDone(!!doneTodos));
     }
-  }, [doneTodos]);
+  }, [doneTodos, dispatch, isSelected]);
 
   preview(drop(ref));
 
@@ -138,7 +140,11 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
       data-created={showCreated}
     >
       <h2>
-        <button onClick={selectedCollectionHandler} style={headingStyles}>
+        <button
+          type="button"
+          onClick={selectedCollectionHandler}
+          style={headingStyles}
+        >
           {title}
         </button>
       </h2>
@@ -148,7 +154,7 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
         ))}
       </ul>
       {isSelected && isEditing && (
-        <button className={styles.move} ref={drag}>
+        <button type="button" className={styles.move} ref={drag}>
           <FontAwesomeIcon icon={faBars} size="2x" />
         </button>
       )}

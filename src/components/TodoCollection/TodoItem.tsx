@@ -53,7 +53,7 @@ export const Item: FC<ItemProps> = ({
 };
 
 const TodoItem: FC<Props> = ({ todo }) => {
-  const { id } = todo;
+  const { id, text, done, created } = todo;
   const dispatch = useAppDispatch();
   const { languageName } = useAppSelector((state) => state.settings);
 
@@ -61,7 +61,15 @@ const TodoItem: FC<Props> = ({ todo }) => {
     dispatch(toggleItemDone({ id }));
   };
 
-  return <Item {...todo} onDone={doneInputHandler} language={languageName} />;
+  return (
+    <Item
+      text={text}
+      done={done}
+      created={created}
+      onDone={doneInputHandler}
+      language={languageName}
+    />
+  );
 };
 
 export default TodoItem;

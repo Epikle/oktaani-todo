@@ -1,6 +1,6 @@
 import type { Languages } from '../types';
 import { setSettings, setLanguage } from '../context/settingsSlice';
-import { languages } from '../utils/languages';
+import languages from '../utils/languages';
 import { useAppDispatch, useAppSelector } from './useRedux';
 
 const useLanguage = () => {

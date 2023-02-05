@@ -16,7 +16,7 @@ const TodoList: FC = () => {
   const { text } = useLanguage();
 
   useEffect(() => {
-    parent.current && autoAnimate(parent.current);
+    if (parent.current) autoAnimate(parent.current);
   }, [parent]);
 
   const moveCollection = (dragIndex: number, hoverIndex: number) => {

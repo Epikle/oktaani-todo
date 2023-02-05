@@ -104,7 +104,7 @@ export const todoSlice = createSlice({
     editCollection: (state, action: PayloadAction<TSelectedEntry>) => {
       const { id, title, color } = action.payload;
 
-      const collection = state.find((collection) => collection.id === id);
+      const collection = state.find((col) => col.id === id);
 
       if (collection) {
         collection.title = title;

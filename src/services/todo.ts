@@ -23,7 +23,7 @@ export const getTodosFromLS = (): [] | TCollection[] => {
 
     return parsedCollections as TCollection[];
   } catch (error) {
-    console.error(error);
+    // TODO: error handling
     return [];
   }
 };
@@ -32,7 +32,7 @@ export const saveCollectionsToLS = (collections: TCollection[]) => {
   try {
     localStorage.setItem(LS_NAME, JSON.stringify(collections));
   } catch (error) {
-    console.error(error);
+    // TODO: error handling
   }
 };
 

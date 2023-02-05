@@ -2,7 +2,7 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 
 import type { Languages, Settings, SettingsLS, Texts } from '../types';
-import { languages } from '../utils/languages';
+import languages from '../utils/languages';
 import { saveSettingsToLS } from '../services/settings';
 import { isLanguage } from '../utils/utils';
 
@@ -20,7 +20,7 @@ const getLanguage = (): [Languages, Texts] => {
 const [languageName, language] = getLanguage();
 
 const initialState: Settings = {
-  availableLanguages: Object.keys(languages) as Languages[], //ISO639-1
+  availableLanguages: Object.keys(languages) as Languages[], // ISO639-1
   languageName,
   language,
   darkMode: isDarkMode,
@@ -51,9 +51,10 @@ export const settingsSlice = createSlice({
       saveSettingsToLS(action.payload);
       return { ...state, ...action.payload };
     },
-    setLanguage: (state, action: PayloadAction<Texts>) => {
-      return { ...state, language: action.payload };
-    },
+    setLanguage: (state, action: PayloadAction<Texts>) => ({
+      ...state,
+      language: action.payload,
+    }),
   },
 });
 

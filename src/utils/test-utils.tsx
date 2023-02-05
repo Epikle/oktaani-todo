@@ -12,7 +12,7 @@ interface ExtendedRenderOptions extends Omit<RenderOptions, 'queries'> {
   store?: AppStore;
 }
 
-export function renderWithProviders(
+const renderWithProviders = (
   ui: ReactElement,
   {
     preloadedState = {},
@@ -20,11 +20,14 @@ export function renderWithProviders(
     store = setupStore(preloadedState),
     ...renderOptions
   }: ExtendedRenderOptions = {},
-) {
-  function Wrapper({
+) => {
+  const Wrapper = ({
     children,
-  }: PropsWithChildren<Record<string, unknown>>): JSX.Element {
-    return <Provider store={store}>{children}</Provider>;
-  }
+  }: PropsWithChildren<Record<string, unknown>>): JSX.Element => (
+    <Provider store={store}>{children}</Provider>
+  );
+
   return { store, ...render(ui, { wrapper: Wrapper, ...renderOptions }) };
-}
+};
+
+export default renderWithProviders;

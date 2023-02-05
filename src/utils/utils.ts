@@ -1,5 +1,5 @@
 import type { Languages } from '../types';
-import { languages } from './languages';
+import languages from './languages';
 
 export const formatDate = (
   date: string,
@@ -14,6 +14,8 @@ export const formatDate = (
 
   return dateObj.toLocaleDateString(locale, options);
 };
+
+const isBoolean = (value: unknown) => typeof value === 'boolean';
 
 export const isValidCollections = (collections: unknown) => {
   if (!collections || !Array.isArray(collections)) return false;
@@ -36,24 +38,16 @@ export const isValidCollections = (collections: unknown) => {
   );
 };
 
-export const isValidSettings = (settings: unknown) => {
-  return (
-    settings !== null &&
-    typeof settings === 'object' &&
-    'languageName' in settings &&
-    'darkMode' in settings &&
-    isLanguage(settings.languageName) &&
-    isBoolean(settings.darkMode)
-  );
-};
+export const isLanguage = (value: unknown) =>
+  value !== null && typeof value === 'string' && value in languages;
 
-export const isLanguage = (value: unknown) => {
-  return value !== null && typeof value === 'string' && value in languages;
-};
-
-const isBoolean = (value: unknown) => {
-  return typeof value === 'boolean';
-};
+export const isValidSettings = (settings: unknown) =>
+  settings !== null &&
+  typeof settings === 'object' &&
+  'languageName' in settings &&
+  'darkMode' in settings &&
+  isLanguage(settings.languageName) &&
+  isBoolean(settings.darkMode);
 
 export const isStorageAvailable = () => {
   try {

@@ -48,7 +48,7 @@ const ColorChooser: FC<Props> = ({
     }
 
     colorInputRef.current.value = selectedCollection.color;
-  }, [selectedCollection.color]);
+  }, [selectedCollection.color, color]);
 
   return (
     <input

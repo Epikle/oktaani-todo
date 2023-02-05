@@ -1,6 +1,6 @@
 import type { Languages, Texts } from '../types';
 
-export const languages: Record<Languages, Texts> = {
+const languages: Record<Languages, Texts> = {
   'en-us': {
     header: {
       newCollection: 'Add a new collection',
@@ -62,3 +62,5 @@ export const languages: Record<Languages, Texts> = {
     },
   },
 };
+
+export default languages;

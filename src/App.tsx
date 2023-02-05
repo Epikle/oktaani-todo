@@ -24,7 +24,7 @@ const App: FC = () => {
   useEffect(() => {
     dispatch(initTodos(todoService.getTodosFromLS()));
     dispatch(initSettings(settingsService.getSettingsFromLS()));
-  }, []);
+  }, [dispatch]);
 
   return (
     <div className={darkMode ? 'content dark-mode' : 'content'}>

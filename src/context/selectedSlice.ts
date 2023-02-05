@@ -16,18 +16,19 @@ export const selectedSlice = createSlice({
   name: 'selected',
   initialState,
   reducers: {
-    setSelectedCollection: (state, action: PayloadAction<TSelectedEntry>) => {
-      return { ...state, ...action.payload, selected: true };
-    },
+    setSelectedCollection: (state, action: PayloadAction<TSelectedEntry>) => ({
+      ...state,
+      ...action.payload,
+      selected: true,
+    }),
     setSelectedCollectionEdit: (
       state,
       action: PayloadAction<{ edit: boolean }>,
-    ) => {
-      return { ...state, ...action.payload };
-    },
-    setHasDone: (state, action: PayloadAction<boolean>) => {
-      return { ...state, hasDone: action.payload };
-    },
+    ) => ({ ...state, ...action.payload }),
+    setHasDone: (state, action: PayloadAction<boolean>) => ({
+      ...state,
+      hasDone: action.payload,
+    }),
     resetSelection: () => initialState,
   },
 });

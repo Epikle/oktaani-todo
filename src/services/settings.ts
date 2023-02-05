@@ -16,7 +16,7 @@ export const getSettingsFromLS = () => {
 
     return parsedSettings as SettingsLS;
   } catch (error) {
-    console.error(error);
+    // TODO: error handling
     return null;
   }
 };
@@ -25,6 +25,6 @@ export const saveSettingsToLS = (settings: SettingsLS) => {
   try {
     localStorage.setItem(LS_NAME, JSON.stringify(settings));
   } catch (error) {
-    console.error(error);
+    // TODO: error handling
   }
 };

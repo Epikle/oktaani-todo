@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import { render, screen } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 import { Provider } from 'react-redux';
@@ -50,7 +51,7 @@ describe('TodoItem', () => {
   it('Should render checkbox already checked', () => {
     render(
       <Provider store={setupStore()}>
-        <Item {...itemSetup} done={true} />
+        <Item {...itemSetup} done />
       </Provider>,
     );
 

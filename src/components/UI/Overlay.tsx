@@ -3,7 +3,7 @@ import { FC, ReactNode } from 'react';
 import styles from './Overlay.module.scss';
 
 type Props = {
-  children?: ReactNode;
+  children: ReactNode;
 };
 
 const Overlay: FC<Props> = ({ children }) => (
