@@ -16,6 +16,10 @@
     @include focus-border;
   }
 
+  &:disabled {
+    cursor: not-allowed;
+  }
+
   &.selected {
     padding-top: 0.75rem;
   }

@@ -1,5 +1,5 @@
 import { Dispatch, FC, SetStateAction, useEffect, useRef } from 'react';
-import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
+import { useAppSelector } from '../../hooks/useRedux';
 
 import type { Texts, TSelected } from '../../types';
 
@@ -41,7 +41,7 @@ const TodoInput: FC<Props> = ({
       ref={ref}
       type="text"
       className={styleClasses}
-      placeholder={placeholderText}
+      placeholder={sort ? text.controls.sort : placeholderText}
       title={placeholderText}
       value={todoInput}
       onChange={(e) => setTodoInput(e.target.value)}

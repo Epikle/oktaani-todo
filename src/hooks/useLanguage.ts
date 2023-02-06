@@ -8,6 +8,7 @@ const useLanguage = () => {
     darkMode,
     languageName,
     language: text,
+    sort,
   } = useAppSelector((state) => state.settings);
   const dispatch = useAppDispatch();
 
@@ -18,7 +19,7 @@ const useLanguage = () => {
     const nextLanguage = languagesList[nextIndex];
     const nextLanguageTexts = languages[languagesList[nextIndex]];
 
-    dispatch(setSettings({ languageName: nextLanguage, darkMode }));
+    dispatch(setSettings({ languageName: nextLanguage, darkMode, sort }));
     dispatch(setLanguage(nextLanguageTexts));
   };
 

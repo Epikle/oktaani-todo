@@ -144,12 +144,13 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
           type="button"
           onClick={selectedCollectionHandler}
           style={headingStyles}
+          disabled={isSorting}
         >
           {title}
         </button>
       </h2>
       {!isSorting && (
-        <ul className={styles['item-list']} ref={parent}>
+        <ul ref={parent} className={styles['item-list']}>
           {collection.todos.map((todo) => (
             <TodoItem key={todo.id} todo={todo} />
           ))}
