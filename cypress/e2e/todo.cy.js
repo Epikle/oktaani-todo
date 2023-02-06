@@ -19,9 +19,9 @@ describe('oktaniTODO', () => {
       .should('have.text', '✨ First Collection ✨')
       .click();
     cy.wait(500);
-    cy.get('form > button').click().should('not.be.visible');
+    cy.get('[data-cy="submit-btn"]').click().should('not.be.visible');
     cy.wait(500);
-    cy.get('input[placeholder="Add a new collection"]').should('be.visible');
+    cy.get('input[type="text"]').should('be.visible');
     cy.wait(500);
   });
 
@@ -31,10 +31,8 @@ describe('oktaniTODO', () => {
       .should('have.text', '✨ First Collection ✨')
       .click();
     cy.wait(500);
-    cy.get(
-      'input[placeholder="Add a new todo to ✨ First Collection ✨"]',
-    ).type('Test todo item');
-    cy.get('button[aria-label="Add"]').click();
+    cy.get('input[type="text"]').type('Test todo item');
+    cy.get('[data-cy="submit-btn"]').click();
     cy.wait(500);
     cy.get('article')
       .first()

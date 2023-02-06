@@ -142,6 +142,7 @@ const TodoForm: FC = () => {
         onClick={addBtnHandler}
         disabled={isBtnDisabled}
         content={<FontAwesomeIcon icon={faPlus} />}
+        data-cy="submit-btn"
       />
     </form>
   );
