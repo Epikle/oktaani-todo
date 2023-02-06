@@ -25,6 +25,8 @@
 
     &:focus-visible {
       @include focus-border;
+      outline: 2px solid var(--color-text-p);
+      outline-offset: 2px;
     }
 
     &:checked {

@@ -1,4 +1,5 @@
 import { Dispatch, FC, SetStateAction, useEffect, useRef } from 'react';
+import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
 
 import type { Texts, TSelected } from '../../types';
 
@@ -19,6 +20,7 @@ const TodoInput: FC<Props> = ({
   text,
   maxLength,
 }) => {
+  const { sort } = useAppSelector((state) => state.settings);
   const ref = useRef<HTMLInputElement>(null);
   const placeholderText = selectedCollection.selected
     ? `${text.header.newTodo} ${selectedCollection.title}`
@@ -44,6 +46,7 @@ const TodoInput: FC<Props> = ({
       value={todoInput}
       onChange={(e) => setTodoInput(e.target.value)}
       maxLength={maxLength}
+      disabled={sort}
     />
   );
 };

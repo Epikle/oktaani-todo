@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef } from 'react';
+import { CSSProperties, FC, useEffect, useRef } from 'react';
 import autoAnimate from '@formkit/auto-animate';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
@@ -11,6 +11,7 @@ import styles from './TodoList.module.scss';
 
 const TodoList: FC = () => {
   const collections = useAppSelector((state) => state.todo);
+  const { sort } = useAppSelector((state) => state.settings);
   const parent = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
   const { text } = useLanguage();
@@ -23,10 +24,12 @@ const TodoList: FC = () => {
     dispatch(changeOrder({ dragIndex, hoverIndex }));
   };
 
+  const sortStyles: CSSProperties = sort ? { gridTemplateColumns: '1fr' } : {};
+
   return (
     <main className={styles.main}>
       <div className={styles.container}>
-        <div className={styles.collections} ref={parent}>
+        <div className={styles.collections} ref={parent} style={sortStyles}>
           {collections.length > 0 ? (
             collections.map((collection, index) => (
               <TodoCollection

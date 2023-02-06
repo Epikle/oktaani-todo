@@ -24,6 +24,7 @@ const initialState: Settings = {
   languageName,
   language,
   darkMode: isDarkMode,
+  sort: false,
 };
 
 export const settingsSlice = createSlice({
@@ -35,6 +36,7 @@ export const settingsSlice = createSlice({
         saveSettingsToLS({
           languageName: state.languageName,
           darkMode: state.darkMode,
+          sort: state.sort,
         });
         return state;
       }

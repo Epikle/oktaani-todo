@@ -1,44 +1,40 @@
 import { FC } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
+import { faArrowDownShortWide } from '@fortawesome/free-solid-svg-icons';
 
 import { useAppDispatch, useAppSelector } from '../../../hooks/useRedux';
 import { setSettings } from '../../../context/settingsSlice';
 import useLanguage from '../../../hooks/useLanguage';
 import Button from '../Button';
 
-import styles from './ModeSelection.module.scss';
+import styles from './Sort.module.scss';
 
 type Props = {
   disabled: boolean;
 };
 
-const ModeSelection: FC<Props> = ({ disabled }) => {
+const Sort: FC<Props> = ({ disabled }) => {
   const { languageName, darkMode, sort } = useAppSelector(
     (state) => state.settings,
   );
   const dispatch = useAppDispatch();
   const { text } = useLanguage();
 
-  const modeBtnHandler = () => {
-    dispatch(setSettings({ sort, languageName, darkMode: !darkMode }));
+  const sortBtnHandler = () => {
+    dispatch(setSettings({ languageName, darkMode, sort: !sort }));
   };
-
-  const modeBtnContent = darkMode ? (
-    <FontAwesomeIcon icon={faSun} />
-  ) : (
-    <FontAwesomeIcon icon={faMoon} />
-  );
 
   return (
     <Button
-      className={styles.mode}
-      onClick={modeBtnHandler}
-      title={text.controls.changeColorMode}
+      className={
+        sort ? [styles.sort, styles['sort-active']].join(' ') : styles.sort
+      }
+      onClick={sortBtnHandler}
+      title={text.controls.sort}
       disabled={disabled}
-      content={modeBtnContent}
+      content={<FontAwesomeIcon icon={faArrowDownShortWide} />}
     />
   );
 };
 
-export default ModeSelection;
+export default Sort;

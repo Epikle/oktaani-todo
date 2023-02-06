@@ -46,8 +46,10 @@ export const isValidSettings = (settings: unknown) =>
   typeof settings === 'object' &&
   'languageName' in settings &&
   'darkMode' in settings &&
+  'sort' in settings &&
   isLanguage(settings.languageName) &&
-  isBoolean(settings.darkMode);
+  isBoolean(settings.darkMode) &&
+  isBoolean(settings.sort);
 
 export const isStorageAvailable = () => {
   try {

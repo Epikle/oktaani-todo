@@ -16,6 +16,7 @@ const languages: Record<Languages, Texts> = {
       editCol: 'Edit collection title',
       removeCol: 'Remove collection',
       deleteConfirm: 'Are you sure?',
+      sort: 'Sort collections',
     },
     collection: {
       created: 'created',
@@ -46,6 +47,7 @@ const languages: Record<Languages, Texts> = {
       editCol: 'Muokkaa kokoelman otsikkoa',
       removeCol: 'Poista kokoelma',
       deleteConfirm: 'Haluatko varmasti poistaa?',
+      sort: 'Järjestä kokoelmat',
     },
     collection: {
       created: 'luotu',

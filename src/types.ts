@@ -48,6 +48,7 @@ export type Texts = {
     shareCol: string;
     removeDone: string;
     deleteConfirm: string;
+    sort: string;
   };
   collection: {
     created: string;
@@ -69,6 +70,7 @@ export type Settings = {
   languageName: Languages;
   language: Texts;
   darkMode: boolean;
+  sort: boolean;
 };
 
 export type SettingsLS = Omit<Settings, 'availableLanguages' | 'language'>;

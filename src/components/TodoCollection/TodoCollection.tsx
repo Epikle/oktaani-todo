@@ -34,9 +34,9 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
   const { id, title, color, shared, created } = collection;
   const dispatch = useAppDispatch();
   const selectedCollection = useAppSelector((state) => state.selected);
-  const { languageName } = useAppSelector((state) => state.settings);
+  const { languageName, sort } = useAppSelector((state) => state.settings);
   const isSelected = selectedCollection.id === collection.id;
-  const isEditing = selectedCollection.edit;
+  const isSorting = sort;
   const parent = useRef<HTMLUListElement>(null);
   const { text } = useLanguage();
 
@@ -112,13 +112,13 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
   }, [parent]);
 
   const totalTodos = collection.todos.length;
-  const showDone = totalTodos > 0 ? `${doneTodos}/${totalTodos}` : '';
+  const showDone = totalTodos > 0 && !sort ? `${doneTodos}/${totalTodos}` : '';
   const articleStyles = isSelected
     ? [styles.collection, styles.selected].join(' ')
     : styles.collection;
 
   const showCreated =
-    isSelected && formatDate(created, languageName)
+    isSelected && formatDate(created, languageName) && !sort
       ? `${text.collection.created} ${formatDate(created, languageName)}`
       : '';
 
@@ -148,12 +148,15 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
           {title}
         </button>
       </h2>
-      <ul className={styles['item-list']} ref={parent}>
-        {collection.todos.map((todo) => (
-          <TodoItem key={todo.id} todo={todo} />
-        ))}
-      </ul>
-      {isSelected && isEditing && (
+      {!isSorting && (
+        <ul className={styles['item-list']} ref={parent}>
+          {collection.todos.map((todo) => (
+            <TodoItem key={todo.id} todo={todo} />
+          ))}
+        </ul>
+      )}
+
+      {isSorting && (
         <button type="button" className={styles.move} ref={drag}>
           <FontAwesomeIcon icon={faBars} size="2x" />
         </button>

@@ -8,6 +8,7 @@ import ModeSelection from './ModeSelection';
 import Button from '../Button';
 
 import styles from './Settings.module.scss';
+import Sort from './Sort';
 
 const Settings: FC = () => {
   const [showSettings, setShowSettings] = useState(false);
@@ -34,6 +35,9 @@ const Settings: FC = () => {
           </li>
           <li>
             <ModeSelection disabled={!showSettings} />
+          </li>
+          <li>
+            <Sort disabled={!showSettings} />
           </li>
         </ul>
       </li>

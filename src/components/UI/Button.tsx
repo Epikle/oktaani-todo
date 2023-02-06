@@ -5,7 +5,14 @@ type Props = ComponentPropsWithoutRef<'button'> & {
   testId?: string;
 };
 
-const Button: FC<Props> = ({ className, title, testId, onClick, content }) => (
+const Button: FC<Props> = ({
+  className,
+  title,
+  testId,
+  onClick,
+  content,
+  ...rest
+}) => (
   <button
     type="button"
     className={className}
@@ -13,6 +20,7 @@ const Button: FC<Props> = ({ className, title, testId, onClick, content }) => (
     title={title}
     onClick={onClick}
     data-testid={testId}
+    {...rest}
   >
     {content}
   </button>
