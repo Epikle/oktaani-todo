@@ -1,6 +1,7 @@
 import { Dispatch, FC, SetStateAction, useEffect, useRef } from 'react';
 
 import { editCollection } from '../../context/todoSlice';
+import { setSelectedCollection } from '../../context/selectedSlice';
 import { useAppDispatch } from '../../hooks/useRedux';
 import type { Texts, TSelected } from '../../types';
 
@@ -38,6 +39,12 @@ const ColorChooser: FC<Props> = ({
     };
 
     dispatch(editCollection(editedCollection));
+    dispatch(
+      setSelectedCollection({
+        ...selectedCollection,
+        color: colorInputRef.current.value,
+      }),
+    );
   };
 
   useEffect(() => {
