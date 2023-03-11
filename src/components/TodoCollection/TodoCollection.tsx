@@ -134,7 +134,9 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
     <article
       ref={ref}
       data-handler-id={handlerId}
-      className={articleStyles}
+      className={
+        isSelected ? [articleStyles, 'print'].join(' ') : articleStyles
+      }
       style={{ ...listStyles, opacity }}
       data-done={showDone}
       data-created={showCreated}

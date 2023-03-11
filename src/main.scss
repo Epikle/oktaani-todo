@@ -12,3 +12,23 @@ body {
   grid-template-rows: max-content 1fr;
   background-color: var(--color-bg-body);
 }
+
+@media print {
+  header,
+  footer {
+    display: none !important;
+  }
+
+  * {
+    background-color: transparent !important;
+    color: black !important;
+  }
+
+  main:has(.print) article:not(.print) {
+    display: none !important;
+  }
+
+  article {
+    box-shadow: none !important;
+  }
+}
