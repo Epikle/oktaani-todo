@@ -9,6 +9,10 @@
   border-top: 6px solid var(--color-gray-800);
   border-bottom: 3px solid var(--color-gray-800);
 
+  &:has(.move) h2 {
+    margin-right: 2.5rem;
+  }
+
   .move {
     position: absolute;
     right: 0.75rem;
@@ -68,6 +72,7 @@
       background-color: transparent;
       text-decoration: underline;
       word-wrap: break-word;
+      word-break: break-all;
       width: 100%;
       color: var(--color-text-p);
 

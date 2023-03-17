@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { DndProvider } from 'react-dnd-multi-backend';
 import { HTML5toTouch } from 'rdndmb-html5-to-touch';
+import '@fontsource/oswald';
+import '@fontsource/arvo';
 
 import { setupStore } from './context/store';
 import App from './App';
