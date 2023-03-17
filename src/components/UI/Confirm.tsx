@@ -31,6 +31,7 @@ const Confirm: FC<Props> = ({ onConfirm, onCancel }) => {
             title={text.common.confirm}
             content={<FontAwesomeIcon icon={faCheck} />}
             onClick={onConfirm}
+            testId="confirm-delete-btn"
           />
         </li>
         <li>
@@ -39,6 +40,7 @@ const Confirm: FC<Props> = ({ onConfirm, onCancel }) => {
             title={text.common.cancel}
             content={<FontAwesomeIcon icon={faXmark} />}
             onClick={onCancel}
+            testId="cancel-delete-btn"
           />
         </li>
       </ul>

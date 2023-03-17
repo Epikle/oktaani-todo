@@ -47,6 +47,7 @@ const TodoInput: FC<Props> = ({
       onChange={(e) => setTodoInput(e.target.value)}
       maxLength={maxLength}
       disabled={sort}
+      data-testid="todo-input"
     />
   );
 };

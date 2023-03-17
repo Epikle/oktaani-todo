@@ -40,6 +40,7 @@ const TodoControls: FC<Props> = ({ onDelete }) => {
           onClick={removeDoneBtnHandler}
           content={<FontAwesomeIcon icon={faListCheck} />}
           disabled={!hasDone}
+          testId="remove-done-btn"
         />
       </li>
       {/* <li>
@@ -55,6 +56,7 @@ const TodoControls: FC<Props> = ({ onDelete }) => {
           onClick={editBtnHandler}
           content={<FontAwesomeIcon icon={faPen} />}
           className={edit ? styles['edit-active'] : ''}
+          testId="edit-collection-title-btn"
         />
       </li>
       <li>
@@ -63,6 +65,7 @@ const TodoControls: FC<Props> = ({ onDelete }) => {
           onClick={onDelete}
           className={styles.trash}
           content={<FontAwesomeIcon icon={faTrash} />}
+          testId="delete-collection-btn"
         />
       </li>
     </ul>
