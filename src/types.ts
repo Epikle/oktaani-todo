@@ -48,6 +48,7 @@ export type Texts = {
     shareCol: string;
     removeDone: string;
     deleteConfirm: string;
+    shareConfirm: string;
     sort: string;
   };
   collection: {
