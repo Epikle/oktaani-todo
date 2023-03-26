@@ -104,7 +104,7 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
     }
 
     dispatch(setHasDone(!!doneTodos));
-    dispatch(setSelectedCollection({ id, title, color }));
+    dispatch(setSelectedCollection({ id, title, color, shared }));
   };
 
   useEffect(() => {

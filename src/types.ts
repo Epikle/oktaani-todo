@@ -28,7 +28,7 @@ export type TNewCollectionEntry = Omit<
   'shared' | 'todos' | 'created'
 >;
 
-export type TSelectedEntry = Omit<TSelected, 'edit' | 'selected' | 'shared'>;
+export type TSelectedEntry = Omit<TSelected, 'edit' | 'selected'>;
 
 export type TItemEntry = Omit<TItem, 'id' | 'done' | 'created'>;
 

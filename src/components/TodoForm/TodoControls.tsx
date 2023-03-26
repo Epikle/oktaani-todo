@@ -21,7 +21,9 @@ type Props = {
 };
 
 const TodoControls: FC<Props> = ({ onConfirm }) => {
-  const { id, edit, hasDone } = useAppSelector((state) => state.selected);
+  const { id, edit, hasDone, shared } = useAppSelector(
+    (state) => state.selected,
+  );
   const dispatch = useAppDispatch();
   const { text } = useLanguage();
 
@@ -46,6 +48,7 @@ const TodoControls: FC<Props> = ({ onConfirm }) => {
       </li>
       <li>
         <Button
+          disabled={shared}
           title={text.controls.shareCol}
           onClick={() => onConfirm('share')}
           content={<FontAwesomeIcon icon={faShareNodes} />}

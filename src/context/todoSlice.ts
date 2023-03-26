@@ -49,6 +49,8 @@ export const todoSlice = createSlice({
         return createdEntry;
       }
 
+      saveCollectionsToLS(action.payload);
+
       return [...action.payload];
     },
     createCollection: (state, action: PayloadAction<TNewCollectionEntry>) => {
@@ -101,11 +103,7 @@ export const todoSlice = createSlice({
 
       return state;
     },
-    // TODO: Fix types
-    editCollection: (
-      state,
-      action: PayloadAction<TSelectedEntry & { shared: boolean }>,
-    ) => {
+    editCollection: (state, action: PayloadAction<TSelectedEntry>) => {
       const { id, title, color, shared } = action.payload;
 
       const collection = state.find((col) => col.id === id);

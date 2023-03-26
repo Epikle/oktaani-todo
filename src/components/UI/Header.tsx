@@ -46,11 +46,13 @@ const Header: FC = () => {
     const selectedCollection = collections.find(
       (collection) => collection.id === id,
     );
+    if (!selectedCollection) return;
+
     try {
-      await axios.post(
-        `${import.meta.env.VITE_API_URL}/share`,
-        selectedCollection,
-      );
+      await axios.post(`${import.meta.env.VITE_API_URL}/share`, {
+        ...selectedCollection,
+        shared: true,
+      });
       const editedCollection = {
         id,
         title,

@@ -22,8 +22,11 @@ const App: FC = () => {
   document.title = title;
 
   useEffect(() => {
-    dispatch(initTodos(todoService.getTodosFromLS()));
-    dispatch(initSettings(settingsService.getSettingsFromLS()));
+    const getData = async () => {
+      dispatch(initTodos(await todoService.getTodosFromLS()));
+      dispatch(initSettings(settingsService.getSettingsFromLS()));
+    };
+    getData();
   }, [dispatch]);
 
   return (
