@@ -18,6 +18,7 @@ export type TSelected = {
   id: string;
   title: string;
   color: string;
+  shared: boolean;
   edit: boolean;
   selected: boolean;
 };
@@ -27,7 +28,7 @@ export type TNewCollectionEntry = Omit<
   'shared' | 'todos' | 'created'
 >;
 
-export type TSelectedEntry = Omit<TSelected, 'edit' | 'selected'>;
+export type TSelectedEntry = Omit<TSelected, 'edit' | 'selected' | 'shared'>;
 
 export type TItemEntry = Omit<TItem, 'id' | 'done' | 'created'>;
 

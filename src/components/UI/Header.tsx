@@ -1,9 +1,13 @@
 import { FC, useEffect, useRef, useState } from 'react';
+import axios from 'axios';
 import autoAnimate from '@formkit/auto-animate';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
-import { deleteCollection } from '../../context/todoSlice';
-import { resetSelection } from '../../context/selectedSlice';
+import { deleteCollection, editCollection } from '../../context/todoSlice';
+import {
+  resetSelection,
+  setSelectedCollection,
+} from '../../context/selectedSlice';
 import useLanguage from '../../hooks/useLanguage';
 import TodoControls from '../TodoForm/TodoControls';
 import TodoForm from '../TodoForm/TodoForm';
@@ -21,7 +25,10 @@ export type TConfirm = {
 const Header: FC = () => {
   const [confirm, setConfirm] = useState<Omit<TConfirm, 'type'> | null>(null);
   const parent = useRef(null);
-  const { selected, id } = useAppSelector((state) => state.selected);
+  const { title, color, selected, id } = useAppSelector(
+    (state) => state.selected,
+  );
+  const collections = useAppSelector((state) => state.todo);
   const dispatch = useAppDispatch();
   const { text } = useLanguage();
 
@@ -35,7 +42,28 @@ const Header: FC = () => {
     setConfirm(null);
   };
 
-  const shareConfirmBtnHandler = () => {
+  const shareConfirmBtnHandler = async () => {
+    const selectedCollection = collections.find(
+      (collection) => collection.id === id,
+    );
+    try {
+      await axios.post(
+        `${import.meta.env.VITE_API_URL}/share`,
+        selectedCollection,
+      );
+      const editedCollection = {
+        id,
+        title,
+        color,
+        shared: true,
+      };
+      dispatch(editCollection(editedCollection));
+      dispatch(setSelectedCollection(editedCollection));
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+    }
+
     setConfirm(null);
   };
 

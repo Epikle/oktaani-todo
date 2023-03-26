@@ -50,6 +50,7 @@ const TodoForm: FC = () => {
         id: selectedCollection.id,
         title: trimmedInput,
         color: selectedCollection.color,
+        shared: selectedCollection.shared,
       };
       dispatch(editCollection(editedCollection));
       dispatch(setSelectedCollection(editedCollection));

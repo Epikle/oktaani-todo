@@ -8,6 +8,7 @@ const initialState = {
   title: '',
   color: '',
   edit: false,
+  shared: false,
   selected: false,
   hasDone: false,
 };

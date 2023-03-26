@@ -101,14 +101,19 @@ export const todoSlice = createSlice({
 
       return state;
     },
-    editCollection: (state, action: PayloadAction<TSelectedEntry>) => {
-      const { id, title, color } = action.payload;
+    // TODO: Fix types
+    editCollection: (
+      state,
+      action: PayloadAction<TSelectedEntry & { shared: boolean }>,
+    ) => {
+      const { id, title, color, shared } = action.payload;
 
       const collection = state.find((col) => col.id === id);
 
       if (collection) {
         collection.title = title;
         collection.color = color;
+        collection.shared = shared;
 
         saveCollectionsToLS(state);
       }
