@@ -12,8 +12,13 @@ import { isValidCollections } from '../utils/utils';
 const LS_NAME = 'oktaani-todo';
 const BASE_URL = import.meta.env.VITE_API_URL;
 
-const getSharedCollectionData = async (id: string) => {
+// eslint-disable-next-line no-promise-executor-return
+const delay = (t: number) => new Promise((resolve) => setTimeout(resolve, t));
+
+export const getSharedCollectionData = async (id: string) => {
   try {
+    // TODO: delay only for development, remove
+    await delay(2000);
     const { data } = await axios.get<TCollection>(`${BASE_URL}/share/${id}`);
     return data;
   } catch (error) {
@@ -26,12 +31,10 @@ export const saveCollectionsToLS = (collections: TCollection[]) => {
     localStorage.setItem(LS_NAME, JSON.stringify(collections));
   } catch (error) {
     // TODO: error handling
-    // eslint-disable-next-line no-console
-    console.error('save to ls:', error);
   }
 };
 
-export const getTodosFromLS = async (): Promise<TCollection[] | []> => {
+export const getTodosFromLS = () => {
   try {
     const collections = localStorage.getItem(LS_NAME);
     if (!collections) return [];
@@ -42,17 +45,7 @@ export const getTodosFromLS = async (): Promise<TCollection[] | []> => {
       throw new Error('localStorage data is not valid, using default values!');
     }
 
-    const validatedCollections = parsedCollections as TCollection[];
-
-    // eslint-disable-next-line no-restricted-syntax
-    for await (const [index, collection] of validatedCollections.entries()) {
-      if (collection.shared) {
-        const data = await getSharedCollectionData(collection.id);
-        validatedCollections[index] = data;
-      }
-    }
-
-    return validatedCollections;
+    return parsedCollections as TCollection[];
   } catch (error) {
     // TODO: error handling
     return [];

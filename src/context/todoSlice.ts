@@ -118,6 +118,25 @@ export const todoSlice = createSlice({
 
       return state;
     },
+    updateSharedCollectionToState: (
+      state,
+      action: PayloadAction<TCollection>,
+    ) => {
+      const { id, title, color, shared, todos } = action.payload;
+
+      const collection = state.find((col) => col.id === id);
+
+      if (collection) {
+        collection.title = title;
+        collection.color = color;
+        collection.shared = shared;
+        collection.todos = todos;
+
+        saveCollectionsToLS(state);
+      }
+
+      return state;
+    },
     removeDoneItems: (state, action: PayloadAction<{ id: string }>) => {
       const { id } = action.payload;
 
@@ -141,6 +160,7 @@ export const {
   toggleItemDone,
   editCollection,
   removeDoneItems,
+  updateSharedCollectionToState,
 } = todoSlice.actions;
 
 export default todoSlice.reducer;
