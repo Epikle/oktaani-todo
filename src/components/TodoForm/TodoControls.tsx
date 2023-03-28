@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faListCheck,
   faPen,
-  // faShareNodes,
+  faShareNodes,
   faTrash,
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -12,15 +12,18 @@ import { setSelectedCollectionEdit } from '../../context/selectedSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
 import useLanguage from '../../hooks/useLanguage';
 import Button from '../UI/Button';
+import type { TConfirm } from '../UI/Header';
 
 import styles from './TodoControls.module.scss';
 
 type Props = {
-  onDelete: () => void;
+  onConfirm: (type: TConfirm['type']) => void;
 };
 
-const TodoControls: FC<Props> = ({ onDelete }) => {
-  const { id, edit, hasDone } = useAppSelector((state) => state.selected);
+const TodoControls: FC<Props> = ({ onConfirm }) => {
+  const { id, edit, hasDone, shared } = useAppSelector(
+    (state) => state.selected,
+  );
   const dispatch = useAppDispatch();
   const { text } = useLanguage();
 
@@ -43,13 +46,15 @@ const TodoControls: FC<Props> = ({ onDelete }) => {
           testId="remove-done-btn"
         />
       </li>
-      {/* <li>
+      <li>
         <Button
-          disabled
+          disabled={shared}
           title={text.controls.shareCol}
+          onClick={() => onConfirm('share')}
           content={<FontAwesomeIcon icon={faShareNodes} />}
+          testId="share-col-btn"
         />
-      </li> */}
+      </li>
       <li>
         <Button
           title={text.controls.editCol}
@@ -62,7 +67,7 @@ const TodoControls: FC<Props> = ({ onDelete }) => {
       <li>
         <Button
           title={text.controls.removeCol}
-          onClick={onDelete}
+          onClick={() => onConfirm('delete')}
           className={styles.trash}
           content={<FontAwesomeIcon icon={faTrash} />}
           testId="delete-collection-btn"

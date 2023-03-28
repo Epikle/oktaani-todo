@@ -1,4 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
+import { vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 
@@ -25,7 +26,7 @@ describe('Button', () => {
   });
 
   it('When clicked should call handlerFn', () => {
-    const onClick = jest.fn();
+    const onClick = vi.fn();
 
     render(<Button onClick={onClick} {...btnSetup} />);
     const btn = screen.getByTestId(btnSetup.testId);

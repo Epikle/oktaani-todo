@@ -8,7 +8,6 @@
     "airbnb/hooks",
     "plugin:jsx-a11y/recommended",
     "plugin:@typescript-eslint/recommended",
-    "plugin:jest/recommended",
     "eslint-config-prettier"
   ],
   "settings": {
@@ -38,15 +37,7 @@
     "import/no-extraneous-dependencies": [
       "error",
       {
-        "devDependencies": [
-          "test.{ts,tsx}",
-          "test-*.{ts,tsx}",
-          "**/*{.,_}{test,spec}.{ts,tsx}",
-          "**/jest.config.ts",
-          "**/jest.setup.ts",
-          "**/test-utils.tsx"
-        ],
-        "optionalDependencies": false
+        "devDependencies": true
       }
     ]
   },

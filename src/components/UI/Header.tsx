@@ -1,9 +1,15 @@
 import { FC, useEffect, useRef, useState } from 'react';
+import axios from 'axios';
 import autoAnimate from '@formkit/auto-animate';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
-import { deleteCollection } from '../../context/todoSlice';
-import { resetSelection } from '../../context/selectedSlice';
+import { deleteCollection, editCollection } from '../../context/todoSlice';
+import {
+  resetSelection,
+  setSelectedCollection,
+} from '../../context/selectedSlice';
+import useLanguage from '../../hooks/useLanguage';
+import { deleteSharedCollection } from '../../services/todo';
 import TodoControls from '../TodoForm/TodoControls';
 import TodoForm from '../TodoForm/TodoForm';
 import Settings from './Settings/Settings';
@@ -11,24 +17,81 @@ import Confirm from './Confirm';
 
 import styles from './Header.module.scss';
 
+export type TConfirm = {
+  type: 'share' | 'delete';
+  confirmText: string;
+  handler: () => void;
+};
+
 const Header: FC = () => {
-  const [isConfirm, setIsConfirm] = useState(false);
+  const [confirm, setConfirm] = useState<Omit<TConfirm, 'type'> | null>(null);
   const parent = useRef(null);
-  const { selected, id } = useAppSelector((state) => state.selected);
+  const { title, color, selected, id } = useAppSelector(
+    (state) => state.selected,
+  );
+  const collections = useAppSelector((state) => state.todo);
   const dispatch = useAppDispatch();
+  const { text } = useLanguage();
 
   useEffect(() => {
     if (parent.current) autoAnimate(parent.current);
   }, [parent]);
 
-  const deleteBtnHandler = () => {
-    setIsConfirm((prevS) => !prevS);
-  };
-
-  const deleteConfirmBtnHandler = () => {
+  const deleteConfirmBtnHandler = async () => {
+    await deleteSharedCollection(id);
     dispatch(deleteCollection({ id }));
     dispatch(resetSelection());
-    setIsConfirm(false);
+    setConfirm(null);
+  };
+
+  const shareConfirmBtnHandler = async () => {
+    const selectedCollection = collections.find(
+      (collection) => collection.id === id,
+    );
+    if (!selectedCollection) return;
+
+    try {
+      await axios.post(`${import.meta.env.VITE_API_URL}/share`, {
+        ...selectedCollection,
+        shared: true,
+      });
+      // TODO: Better way to copy and show share link
+      await navigator.clipboard.writeText(
+        `${import.meta.env.VITE_BASE_URL}?share=${id}`,
+      );
+      const editedCollection = {
+        id,
+        title,
+        color,
+        shared: true,
+      };
+      dispatch(editCollection(editedCollection));
+      dispatch(setSelectedCollection(editedCollection));
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+    }
+
+    setConfirm(null);
+  };
+
+  const confirmBtnHandler = (type?: TConfirm['type']) => {
+    switch (type) {
+      case 'delete':
+        setConfirm({
+          confirmText: text.controls.deleteConfirm,
+          handler: deleteConfirmBtnHandler,
+        });
+        return;
+      case 'share':
+        setConfirm({
+          confirmText: text.controls.shareConfirm,
+          handler: shareConfirmBtnHandler,
+        });
+        return;
+      default:
+        setConfirm(null);
+    }
   };
 
   return (
@@ -41,15 +104,16 @@ const Header: FC = () => {
             </h1>
           </div>
           {selected ? (
-            <TodoControls onDelete={deleteBtnHandler} />
+            <TodoControls onConfirm={confirmBtnHandler} />
           ) : (
             <Settings />
           )}
         </div>
-        {isConfirm ? (
+        {confirm ? (
           <Confirm
-            onConfirm={deleteConfirmBtnHandler}
-            onCancel={deleteBtnHandler}
+            confirmText={confirm.confirmText}
+            onConfirm={confirm.handler}
+            onCancel={confirmBtnHandler}
           />
         ) : (
           <TodoForm />

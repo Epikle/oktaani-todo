@@ -1,17 +1,19 @@
-import { FC, CSSProperties, useEffect, useRef } from 'react';
+import { FC, CSSProperties, useEffect, useRef, useState } from 'react';
 import autoAnimate from '@formkit/auto-animate';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faShareNodes } from '@fortawesome/free-solid-svg-icons';
 import { useDrag, useDrop } from 'react-dnd';
 import type { Identifier, XYCoord } from 'dnd-core';
 
-import { ItemTypes, TCollection } from '../../types';
+import { ItemTypes, type TCollection } from '../../types';
 import {
   resetSelection,
   setHasDone,
   setSelectedCollection,
 } from '../../context/selectedSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
+import { getSharedCollectionData } from '../../services/todo';
+import { updateSharedCollectionToState } from '../../context/todoSlice';
 import useLanguage from '../../hooks/useLanguage';
 import { formatDate } from '../../utils/utils';
 import TodoItem from './TodoItem';
@@ -36,11 +38,31 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
   const selectedCollection = useAppSelector((state) => state.selected);
   const { languageName, sort } = useAppSelector((state) => state.settings);
   const isSelected = selectedCollection.id === collection.id;
-  const isSorting = sort;
   const parent = useRef<HTMLUListElement>(null);
   const { text } = useLanguage();
 
   const ref = useRef<HTMLElement>(null);
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+
+  useEffect(() => {
+    const getAPIData = async () => {
+      setIsLoading(true);
+      try {
+        const sharedCollection = await getSharedCollectionData(id);
+        dispatch(updateSharedCollectionToState(sharedCollection));
+      } catch (error) {
+        dispatch(updateSharedCollectionToState({ id, shared: false }));
+        setIsError(true);
+      }
+      setIsLoading(false);
+    };
+
+    if (shared) {
+      getAPIData();
+    }
+  }, [id, shared, dispatch]);
 
   const [{ handlerId }, drop] = useDrop<
     DragItem,
@@ -104,7 +126,7 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
     }
 
     dispatch(setHasDone(!!doneTodos));
-    dispatch(setSelectedCollection({ id, title, color }));
+    dispatch(setSelectedCollection({ id, title, color, shared }));
   };
 
   useEffect(() => {
@@ -130,6 +152,23 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
 
   preview(drop(ref));
 
+  if (isLoading)
+    return (
+      <article className={articleStyles}>
+        <h2>Loading...</h2>
+      </article>
+    );
+  if (isError)
+    return (
+      <article className={articleStyles}>
+        <h2>ERROR</h2>
+        Failed to fetch shared collection.
+        <button type="button" onClick={() => setIsError(false)}>
+          Show local copy
+        </button>
+      </article>
+    );
+
   return (
     <article
       ref={ref}
@@ -146,12 +185,12 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
           type="button"
           onClick={selectedCollectionHandler}
           style={headingStyles}
-          disabled={isSorting}
+          disabled={sort}
         >
           {title}
         </button>
       </h2>
-      {!isSorting && (
+      {!sort && (
         <ul ref={parent} className={styles['item-list']}>
           {collection.todos.map((todo) => (
             <TodoItem key={todo.id} todo={todo} />
@@ -159,7 +198,7 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
         </ul>
       )}
 
-      {isSorting && (
+      {sort && (
         <button type="button" className={styles.move} ref={drag}>
           <FontAwesomeIcon icon={faBars} size="2x" />
         </button>

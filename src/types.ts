@@ -18,6 +18,7 @@ export type TSelected = {
   id: string;
   title: string;
   color: string;
+  shared: boolean;
   edit: boolean;
   selected: boolean;
 };
@@ -48,6 +49,7 @@ export type Texts = {
     shareCol: string;
     removeDone: string;
     deleteConfirm: string;
+    shareConfirm: string;
     sort: string;
   };
   collection: {

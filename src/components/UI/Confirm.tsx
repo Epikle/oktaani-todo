@@ -12,18 +12,19 @@ import Button from './Button';
 import styles from './Confirm.module.scss';
 
 type Props = {
+  confirmText: string;
   onConfirm: () => void;
   onCancel: () => void;
 };
 
-const Confirm: FC<Props> = ({ onConfirm, onCancel }) => {
+const Confirm: FC<Props> = ({ confirmText, onConfirm, onCancel }) => {
   const { text } = useLanguage();
 
   return (
     <div className={styles.confirm}>
       <div className={styles.text}>
         <FontAwesomeIcon icon={faCircleQuestion} size="xl" />
-        {text.controls.deleteConfirm}
+        {confirmText}
       </div>
       <ul className={styles.controls}>
         <li>

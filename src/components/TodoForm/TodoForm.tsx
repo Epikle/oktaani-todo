@@ -50,6 +50,7 @@ const TodoForm: FC = () => {
         id: selectedCollection.id,
         title: trimmedInput,
         color: selectedCollection.color,
+        shared: selectedCollection.shared,
       };
       dispatch(editCollection(editedCollection));
       dispatch(setSelectedCollection(editedCollection));
@@ -69,6 +70,7 @@ const TodoForm: FC = () => {
       title: trimmedInput,
       color,
       id: nanoid(),
+      shared: false,
     };
 
     dispatch(createCollection(newCollectionEntry));
