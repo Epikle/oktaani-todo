@@ -25,6 +25,6 @@ cypress/downloads
 *.njsproj
 *.sln
 *.sw?
-.env
+.env**
 TODO.md
 tyoaikakirjanpito.md

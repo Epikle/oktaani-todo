@@ -12,7 +12,7 @@
 - SASS
 - CSS Flexbox, Grid
 - TypeScript
-- Jest + React Testing Library
+- Vitest + React Testing Library
 - Cypress E2E
 - Prettier
 - ESLint
@@ -31,7 +31,7 @@ In the project directory, you can run:
 
 - `npm run lint` <br /> Uses ESLint to analyze code and find problems.
 
-- `npm run test` <br /> Launches the Jest test runner and runs all tests.
+- `npm run test` <br /> Launches the Vitest test runner and runs all tests.
 
 - `npm run cypress:open` <br /> Launches the Cypress Launchpad window.
 
