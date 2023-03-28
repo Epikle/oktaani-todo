@@ -34,7 +34,7 @@ const App: FC = () => {
         } catch (error) {
           // TODO: Error handling
         }
-        window.location.replace(process.env.VITE_BASE_URL || '');
+        window.location.replace(import.meta.env.VITE_BASE_URL);
       };
       getSharedCollection();
     }

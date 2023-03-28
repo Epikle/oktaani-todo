@@ -10,7 +10,7 @@ import type {
 import { isValidCollections } from '../utils/utils';
 
 const LS_NAME = 'oktaani-todo';
-const BASE_URL = process.env.VITE_API_URL;
+const BASE_URL = import.meta.env.VITE_API_URL;
 
 export const deleteSharedCollection = async (id: string) => {
   await axios.delete(`${BASE_URL}/share/${id}`);
@@ -20,7 +20,7 @@ export const getSharedCollectionData = async (id: string) => {
   try {
     // TODO: delay only for development, remove
     // eslint-disable-next-line no-promise-executor-return
-    await new Promise((r) => setTimeout(r, 2000));
+    // await new Promise((r) => setTimeout(r, 2000));
     const { data } = await axios.get<TCollection>(`${BASE_URL}/share/${id}`);
     return data;
   } catch (error) {

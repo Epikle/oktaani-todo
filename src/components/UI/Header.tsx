@@ -51,13 +51,13 @@ const Header: FC = () => {
     if (!selectedCollection) return;
 
     try {
-      await axios.post(`${process.env.VITE_API_URL}/share`, {
+      await axios.post(`${import.meta.env.VITE_API_URL}/share`, {
         ...selectedCollection,
         shared: true,
       });
       // TODO: Better way to copy and show share link
       await navigator.clipboard.writeText(
-        `${process.env.VITE_BASE_URL}?share=${id}`,
+        `${import.meta.env.VITE_BASE_URL}?share=${id}`,
       );
       const editedCollection = {
         id,

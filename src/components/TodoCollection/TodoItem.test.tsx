@@ -1,4 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
+import { vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 import { Provider } from 'react-redux';
@@ -13,7 +14,7 @@ describe('TodoItem', () => {
     text: 'Test item',
     done: false,
     created: Date(),
-    onDone: jest.fn(),
+    onDone: vi.fn(),
     language: 'en-us' as Languages,
   };
 
@@ -61,6 +62,6 @@ describe('TodoItem', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 });
