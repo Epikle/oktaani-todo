@@ -12,6 +12,10 @@ import { isValidCollections } from '../utils/utils';
 const LS_NAME = 'oktaani-todo';
 const BASE_URL = import.meta.env.VITE_API_URL;
 
+export const deleteSharedCollection = async (id: string) => {
+  await axios.delete(`${BASE_URL}/share/${id}`);
+};
+
 export const getSharedCollectionData = async (id: string) => {
   try {
     // TODO: delay only for development, remove

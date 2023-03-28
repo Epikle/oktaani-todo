@@ -9,6 +9,7 @@ import {
   setSelectedCollection,
 } from '../../context/selectedSlice';
 import useLanguage from '../../hooks/useLanguage';
+import { deleteSharedCollection } from '../../services/todo';
 import TodoControls from '../TodoForm/TodoControls';
 import TodoForm from '../TodoForm/TodoForm';
 import Settings from './Settings/Settings';
@@ -36,7 +37,8 @@ const Header: FC = () => {
     if (parent.current) autoAnimate(parent.current);
   }, [parent]);
 
-  const deleteConfirmBtnHandler = () => {
+  const deleteConfirmBtnHandler = async () => {
+    await deleteSharedCollection(id);
     dispatch(deleteCollection({ id }));
     dispatch(resetSelection());
     setConfirm(null);
@@ -53,6 +55,7 @@ const Header: FC = () => {
         ...selectedCollection,
         shared: true,
       });
+      // TODO: Better way to copy and show share link
       await navigator.clipboard.writeText(
         `${import.meta.env.VITE_BASE_URL}?share=${id}`,
       );
