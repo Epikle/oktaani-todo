@@ -36,6 +36,7 @@ const ColorChooser: FC<Props> = ({
       id: selectedCollection.id,
       title: selectedCollection.title,
       color: colorInputRef.current.value,
+      shared: selectedCollection.shared,
     };
 
     dispatch(editCollection(editedCollection));

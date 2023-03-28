@@ -70,6 +70,7 @@ const TodoForm: FC = () => {
       title: trimmedInput,
       color,
       id: nanoid(),
+      shared: false,
     };
 
     dispatch(createCollection(newCollectionEntry));
