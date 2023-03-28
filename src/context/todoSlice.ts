@@ -104,15 +104,10 @@ export const todoSlice = createSlice({
       return state;
     },
     editCollection: (state, action: PayloadAction<TSelectedEntry>) => {
-      const { id, title, color, shared } = action.payload;
-
-      const collection = state.find((col) => col.id === id);
+      const collection = state.find((col) => col.id === action.payload.id);
 
       if (collection) {
-        collection.title = title;
-        collection.color = color;
-        collection.shared = shared;
-
+        Object.assign(collection, action.payload);
         saveCollectionsToLS(state);
       }
 
@@ -120,22 +115,24 @@ export const todoSlice = createSlice({
     },
     updateSharedCollectionToState: (
       state,
-      action: PayloadAction<TCollection>,
+      action: PayloadAction<Partial<TCollection>>,
     ) => {
-      const { id, title, color, shared, todos } = action.payload;
-
-      const collection = state.find((col) => col.id === id);
+      const collection = state.find((col) => col.id === action.payload.id);
 
       if (collection) {
-        collection.title = title;
-        collection.color = color;
-        collection.shared = shared;
-        collection.todos = todos;
-
+        Object.assign(collection, action.payload);
         saveCollectionsToLS(state);
       }
 
       return state;
+    },
+    createSharedCollection: (state, action: PayloadAction<TCollection>) => {
+      const collection = state.find((col) => col.id === action.payload.id);
+
+      if (collection) return state;
+
+      saveCollectionsToLS([action.payload, ...state]);
+      return [action.payload, ...state];
     },
     removeDoneItems: (state, action: PayloadAction<{ id: string }>) => {
       const { id } = action.payload;
@@ -161,6 +158,7 @@ export const {
   editCollection,
   removeDoneItems,
   updateSharedCollectionToState,
+  createSharedCollection,
 } = todoSlice.actions;
 
 export default todoSlice.reducer;

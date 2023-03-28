@@ -53,6 +53,9 @@ const Header: FC = () => {
         ...selectedCollection,
         shared: true,
       });
+      await navigator.clipboard.writeText(
+        `${import.meta.env.VITE_BASE_URL}?share=${id}`,
+      );
       const editedCollection = {
         id,
         title,

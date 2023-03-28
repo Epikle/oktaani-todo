@@ -12,17 +12,15 @@ import { isValidCollections } from '../utils/utils';
 const LS_NAME = 'oktaani-todo';
 const BASE_URL = import.meta.env.VITE_API_URL;
 
-// eslint-disable-next-line no-promise-executor-return
-const delay = (t: number) => new Promise((resolve) => setTimeout(resolve, t));
-
 export const getSharedCollectionData = async (id: string) => {
   try {
     // TODO: delay only for development, remove
-    await delay(2000);
+    // eslint-disable-next-line no-promise-executor-return
+    await new Promise((r) => setTimeout(r, 2000));
     const { data } = await axios.get<TCollection>(`${BASE_URL}/share/${id}`);
     return data;
   } catch (error) {
-    throw new Error('Fetch failed.');
+    throw new Error('Fetching shared collection failed.');
   }
 };
 
@@ -47,7 +45,6 @@ export const getTodosFromLS = () => {
 
     return parsedCollections as TCollection[];
   } catch (error) {
-    // TODO: error handling
     return [];
   }
 };

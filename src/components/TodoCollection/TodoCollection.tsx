@@ -1,31 +1,24 @@
-import {
-  FC,
-  CSSProperties,
-  useEffect,
-  useRef,
-  useCallback,
-  useState,
-} from 'react';
+import { FC, CSSProperties, useEffect, useRef, useState } from 'react';
 import autoAnimate from '@formkit/auto-animate';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faShareNodes } from '@fortawesome/free-solid-svg-icons';
 import { useDrag, useDrop } from 'react-dnd';
 import type { Identifier, XYCoord } from 'dnd-core';
 
-import { ItemTypes, TCollection } from '../../types';
+import { ItemTypes, type TCollection } from '../../types';
 import {
   resetSelection,
   setHasDone,
   setSelectedCollection,
 } from '../../context/selectedSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
+import { getSharedCollectionData } from '../../services/todo';
+import { updateSharedCollectionToState } from '../../context/todoSlice';
 import useLanguage from '../../hooks/useLanguage';
 import { formatDate } from '../../utils/utils';
 import TodoItem from './TodoItem';
 
 import styles from './TodoCollection.module.scss';
-import { getSharedCollectionData } from '../../services/todo';
-import { updateSharedCollectionToState } from '../../context/todoSlice';
 
 type Props = {
   collection: TCollection;
@@ -53,22 +46,23 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
 
-  const getAPIData = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      const data = await getSharedCollectionData(id);
-      dispatch(updateSharedCollectionToState(data));
-    } catch (error) {
-      setIsError(true);
-    }
-    setIsLoading(false);
-  }, [id, dispatch]);
-
   useEffect(() => {
+    const getAPIData = async () => {
+      setIsLoading(true);
+      try {
+        const sharedCollection = await getSharedCollectionData(id);
+        dispatch(updateSharedCollectionToState(sharedCollection));
+      } catch (error) {
+        dispatch(updateSharedCollectionToState({ id, shared: false }));
+        setIsError(true);
+      }
+      setIsLoading(false);
+    };
+
     if (shared) {
       getAPIData();
     }
-  }, [shared, getAPIData]);
+  }, [id, shared, dispatch]);
 
   const [{ handlerId }, drop] = useDrop<
     DragItem,
@@ -158,8 +152,22 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
 
   preview(drop(ref));
 
-  if (isLoading) return <p>Loading...</p>;
-  if (isError) return <p>ERROR</p>;
+  if (isLoading)
+    return (
+      <article className={articleStyles}>
+        <h2>Loading...</h2>
+      </article>
+    );
+  if (isError)
+    return (
+      <article className={articleStyles}>
+        <h2>ERROR</h2>
+        Failed to fetch shared collection.
+        <button type="button" onClick={() => setIsError(false)}>
+          Show local copy
+        </button>
+      </article>
+    );
 
   return (
     <article
