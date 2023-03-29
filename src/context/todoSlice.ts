@@ -27,20 +27,17 @@ export const deleteCollectionById = createAsyncThunk(
   },
 );
 
-export const initTodoState = createAsyncThunk(
-  'todo/initTodoState',
-  async (collections: TCollection[]) => {
-    // eslint-disable-next-line no-restricted-syntax
-    for await (const collection of collections) {
-      if (collection.shared) {
-        const sharedCollectionData = await getSharedCollectionData(
-          collection.id,
-        );
-        Object.assign(collection, sharedCollectionData);
-      }
+export const updateSharedCollectionById = createAsyncThunk(
+  'todo/updateSharedCollectionById',
+  async (id: string) => {
+    // TODO: REMOVE DELAY, ONLY DEVELOPMENT
+    if (import.meta.env.DEV) {
+      // eslint-disable-next-line no-promise-executor-return
+      await new Promise((resolve) => setTimeout(resolve, 2000));
     }
+    const sharedCollectionData = await getSharedCollectionData(id);
 
-    return collections;
+    return sharedCollectionData;
   },
 );
 
@@ -74,6 +71,25 @@ export const todoSlice = createSlice({
   name: 'todo',
   initialState,
   reducers: {
+    initTodoState: (state, action: PayloadAction<TCollection[] | []>) => {
+      if (action.payload.length === 0) {
+        const createdEntry = [
+          createCollectionEntry({
+            title: '✨ First Collection ✨',
+            color: '#7b68ee',
+            id: nanoid(),
+          }),
+        ];
+
+        saveCollectionsToLS(createdEntry);
+
+        return createdEntry;
+      }
+
+      saveCollectionsToLS(action.payload);
+
+      return [...action.payload];
+    },
     changeOrder: (
       state,
       action: PayloadAction<{ dragIndex: number; hoverIndex: number }>,
@@ -120,19 +136,6 @@ export const todoSlice = createSlice({
 
       return state;
     },
-    updateSharedCollectionToState: (
-      state,
-      action: PayloadAction<Partial<TCollection>>,
-    ) => {
-      const collection = state.find((col) => col.id === action.payload.id);
-
-      if (collection) {
-        Object.assign(collection, action.payload);
-        saveCollectionsToLS(state);
-      }
-
-      return state;
-    },
     createSharedCollection: (state, action: PayloadAction<TCollection>) => {
       const collection = state.find((col) => col.id === action.payload.id);
 
@@ -154,6 +157,17 @@ export const todoSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    builder.addCase(updateSharedCollectionById.fulfilled, (state, action) => {
+      const collection = state.find((col) => col.id === action.payload.id);
+
+      if (collection) {
+        Object.assign(collection, action.payload);
+        saveCollectionsToLS(state);
+      }
+
+      return state;
+    });
+
     builder.addCase(createCollectionItem.fulfilled, (state, action) => {
       const { id, createdItem } = action.payload;
       const selectedCollection = state.find(
@@ -166,26 +180,6 @@ export const todoSlice = createSlice({
       saveCollectionsToLS(state);
 
       return state;
-    });
-
-    builder.addCase(initTodoState.fulfilled, (state, action) => {
-      if (action.payload.length === 0) {
-        const createdEntry = [
-          createCollectionEntry({
-            title: '✨ First Collection ✨',
-            color: '#7b68ee',
-            id: nanoid(),
-          }),
-        ];
-
-        saveCollectionsToLS(createdEntry);
-
-        return createdEntry;
-      }
-
-      saveCollectionsToLS(action.payload);
-
-      return [...action.payload];
     });
 
     builder.addCase(deleteCollectionById.fulfilled, (state, action) => {
@@ -201,12 +195,12 @@ export const todoSlice = createSlice({
 });
 
 export const {
+  initTodoState,
   changeOrder,
   createCollection,
   toggleItemDone,
   editCollection,
   removeDoneItems,
-  updateSharedCollectionToState,
   createSharedCollection,
 } = todoSlice.actions;
 

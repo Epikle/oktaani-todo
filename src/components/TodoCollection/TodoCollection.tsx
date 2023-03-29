@@ -1,4 +1,4 @@
-import { FC, CSSProperties, useEffect, useRef } from 'react';
+import { FC, CSSProperties, useEffect, useRef, useState } from 'react';
 import autoAnimate from '@formkit/auto-animate';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faShareNodes } from '@fortawesome/free-solid-svg-icons';
@@ -17,6 +17,7 @@ import { formatDate } from '../../utils/utils';
 import TodoItem from './TodoItem';
 
 import styles from './TodoCollection.module.scss';
+import { updateSharedCollectionById } from '../../context/todoSlice';
 
 type Props = {
   collection: TCollection;
@@ -38,8 +39,20 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
   const isSelected = selectedCollection.id === collection.id;
   const parent = useRef<HTMLUListElement>(null);
   const { text } = useLanguage();
-
   const ref = useRef<HTMLElement>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const getSharedCollectionData = async () => {
+      setIsLoading(true);
+      await dispatch(updateSharedCollectionById(id));
+      setIsLoading(false);
+    };
+
+    if (shared) {
+      getSharedCollectionData();
+    }
+  }, [shared, dispatch, id]);
 
   const [{ handlerId }, drop] = useDrop<
     DragItem,
@@ -128,6 +141,13 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
   }, [doneTodos, dispatch, isSelected]);
 
   preview(drop(ref));
+
+  if (isLoading)
+    return (
+      <article className={articleStyles}>
+        <h2>Loading...</h2>
+      </article>
+    );
 
   return (
     <article
