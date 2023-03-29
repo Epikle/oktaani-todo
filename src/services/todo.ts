@@ -13,17 +13,27 @@ const LS_NAME = 'oktaani-todo';
 const BASE_URL = import.meta.env.VITE_API_URL;
 
 export const deleteSharedCollection = async (id: string) => {
-  await axios.delete(`${BASE_URL}/share/${id}`);
+  try {
+    await axios.delete(`${BASE_URL}/share/${id}`);
+  } catch (error) {
+    // TODO: error handling
+  }
+};
+
+export const updateSharedCollection = async (collection: TCollection) => {
+  try {
+    await axios.put(`${BASE_URL}/share/${collection.id}`, collection);
+  } catch (error) {
+    // TODO: error handling
+  }
 };
 
 export const getSharedCollectionData = async (id: string) => {
   try {
-    // TODO: delay only for development, remove
-    // eslint-disable-next-line no-promise-executor-return
-    // await new Promise((r) => setTimeout(r, 2000));
     const { data } = await axios.get<TCollection>(`${BASE_URL}/share/${id}`);
     return data;
   } catch (error) {
+    // TODO: Languages
     throw new Error('Fetching shared collection failed.');
   }
 };

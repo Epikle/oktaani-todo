@@ -3,13 +3,12 @@ import axios from 'axios';
 import autoAnimate from '@formkit/auto-animate';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
-import { deleteCollection, editCollection } from '../../context/todoSlice';
+import { deleteCollectionById, editCollection } from '../../context/todoSlice';
 import {
   resetSelection,
   setSelectedCollection,
 } from '../../context/selectedSlice';
 import useLanguage from '../../hooks/useLanguage';
-import { deleteSharedCollection } from '../../services/todo';
 import TodoControls from '../TodoForm/TodoControls';
 import TodoForm from '../TodoForm/TodoForm';
 import Settings from './Settings/Settings';
@@ -26,7 +25,7 @@ export type TConfirm = {
 const Header: FC = () => {
   const [confirm, setConfirm] = useState<Omit<TConfirm, 'type'> | null>(null);
   const parent = useRef(null);
-  const { title, color, selected, id } = useAppSelector(
+  const { title, color, selected, id, shared } = useAppSelector(
     (state) => state.selected,
   );
   const collections = useAppSelector((state) => state.todo);
@@ -38,8 +37,7 @@ const Header: FC = () => {
   }, [parent]);
 
   const deleteConfirmBtnHandler = async () => {
-    await deleteSharedCollection(id);
-    dispatch(deleteCollection({ id }));
+    await dispatch(deleteCollectionById({ id, shared }));
     dispatch(resetSelection());
     setConfirm(null);
   };

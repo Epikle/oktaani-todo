@@ -1,4 +1,4 @@
-import { FC, CSSProperties, useEffect, useRef, useState } from 'react';
+import { FC, CSSProperties, useEffect, useRef } from 'react';
 import autoAnimate from '@formkit/auto-animate';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faShareNodes } from '@fortawesome/free-solid-svg-icons';
@@ -12,8 +12,6 @@ import {
   setSelectedCollection,
 } from '../../context/selectedSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
-import { getSharedCollectionData } from '../../services/todo';
-import { updateSharedCollectionToState } from '../../context/todoSlice';
 import useLanguage from '../../hooks/useLanguage';
 import { formatDate } from '../../utils/utils';
 import TodoItem from './TodoItem';
@@ -42,27 +40,6 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
   const { text } = useLanguage();
 
   const ref = useRef<HTMLElement>(null);
-
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
-
-  useEffect(() => {
-    const getAPIData = async () => {
-      setIsLoading(true);
-      try {
-        const sharedCollection = await getSharedCollectionData(id);
-        dispatch(updateSharedCollectionToState(sharedCollection));
-      } catch (error) {
-        dispatch(updateSharedCollectionToState({ id, shared: false }));
-        setIsError(true);
-      }
-      setIsLoading(false);
-    };
-
-    if (shared) {
-      getAPIData();
-    }
-  }, [id, shared, dispatch]);
 
   const [{ handlerId }, drop] = useDrop<
     DragItem,
@@ -151,23 +128,6 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
   }, [doneTodos, dispatch, isSelected]);
 
   preview(drop(ref));
-
-  if (isLoading)
-    return (
-      <article className={articleStyles}>
-        <h2>Loading...</h2>
-      </article>
-    );
-  if (isError)
-    return (
-      <article className={articleStyles}>
-        <h2>ERROR</h2>
-        Failed to fetch shared collection.
-        <button type="button" onClick={() => setIsError(false)}>
-          Show local copy
-        </button>
-      </article>
-    );
 
   return (
     <article

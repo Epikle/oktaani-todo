@@ -6,7 +6,7 @@ import { nanoid } from 'nanoid';
 import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
 import {
   createCollection,
-  createItem,
+  createCollectionItem,
   editCollection,
 } from '../../context/todoSlice';
 import {
@@ -60,7 +60,10 @@ const TodoForm: FC = () => {
 
     if (selectedCollection.selected) {
       dispatch(
-        createItem({ id: selectedCollection.id, item: { text: trimmedInput } }),
+        createCollectionItem({
+          id: selectedCollection.id,
+          newItemEntry: { text: trimmedInput },
+        }),
       );
       setTodoInput('');
       return;
