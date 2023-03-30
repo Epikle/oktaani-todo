@@ -173,7 +173,7 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
       {!sort && (
         <ul ref={parent} className={styles['item-list']}>
           {collection.todos.map((todo) => (
-            <TodoItem key={todo.id} todo={todo} />
+            <TodoItem key={todo.id} todo={todo} colId={id} />
           ))}
         </ul>
       )}

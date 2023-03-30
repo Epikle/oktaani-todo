@@ -48,6 +48,7 @@ const Header: FC = () => {
     );
     if (!selectedCollection) return;
 
+    // TODO: Refactor
     try {
       await axios.post(`${import.meta.env.VITE_API_URL}/share`, {
         ...selectedCollection,
