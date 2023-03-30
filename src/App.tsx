@@ -1,7 +1,7 @@
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from './hooks/useRedux';
-import { createSharedCollection, initTodos } from './context/todoSlice';
+import { createSharedCollection, initTodoState } from './context/todoSlice';
 import { initSettings } from './context/settingsSlice';
 import * as todoService from './services/todo';
 import * as settingsService from './services/settings';
@@ -16,6 +16,7 @@ const App: FC = () => {
   const dispatch = useAppDispatch();
   const selected = useAppSelector((state) => state.selected);
   const { darkMode } = useAppSelector((state) => state.settings);
+  const [isError, setIsError] = useState(false);
 
   const title = selected.title
     ? `${selected.title} | oktaaniTODO`
@@ -24,29 +25,36 @@ const App: FC = () => {
   document.title = title;
 
   useEffect(() => {
-    dispatch(initTodos(todoService.getTodosFromLS()));
+    dispatch(initTodoState(todoService.getTodosFromLS()));
     dispatch(initSettings(settingsService.getSettingsFromLS()));
     if (shareParam) {
       const getSharedCollection = async () => {
         try {
           const data = await todoService.getSharedCollectionData(shareParam);
           dispatch(createSharedCollection(data));
+          window.location.replace(import.meta.env.VITE_BASE_URL);
         } catch (error) {
           // TODO: Error handling
+          setIsError(true);
         }
-        window.location.replace(import.meta.env.VITE_BASE_URL);
       };
       getSharedCollection();
     }
   }, [dispatch]);
 
+  // TODO: Languages
   return (
     <div className={darkMode ? 'content dark-mode' : 'content'}>
       {!isStorageAvailable() && (
         <Overlay>You need to allow localStorage usage to use this app.</Overlay>
       )}
       <Header />
-      <TodoList />
+      {isError && (
+        <main>
+          <p>Something went wrong!</p>
+        </main>
+      )}
+      {!shareParam && !isError && <TodoList />}
     </div>
   );
 };

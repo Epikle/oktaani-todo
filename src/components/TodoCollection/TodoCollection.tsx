@@ -12,13 +12,12 @@ import {
   setSelectedCollection,
 } from '../../context/selectedSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
-import { getSharedCollectionData } from '../../services/todo';
-import { updateSharedCollectionToState } from '../../context/todoSlice';
 import useLanguage from '../../hooks/useLanguage';
 import { formatDate } from '../../utils/utils';
 import TodoItem from './TodoItem';
 
 import styles from './TodoCollection.module.scss';
+import { updateSharedCollectionById } from '../../context/todoSlice';
 
 type Props = {
   collection: TCollection;
@@ -40,29 +39,20 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
   const isSelected = selectedCollection.id === collection.id;
   const parent = useRef<HTMLUListElement>(null);
   const { text } = useLanguage();
-
   const ref = useRef<HTMLElement>(null);
-
   const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
-    const getAPIData = async () => {
+    const getSharedCollectionData = async () => {
       setIsLoading(true);
-      try {
-        const sharedCollection = await getSharedCollectionData(id);
-        dispatch(updateSharedCollectionToState(sharedCollection));
-      } catch (error) {
-        dispatch(updateSharedCollectionToState({ id, shared: false }));
-        setIsError(true);
-      }
+      await dispatch(updateSharedCollectionById(id));
       setIsLoading(false);
     };
 
     if (shared) {
-      getAPIData();
+      getSharedCollectionData();
     }
-  }, [id, shared, dispatch]);
+  }, [shared, dispatch, id]);
 
   const [{ handlerId }, drop] = useDrop<
     DragItem,
@@ -158,16 +148,6 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
         <h2>Loading...</h2>
       </article>
     );
-  if (isError)
-    return (
-      <article className={articleStyles}>
-        <h2>ERROR</h2>
-        Failed to fetch shared collection.
-        <button type="button" onClick={() => setIsError(false)}>
-          Show local copy
-        </button>
-      </article>
-    );
 
   return (
     <article
@@ -193,7 +173,7 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
       {!sort && (
         <ul ref={parent} className={styles['item-list']}>
           {collection.todos.map((todo) => (
-            <TodoItem key={todo.id} todo={todo} />
+            <TodoItem key={todo.id} todo={todo} colId={id} />
           ))}
         </ul>
       )}

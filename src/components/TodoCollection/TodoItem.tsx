@@ -10,6 +10,7 @@ import styles from './TodoItem.module.scss';
 
 type Props = {
   todo: TItem;
+  colId: string;
 };
 
 type ItemProps = Omit<TItem, 'id'> & {
@@ -52,13 +53,13 @@ export const Item: FC<ItemProps> = ({
   );
 };
 
-const TodoItem: FC<Props> = ({ todo }) => {
+const TodoItem: FC<Props> = ({ todo, colId }) => {
   const { id, text, done, created } = todo;
   const dispatch = useAppDispatch();
   const { languageName } = useAppSelector((state) => state.settings);
 
   const doneInputHandler = () => {
-    dispatch(toggleItemDone({ id }));
+    dispatch(toggleItemDone({ colId, id }));
   };
 
   return (
