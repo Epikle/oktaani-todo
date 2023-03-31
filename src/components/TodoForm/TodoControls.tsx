@@ -27,8 +27,8 @@ const TodoControls: FC<Props> = ({ onConfirm }) => {
   const dispatch = useAppDispatch();
   const { text } = useLanguage();
 
-  const removeDoneBtnHandler = () => {
-    dispatch(removeDoneItems(id));
+  const removeDoneBtnHandler = async () => {
+    await dispatch(removeDoneItems(id));
   };
 
   const editBtnHandler = () => {

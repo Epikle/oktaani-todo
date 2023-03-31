@@ -1,9 +1,8 @@
 import { FC, useEffect, useRef, useState } from 'react';
-import axios from 'axios';
 import autoAnimate from '@formkit/auto-animate';
-
 import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
 import { deleteCollectionById, editCollection } from '../../context/todoSlice';
+import { createSharedCollection } from '../../services/todo';
 import {
   resetSelection,
   setSelectedCollection,
@@ -48,12 +47,8 @@ const Header: FC = () => {
     );
     if (!selectedCollection) return;
 
-    // TODO: Refactor
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL}/share`, {
-        ...selectedCollection,
-        shared: true,
-      });
+      await createSharedCollection(selectedCollection);
       // TODO: Better way to copy and show share link
       await navigator.clipboard.writeText(
         `${import.meta.env.VITE_BASE_URL}?share=${id}`,
@@ -64,11 +59,10 @@ const Header: FC = () => {
         color,
         shared: true,
       };
-      dispatch(editCollection(editedCollection));
+      await dispatch(editCollection(editedCollection));
       dispatch(setSelectedCollection(editedCollection));
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(error);
+      // TODO: error handling
     }
 
     setConfirm(null);

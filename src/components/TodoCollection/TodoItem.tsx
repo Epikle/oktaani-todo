@@ -58,8 +58,8 @@ const TodoItem: FC<Props> = ({ todo, colId }) => {
   const dispatch = useAppDispatch();
   const { languageName } = useAppSelector((state) => state.settings);
 
-  const doneInputHandler = () => {
-    dispatch(toggleItemDone({ colId, id }));
+  const doneInputHandler = async () => {
+    await dispatch(toggleItemDone({ colId, id }));
   };
 
   return (

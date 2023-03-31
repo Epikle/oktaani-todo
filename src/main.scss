@@ -13,10 +13,12 @@ body {
   background-color: var(--color-bg-body);
 }
 
-main p {
-  margin-top: 1rem;
-  text-align: center;
-  color: var(--color-text-p);
+main {
+  p {
+    margin-top: 1rem;
+    text-align: center;
+    color: var(--color-text-p);
+  }
 }
 
 @media print {

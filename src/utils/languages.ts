@@ -32,6 +32,10 @@ const languages: Record<Languages, Texts> = {
       add: 'Add',
       editing: 'Editing',
     },
+    errors: {
+      localStorage: 'You need to allow localStorage usage to use this app.',
+      default: 'Something went wrong.',
+    },
   },
   fi: {
     header: {
@@ -63,6 +67,11 @@ const languages: Record<Languages, Texts> = {
       cancel: 'Peruuta',
       add: 'Lisää',
       editing: 'Muokkaa',
+    },
+    errors: {
+      localStorage:
+        'Sovellus tarvitsee paikallisen tallennuksen päälle toimiakseen.',
+      default: 'Jotain meni pieleen.',
     },
   },
 };

@@ -65,6 +65,10 @@ export type Texts = {
     add: string;
     editing: string;
   };
+  errors: {
+    localStorage: string;
+    default: string;
+  };
 };
 
 export type Settings = {

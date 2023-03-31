@@ -41,7 +41,7 @@ const TodoForm: FC = () => {
     setTodoInput('');
   }, [selectedCollection.edit, selectedCollection.title]);
 
-  const submitHandler = (event: FormEvent) => {
+  const submitHandler = async (event: FormEvent) => {
     event.preventDefault();
     if (trimmedInput.length === 0) return;
 
@@ -52,14 +52,14 @@ const TodoForm: FC = () => {
         color: selectedCollection.color,
         shared: selectedCollection.shared,
       };
-      dispatch(editCollection(editedCollection));
+      await dispatch(editCollection(editedCollection));
       dispatch(setSelectedCollection(editedCollection));
       dispatch(setSelectedCollectionEdit({ edit: false }));
       return;
     }
 
     if (selectedCollection.selected) {
-      dispatch(
+      await dispatch(
         createCollectionItem({
           id: selectedCollection.id,
           newItemEntry: { text: trimmedInput },

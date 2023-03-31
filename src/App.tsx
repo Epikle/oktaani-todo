@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from 'react';
-
 import { useAppDispatch, useAppSelector } from './hooks/useRedux';
+import useLanguage from './hooks/useLanguage';
 import { createSharedCollection, initTodoState } from './context/todoSlice';
 import { initSettings } from './context/settingsSlice';
 import * as todoService from './services/todo';
@@ -17,6 +17,7 @@ const App: FC = () => {
   const selected = useAppSelector((state) => state.selected);
   const { darkMode } = useAppSelector((state) => state.settings);
   const [isError, setIsError] = useState(false);
+  const { text } = useLanguage();
 
   const title = selected.title
     ? `${selected.title} | oktaaniTODO`
@@ -34,24 +35,24 @@ const App: FC = () => {
           dispatch(createSharedCollection(data));
           window.location.replace(import.meta.env.VITE_BASE_URL);
         } catch (error) {
-          // TODO: Error handling
           setIsError(true);
+          setTimeout(() => {
+            setIsError(false);
+            window.location.replace(import.meta.env.VITE_BASE_URL);
+          }, 2000);
         }
       };
       getSharedCollection();
     }
   }, [dispatch]);
 
-  // TODO: Languages
   return (
     <div className={darkMode ? 'content dark-mode' : 'content'}>
-      {!isStorageAvailable() && (
-        <Overlay>You need to allow localStorage usage to use this app.</Overlay>
-      )}
+      {!isStorageAvailable() && <Overlay>{text.errors.localStorage}</Overlay>}
       <Header />
       {isError && (
         <main>
-          <p>Something went wrong!</p>
+          <p>{text.errors.default}</p>
         </main>
       )}
       {!shareParam && !isError && <TodoList />}

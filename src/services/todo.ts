@@ -12,6 +12,17 @@ import { isValidCollections } from '../utils/utils';
 const LS_NAME = 'oktaani-todo';
 const BASE_URL = import.meta.env.VITE_API_URL;
 
+export const createSharedCollection = async (collection: TCollection) => {
+  try {
+    await axios.post(`${BASE_URL}/share`, {
+      ...collection,
+      shared: true,
+    });
+  } catch (error) {
+    throw new Error('Creating shared collection failed.');
+  }
+};
+
 export const deleteSharedCollection = async (id: string) => {
   try {
     await axios.delete(`${BASE_URL}/share/${id}`);
@@ -33,7 +44,7 @@ export const getSharedCollectionData = async (id: string) => {
     const { data } = await axios.get<TCollection>(`${BASE_URL}/share/${id}`);
     return data;
   } catch (error) {
-    // TODO: Languages
+    // TODO: error handling
     throw new Error('Fetching shared collection failed.');
   }
 };

@@ -25,7 +25,7 @@ const ColorChooser: FC<Props> = ({
   const colorInputRef = useRef<HTMLInputElement>(null);
   const dispatch = useAppDispatch();
 
-  const colorInputHandler = () => {
+  const colorInputHandler = async () => {
     if (!colorInputRef.current) return;
     if (!selectedCollection.color) {
       setColor(colorInputRef.current.value);
@@ -39,7 +39,7 @@ const ColorChooser: FC<Props> = ({
       shared: selectedCollection.shared,
     };
 
-    dispatch(editCollection(editedCollection));
+    await dispatch(editCollection(editedCollection));
     dispatch(
       setSelectedCollection({
         ...selectedCollection,
