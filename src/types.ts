@@ -55,6 +55,7 @@ export type Texts = {
   collection: {
     created: string;
     empty: string;
+    shareFail: string;
   };
   todo: {
     markDone: string;
@@ -67,6 +68,7 @@ export type Texts = {
   };
   errors: {
     localStorage: string;
+    apiGetCollection: string;
     default: string;
   };
 };

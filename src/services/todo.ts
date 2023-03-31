@@ -27,7 +27,7 @@ export const deleteSharedCollection = async (id: string) => {
   try {
     await axios.delete(`${BASE_URL}/share/${id}`);
   } catch (error) {
-    // TODO: error handling
+    throw new Error('Deleting shared collection failed.');
   }
 };
 
@@ -35,7 +35,7 @@ export const updateSharedCollection = async (collection: TCollection) => {
   try {
     await axios.put(`${BASE_URL}/share/${collection.id}`, collection);
   } catch (error) {
-    // TODO: error handling
+    throw new Error('Updating shared collection failed.');
   }
 };
 
@@ -44,7 +44,6 @@ export const getSharedCollectionData = async (id: string) => {
     const { data } = await axios.get<TCollection>(`${BASE_URL}/share/${id}`);
     return data;
   } catch (error) {
-    // TODO: error handling
     throw new Error('Fetching shared collection failed.');
   }
 };

@@ -14,10 +14,14 @@ import {
 import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
 import useLanguage from '../../hooks/useLanguage';
 import { formatDate } from '../../utils/utils';
+import {
+  editCollection,
+  updateSharedCollectionById,
+} from '../../context/todoSlice';
 import TodoItem from './TodoItem';
 
 import styles from './TodoCollection.module.scss';
-import { updateSharedCollectionById } from '../../context/todoSlice';
+import Button from '../UI/Button';
 
 type Props = {
   collection: TCollection;
@@ -41,11 +45,16 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
   const { text } = useLanguage();
   const ref = useRef<HTMLElement>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     const getSharedCollectionData = async () => {
       setIsLoading(true);
-      await dispatch(updateSharedCollectionById(id));
+      try {
+        await dispatch(updateSharedCollectionById(id)).unwrap();
+      } catch (error) {
+        setIsError(true);
+      }
       setIsLoading(false);
     };
 
@@ -53,6 +62,11 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
       getSharedCollectionData();
     }
   }, [shared, dispatch, id]);
+
+  const disableShareBtnHandler = async () => {
+    await dispatch(editCollection({ id, title, color, shared: false }));
+    setIsError(false);
+  };
 
   const [{ handlerId }, drop] = useDrop<
     DragItem,
@@ -142,12 +156,28 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
 
   preview(drop(ref));
 
-  if (isLoading)
+  if (isLoading) {
     return (
       <article className={articleStyles}>
         <h2>Loading...</h2>
       </article>
     );
+  }
+
+  if (isError) {
+    return (
+      <article className={[articleStyles, styles.error].join(' ')}>
+        <h2>🚨 ERROR 🚨</h2>
+        <div>
+          <p>{text.errors.apiGetCollection}</p>
+          <Button
+            content={text.collection.shareFail}
+            onClick={disableShareBtnHandler}
+          />
+        </div>
+      </article>
+    );
+  }
 
   return (
     <article

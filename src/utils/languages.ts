@@ -22,6 +22,7 @@ const languages: Record<Languages, Texts> = {
     collection: {
       created: 'created',
       empty: 'No collections, start by creating one.',
+      shareFail: 'Show local copy',
     },
     todo: {
       markDone: 'Mark [] as done',
@@ -34,6 +35,7 @@ const languages: Record<Languages, Texts> = {
     },
     errors: {
       localStorage: 'You need to allow localStorage usage to use this app.',
+      apiGetCollection: 'Failed to fetch shared collection data.',
       default: 'Something went wrong.',
     },
   },
@@ -58,6 +60,7 @@ const languages: Record<Languages, Texts> = {
     collection: {
       created: 'luotu',
       empty: 'Ei kokoelmia, aloita luomalla uusi.',
+      shareFail: 'Näytä paikallinen versio',
     },
     todo: {
       markDone: 'Merkkaa [] tehdyksi',
@@ -71,6 +74,7 @@ const languages: Record<Languages, Texts> = {
     errors: {
       localStorage:
         'Sovellus tarvitsee paikallisen tallennuksen päälle toimiakseen.',
+      apiGetCollection: 'Jaetun listan haku epäonnistui.',
       default: 'Jotain meni pieleen.',
     },
   },
