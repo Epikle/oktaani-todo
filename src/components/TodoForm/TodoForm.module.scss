@@ -72,5 +72,9 @@
       width: 0rem;
       color: transparent;
     }
+
+    &:disabled {
+      cursor: not-allowed;
+    }
   }
 }

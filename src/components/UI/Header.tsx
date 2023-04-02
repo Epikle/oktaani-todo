@@ -30,15 +30,18 @@ const Header: FC = () => {
   const collections = useAppSelector((state) => state.todo);
   const dispatch = useAppDispatch();
   const { text } = useLanguage();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (parent.current) autoAnimate(parent.current);
   }, [parent]);
 
   const deleteConfirmBtnHandler = async () => {
+    setIsLoading(true);
     await dispatch(deleteCollectionById({ id, shared }));
     dispatch(resetSelection());
     setConfirm(null);
+    setIsLoading(false);
   };
 
   const shareConfirmBtnHandler = async () => {
@@ -46,7 +49,7 @@ const Header: FC = () => {
       (collection) => collection.id === id,
     );
     if (!selectedCollection) return;
-
+    setIsLoading(true);
     try {
       await createSharedCollection(selectedCollection);
       // TODO: Better way to copy and show share link
@@ -66,6 +69,7 @@ const Header: FC = () => {
     }
 
     setConfirm(null);
+    setIsLoading(false);
   };
 
   const confirmBtnHandler = (type?: TConfirm['type']) => {
@@ -107,6 +111,7 @@ const Header: FC = () => {
             confirmText={confirm.confirmText}
             onConfirm={confirm.handler}
             onCancel={confirmBtnHandler}
+            isLoading={isLoading}
           />
         ) : (
           <TodoForm />

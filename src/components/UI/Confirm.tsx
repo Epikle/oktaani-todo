@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCheck,
   faCircleQuestion,
+  faSpinner,
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -15,9 +16,15 @@ type Props = {
   confirmText: string;
   onConfirm: () => void;
   onCancel: () => void;
+  isLoading: boolean;
 };
 
-const Confirm: FC<Props> = ({ confirmText, onConfirm, onCancel }) => {
+const Confirm: FC<Props> = ({
+  confirmText,
+  onConfirm,
+  onCancel,
+  isLoading,
+}) => {
   const { text } = useLanguage();
 
   return (
@@ -30,9 +37,16 @@ const Confirm: FC<Props> = ({ confirmText, onConfirm, onCancel }) => {
         <li>
           <Button
             title={text.common.confirm}
-            content={<FontAwesomeIcon icon={faCheck} />}
+            content={
+              isLoading ? (
+                <FontAwesomeIcon icon={faSpinner} spinPulse />
+              ) : (
+                <FontAwesomeIcon icon={faCheck} />
+              )
+            }
             onClick={onConfirm}
             testId="confirm-delete-btn"
+            disabled={isLoading}
           />
         </li>
         <li>
@@ -42,6 +56,7 @@ const Confirm: FC<Props> = ({ confirmText, onConfirm, onCancel }) => {
             content={<FontAwesomeIcon icon={faXmark} />}
             onClick={onCancel}
             testId="cancel-delete-btn"
+            disabled={isLoading}
           />
         </li>
       </ul>

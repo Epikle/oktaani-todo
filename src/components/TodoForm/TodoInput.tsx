@@ -11,6 +11,7 @@ type Props = {
   selectedCollection: TSelected;
   text: Texts;
   maxLength: number;
+  isLoading: boolean;
 };
 
 const TodoInput: FC<Props> = ({
@@ -19,6 +20,7 @@ const TodoInput: FC<Props> = ({
   selectedCollection,
   text,
   maxLength,
+  isLoading,
 }) => {
   const { sort } = useAppSelector((state) => state.settings);
   const ref = useRef<HTMLInputElement>(null);
@@ -34,7 +36,7 @@ const TodoInput: FC<Props> = ({
     if (selectedCollection.selected && ref.current) {
       ref.current.focus();
     }
-  }, [selectedCollection]);
+  }, [selectedCollection, isLoading]);
 
   return (
     <input
@@ -46,7 +48,7 @@ const TodoInput: FC<Props> = ({
       value={todoInput}
       onChange={(e) => setTodoInput(e.target.value)}
       maxLength={maxLength}
-      disabled={sort}
+      disabled={sort || isLoading}
       data-testid="todo-input"
     />
   );

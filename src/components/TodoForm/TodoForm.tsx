@@ -1,6 +1,6 @@
 import { FC, FormEvent, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { nanoid } from 'nanoid';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
@@ -32,6 +32,7 @@ const TodoForm: FC = () => {
   const selectedCollection = useAppSelector((state) => state.selected);
   const { text } = useLanguage();
   const trimmedInput = todoInput.trim().replace(/\s+/g, ' ');
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (selectedCollection.edit) {
@@ -44,6 +45,7 @@ const TodoForm: FC = () => {
   const submitHandler = async (event: FormEvent) => {
     event.preventDefault();
     if (trimmedInput.length === 0) return;
+    setIsLoading(true);
 
     if (selectedCollection.edit) {
       const editedCollection = {
@@ -55,6 +57,7 @@ const TodoForm: FC = () => {
       await dispatch(editCollection(editedCollection));
       dispatch(setSelectedCollection(editedCollection));
       dispatch(setSelectedCollectionEdit({ edit: false }));
+      setIsLoading(false);
       return;
     }
 
@@ -66,6 +69,7 @@ const TodoForm: FC = () => {
         }),
       );
       setTodoInput('');
+      setIsLoading(false);
       return;
     }
 
@@ -80,6 +84,7 @@ const TodoForm: FC = () => {
     dispatch(setSelectedCollection(newCollectionEntry));
 
     setTodoInput('');
+    setIsLoading(false);
   };
 
   const isBtnDisabled =
@@ -139,14 +144,21 @@ const TodoForm: FC = () => {
         selectedCollection={selectedCollection}
         text={text}
         maxLength={maxLength}
+        isLoading={isLoading}
       />
 
       <Button
         className={btnStyles}
         title={isAddBtn ? text.common.add : text.common.cancel}
         onClick={addBtnHandler}
-        disabled={isBtnDisabled}
-        content={<FontAwesomeIcon icon={faPlus} />}
+        disabled={isBtnDisabled || isLoading}
+        content={
+          isLoading ? (
+            <FontAwesomeIcon icon={faSpinner} spinPulse />
+          ) : (
+            <FontAwesomeIcon icon={faPlus} />
+          )
+        }
         testId="submit-btn"
       />
     </form>

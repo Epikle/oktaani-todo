@@ -73,6 +73,10 @@ export const editCollection = createAsyncThunk(
       await updateSharedCollection(newCollection);
     }
 
+    if (collection && collection.shared && !entry.shared) {
+      await deleteSharedCollection(collection.id);
+    }
+
     return entry;
   },
 );

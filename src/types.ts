@@ -47,6 +47,7 @@ export type Texts = {
     removeCol: string;
     editCol: string;
     shareCol: string;
+    stopShareCol: string;
     removeDone: string;
     deleteConfirm: string;
     shareConfirm: string;

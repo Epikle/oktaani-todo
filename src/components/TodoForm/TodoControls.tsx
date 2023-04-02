@@ -1,14 +1,18 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faListCheck,
   faPen,
   faShareNodes,
+  faSpinner,
   faTrash,
 } from '@fortawesome/free-solid-svg-icons';
 
-import { removeDoneItems } from '../../context/todoSlice';
-import { setSelectedCollectionEdit } from '../../context/selectedSlice';
+import { editCollection, removeDoneItems } from '../../context/todoSlice';
+import {
+  setSelectedCollection,
+  setSelectedCollectionEdit,
+} from '../../context/selectedSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
 import useLanguage from '../../hooks/useLanguage';
 import Button from '../UI/Button';
@@ -21,18 +25,32 @@ type Props = {
 };
 
 const TodoControls: FC<Props> = ({ onConfirm }) => {
-  const { id, edit, hasDone, shared } = useAppSelector(
+  const { id, edit, hasDone, shared, title, color } = useAppSelector(
     (state) => state.selected,
   );
   const dispatch = useAppDispatch();
   const { text } = useLanguage();
+  const [isLoading, setIsLoading] = useState(false);
 
   const removeDoneBtnHandler = async () => {
+    setIsLoading(true);
     await dispatch(removeDoneItems(id));
+    setIsLoading(false);
   };
 
   const editBtnHandler = () => {
     dispatch(setSelectedCollectionEdit({ edit: !edit }));
+  };
+
+  const stopShareBtnHandler = async () => {
+    const editedCollection = {
+      id,
+      title,
+      color,
+      shared: false,
+    };
+    dispatch(setSelectedCollection({ id, title, color, shared: false }));
+    await dispatch(editCollection(editedCollection));
   };
 
   return (
@@ -41,16 +59,22 @@ const TodoControls: FC<Props> = ({ onConfirm }) => {
         <Button
           title={text.controls.removeDone}
           onClick={removeDoneBtnHandler}
-          content={<FontAwesomeIcon icon={faListCheck} />}
-          disabled={!hasDone}
+          content={
+            isLoading ? (
+              <FontAwesomeIcon icon={faSpinner} spinPulse />
+            ) : (
+              <FontAwesomeIcon icon={faListCheck} />
+            )
+          }
+          disabled={!hasDone || isLoading}
           testId="remove-done-btn"
         />
       </li>
       <li>
         <Button
-          disabled={shared}
-          title={text.controls.shareCol}
-          onClick={() => onConfirm('share')}
+          className={shared ? styles.shared : ''}
+          title={shared ? text.controls.stopShareCol : text.controls.shareCol}
+          onClick={() => (shared ? stopShareBtnHandler() : onConfirm('share'))}
           content={<FontAwesomeIcon icon={faShareNodes} />}
           testId="share-col-btn"
         />
