@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from './hooks/useRedux';
+import { useAppDispatch } from './hooks/useRedux';
 import useLanguage from './hooks/useLanguage';
 import { createSharedCollection, initTodoState } from './context/todoSlice';
 import * as todoService from './services/todo';
@@ -9,18 +9,18 @@ import Header from './components/UI/Header';
 import TodoList from './components/TodoList/TodoList';
 import Overlay from './components/UI/Overlay';
 import useSettingsStore from './context/useSettingsStore';
+import useSelectedStore from './context/useSelectedStore';
 
 const shareParam = new URLSearchParams(document.location.search).get('share');
 
 const App: FC = () => {
   const dispatch = useAppDispatch();
-  const selected = useAppSelector((state) => state.selected);
+  const { title } = useSelectedStore();
   const [isError, setIsError] = useState(false);
   const { darkMode, setSettings } = useSettingsStore();
   const { text } = useLanguage();
 
-  const title = selected.title ? `${selected.title} | oktaaniTODO` : 'oktaaniTODO';
-  document.title = title;
+  document.title = title ? `${title} | oktaaniTODO` : 'oktaaniTODO';
 
   useEffect(() => {
     dispatch(initTodoState(todoService.getTodosFromLS()));

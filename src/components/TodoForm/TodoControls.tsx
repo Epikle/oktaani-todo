@@ -1,19 +1,10 @@
 import { FC, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faListCheck,
-  faPen,
-  faShareNodes,
-  faSpinner,
-  faTrash,
-} from '@fortawesome/free-solid-svg-icons';
+import { faListCheck, faPen, faShareNodes, faSpinner, faTrash } from '@fortawesome/free-solid-svg-icons';
 
+import useSelectedStore from '../../context/useSelectedStore';
 import { editCollection, removeDoneItems } from '../../context/todoSlice';
-import {
-  setSelectedCollection,
-  setSelectedCollectionEdit,
-} from '../../context/selectedSlice';
-import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
+import { useAppDispatch } from '../../hooks/useRedux';
 import useLanguage from '../../hooks/useLanguage';
 import Button from '../UI/Button';
 import type { TConfirm } from '../UI/Header';
@@ -25,12 +16,10 @@ type Props = {
 };
 
 const TodoControls: FC<Props> = ({ onConfirm }) => {
-  const { id, edit, hasDone, shared, title, color } = useAppSelector(
-    (state) => state.selected,
-  );
-  const dispatch = useAppDispatch();
-  const { text } = useLanguage();
   const [isLoading, setIsLoading] = useState(false);
+  const { id, edit, hasDone, shared, title, color, setSelectedCollection } = useSelectedStore();
+  const { text } = useLanguage();
+  const dispatch = useAppDispatch();
 
   const removeDoneBtnHandler = async () => {
     setIsLoading(true);
@@ -39,7 +28,7 @@ const TodoControls: FC<Props> = ({ onConfirm }) => {
   };
 
   const editBtnHandler = () => {
-    dispatch(setSelectedCollectionEdit({ edit: !edit }));
+    setSelectedCollection({ edit: !edit });
   };
 
   const stopShareBtnHandler = async () => {
@@ -49,7 +38,7 @@ const TodoControls: FC<Props> = ({ onConfirm }) => {
       color,
       shared: false,
     };
-    dispatch(setSelectedCollection({ id, title, color, shared: false }));
+    setSelectedCollection({ id, title, color, shared: false });
     await dispatch(editCollection(editedCollection));
   };
 
@@ -59,13 +48,7 @@ const TodoControls: FC<Props> = ({ onConfirm }) => {
         <Button
           title={text.controls.removeDone}
           onClick={removeDoneBtnHandler}
-          content={
-            isLoading ? (
-              <FontAwesomeIcon icon={faSpinner} spinPulse />
-            ) : (
-              <FontAwesomeIcon icon={faListCheck} />
-            )
-          }
+          content={isLoading ? <FontAwesomeIcon icon={faSpinner} spinPulse /> : <FontAwesomeIcon icon={faListCheck} />}
           disabled={!hasDone || isLoading}
           testId="remove-done-btn"
         />

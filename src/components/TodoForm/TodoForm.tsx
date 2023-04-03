@@ -4,16 +4,8 @@ import { faPlus, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { nanoid } from 'nanoid';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
-import {
-  createCollection,
-  createCollectionItem,
-  editCollection,
-} from '../../context/todoSlice';
-import {
-  resetSelection,
-  setSelectedCollection,
-  setSelectedCollectionEdit,
-} from '../../context/selectedSlice';
+import { createCollection, createCollectionItem, editCollection } from '../../context/todoSlice';
+import useSelectedStore from '../../context/useSelectedStore';
 import useLanguage from '../../hooks/useLanguage';
 import Button from '../UI/Button';
 import ColorChooser from './ColorChooser';
@@ -29,7 +21,7 @@ const TodoForm: FC = () => {
   const [color, setColor] = useState(DEFAULT_COLOR);
   const [todoInput, setTodoInput] = useState('');
   const dispatch = useAppDispatch();
-  const selectedCollection = useAppSelector((state) => state.selected);
+  const selectedCollection = useSelectedStore();
   const { text } = useLanguage();
   const trimmedInput = todoInput.trim().replace(/\s+/g, ' ');
   const [isLoading, setIsLoading] = useState(false);
@@ -55,8 +47,8 @@ const TodoForm: FC = () => {
         shared: selectedCollection.shared,
       };
       await dispatch(editCollection(editedCollection));
-      dispatch(setSelectedCollection(editedCollection));
-      dispatch(setSelectedCollectionEdit({ edit: false }));
+      selectedCollection.setSelectedCollection(editedCollection);
+      selectedCollection.setSelectedCollection({ edit: false });
       setIsLoading(false);
       return;
     }
@@ -81,40 +73,25 @@ const TodoForm: FC = () => {
     };
 
     dispatch(createCollection(newCollectionEntry));
-    dispatch(setSelectedCollection(newCollectionEntry));
+    selectedCollection.setSelectedCollection(newCollectionEntry);
 
     setTodoInput('');
     setIsLoading(false);
   };
 
-  const isBtnDisabled =
-    !selectedCollection.selected && trimmedInput.length === 0;
+  const isBtnDisabled = !selectedCollection.selected && trimmedInput.length === 0;
 
-  const isAddBtn =
-    (selectedCollection.selected && trimmedInput.length > 0) ||
-    trimmedInput.length > 0;
+  const isAddBtn = (selectedCollection.selected && trimmedInput.length > 0) || trimmedInput.length > 0;
 
-  const showAddBtnStyles =
-    selectedCollection.selected && trimmedInput.length === 0
-      ? styles.blur
-      : styles.hide;
+  const showAddBtnStyles = selectedCollection.selected && trimmedInput.length === 0 ? styles.blur : styles.hide;
 
-  const btnStyles = isAddBtn
-    ? styles.add
-    : [styles.add, showAddBtnStyles].join(' ');
+  const btnStyles = isAddBtn ? styles.add : [styles.add, showAddBtnStyles].join(' ');
 
-  const addBtnHandler = isAddBtn
-    ? submitHandler
-    : () => dispatch(resetSelection());
+  const addBtnHandler = isAddBtn ? submitHandler : () => selectedCollection.resetSelection();
 
-  const formStyles = selectedCollection.selected
-    ? [styles.form, styles.selected].join(' ')
-    : styles.form;
+  const formStyles = selectedCollection.selected ? [styles.form, styles.selected].join(' ') : styles.form;
 
-  const maxLength =
-    !selectedCollection.selected || selectedCollection.edit
-      ? COLLECTION_LENGTH
-      : ITEM_LENGTH;
+  const maxLength = !selectedCollection.selected || selectedCollection.edit ? COLLECTION_LENGTH : ITEM_LENGTH;
 
   const inputLengthText = `${todoInput.length}/${maxLength}`;
   const showInputLength = isAddBtn ? inputLengthText : '';
@@ -124,9 +101,7 @@ const TodoForm: FC = () => {
       className={formStyles}
       onSubmit={submitHandler}
       data-collection={
-        selectedCollection.edit
-          ? `${text.common.editing}: ${selectedCollection.title}`
-          : selectedCollection.title
+        selectedCollection.edit ? `${text.common.editing}: ${selectedCollection.title}` : selectedCollection.title
       }
       data-length={showInputLength}
     >
@@ -152,13 +127,7 @@ const TodoForm: FC = () => {
         title={isAddBtn ? text.common.add : text.common.cancel}
         onClick={addBtnHandler}
         disabled={isBtnDisabled || isLoading}
-        content={
-          isLoading ? (
-            <FontAwesomeIcon icon={faSpinner} spinPulse />
-          ) : (
-            <FontAwesomeIcon icon={faPlus} />
-          )
-        }
+        content={isLoading ? <FontAwesomeIcon icon={faSpinner} spinPulse /> : <FontAwesomeIcon icon={faPlus} />}
         testId="submit-btn"
       />
     </form>

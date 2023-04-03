@@ -1,7 +1,7 @@
 import { Dispatch, FC, SetStateAction, useEffect, useRef } from 'react';
 
+import useSelectedStore from '../../context/useSelectedStore';
 import { editCollection } from '../../context/todoSlice';
-import { setSelectedCollection } from '../../context/selectedSlice';
 import { useAppDispatch } from '../../hooks/useRedux';
 import type { Texts, TSelected } from '../../types';
 
@@ -15,14 +15,9 @@ type Props = {
   text: Texts;
 };
 
-const ColorChooser: FC<Props> = ({
-  defaultColor,
-  color,
-  setColor,
-  selectedCollection,
-  text,
-}) => {
+const ColorChooser: FC<Props> = ({ defaultColor, color, setColor, selectedCollection, text }) => {
   const colorInputRef = useRef<HTMLInputElement>(null);
+  const { setSelectedCollection } = useSelectedStore();
   const dispatch = useAppDispatch();
 
   const colorInputHandler = async () => {
@@ -40,12 +35,11 @@ const ColorChooser: FC<Props> = ({
     };
 
     await dispatch(editCollection(editedCollection));
-    dispatch(
-      setSelectedCollection({
-        ...selectedCollection,
-        color: colorInputRef.current.value,
-      }),
-    );
+
+    setSelectedCollection({
+      ...selectedCollection,
+      color: colorInputRef.current.value,
+    });
   };
 
   useEffect(() => {

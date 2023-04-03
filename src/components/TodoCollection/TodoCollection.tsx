@@ -7,9 +7,9 @@ import type { Identifier, XYCoord } from 'dnd-core';
 
 import { ItemTypes, type TCollection } from '../../types';
 import useSettingsStore from '../../context/useSettingsStore';
-import { resetSelection, setHasDone, setSelectedCollection } from '../../context/selectedSlice';
-import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
+import { useAppDispatch } from '../../hooks/useRedux';
 import useLanguage from '../../hooks/useLanguage';
+import useSelectedStore from '../../context/useSelectedStore';
 import { formatDate } from '../../utils/utils';
 import { editCollection, updateSharedCollectionById } from '../../context/todoSlice';
 import TodoItem from './TodoItem';
@@ -37,9 +37,9 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
   const [isError, setIsError] = useState(false);
   const { sort, languageName } = useSettingsStore();
   const dispatch = useAppDispatch();
-  const selectedCollection = useAppSelector((state) => state.selected);
+  const { id: selectedColId, setSelectedCollection, resetSelection } = useSelectedStore();
   const { text } = useLanguage();
-  const isSelected = selectedCollection.id === collection.id;
+  const isSelected = selectedColId === id;
 
   useEffect(() => {
     const getSharedCollectionData = async () => {
@@ -114,12 +114,11 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
 
   const selectedCollectionHandler = () => {
     if (isSelected) {
-      dispatch(resetSelection());
+      resetSelection();
       return;
     }
 
-    dispatch(setHasDone(!!doneTodos));
-    dispatch(setSelectedCollection({ id, title, color, shared }));
+    setSelectedCollection({ id, title, color, shared, hasDone: !!doneTodos });
   };
 
   useEffect(() => {
@@ -137,9 +136,9 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
 
   useEffect(() => {
     if (isSelected) {
-      dispatch(setHasDone(!!doneTodos));
+      setSelectedCollection({ hasDone: !!doneTodos });
     }
-  }, [doneTodos, dispatch, isSelected]);
+  }, [doneTodos, isSelected, setSelectedCollection]);
 
   preview(drop(ref));
 

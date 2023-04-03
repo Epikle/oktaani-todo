@@ -14,7 +14,7 @@ export type SettingsLS = Omit<SettingsState, 'availableLanguages' | 'sort'>;
 const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
 const availableLanguages = Object.keys(languages) as Languages[]; // ISO639-1
 
-export const initialSettingsState = {
+const initialSettingsState = {
   availableLanguages,
   languageName: availableLanguages[0],
   darkMode: isDarkMode,
