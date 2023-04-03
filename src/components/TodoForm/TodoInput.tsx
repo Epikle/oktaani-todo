@@ -1,7 +1,7 @@
 import { Dispatch, FC, SetStateAction, useEffect, useRef } from 'react';
-import { useAppSelector } from '../../hooks/useRedux';
 
 import type { Texts, TSelected } from '../../types';
+import useSettingsStore from '../../context/useSettingsStore';
 
 import styles from './TodoInput.module.scss';
 
@@ -14,23 +14,15 @@ type Props = {
   isLoading: boolean;
 };
 
-const TodoInput: FC<Props> = ({
-  todoInput,
-  setTodoInput,
-  selectedCollection,
-  text,
-  maxLength,
-  isLoading,
-}) => {
-  const { sort } = useAppSelector((state) => state.settings);
+const TodoInput: FC<Props> = ({ todoInput, setTodoInput, selectedCollection, text, maxLength, isLoading }) => {
   const ref = useRef<HTMLInputElement>(null);
+  const { sort } = useSettingsStore();
+
   const placeholderText = selectedCollection.selected
     ? `${text.header.newTodo} ${selectedCollection.title}`
     : text.header.newCollection;
 
-  const styleClasses = selectedCollection.selected
-    ? [styles.todo, styles.selected].join(' ')
-    : styles.todo;
+  const styleClasses = selectedCollection.selected ? [styles.todo, styles.selected].join(' ') : styles.todo;
 
   useEffect(() => {
     if (selectedCollection.selected && ref.current) {

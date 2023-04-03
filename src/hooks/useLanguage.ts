@@ -1,26 +1,19 @@
 import type { Languages } from '../types';
-import { setSettings, setLanguage } from '../context/settingsSlice';
+import useSettingsStore from '../context/useSettingsStore';
 import languages from '../utils/languages';
-import { useAppDispatch, useAppSelector } from './useRedux';
 
 const useLanguage = () => {
-  const {
-    darkMode,
-    languageName,
-    language: text,
-    sort,
-  } = useAppSelector((state) => state.settings);
-  const dispatch = useAppDispatch();
+  const { darkMode, languageName, setSettings } = useSettingsStore();
+  let text = languages[languageName];
 
   const nextLang = () => {
     const languagesList = Object.keys(languages) as Languages[];
     const currentLanguageIndex = languagesList.indexOf(languageName);
     const nextIndex = (currentLanguageIndex + 1) % languagesList.length;
     const nextLanguage = languagesList[nextIndex];
-    const nextLanguageTexts = languages[languagesList[nextIndex]];
+    text = languages[languagesList[nextIndex]];
 
-    dispatch(setSettings({ languageName: nextLanguage, darkMode, sort }));
-    dispatch(setLanguage(nextLanguageTexts));
+    setSettings({ languageName: nextLanguage, darkMode });
   };
 
   return { text, nextLang };

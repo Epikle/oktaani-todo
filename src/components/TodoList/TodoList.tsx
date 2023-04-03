@@ -1,6 +1,7 @@
 import { CSSProperties, FC, useEffect, useRef } from 'react';
 import autoAnimate from '@formkit/auto-animate';
 
+import useSettingsStore from '../../context/useSettingsStore';
 import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
 import { changeOrder } from '../../context/todoSlice';
 import useLanguage from '../../hooks/useLanguage';
@@ -11,7 +12,7 @@ import styles from './TodoList.module.scss';
 
 const TodoList: FC = () => {
   const collections = useAppSelector((state) => state.todo);
-  const { sort } = useAppSelector((state) => state.settings);
+  const { sort } = useSettingsStore();
   const parent = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
   const { text } = useLanguage();

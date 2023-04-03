@@ -1,96 +1,58 @@
 import axios from 'axios';
 import { nanoid } from 'nanoid';
 
-import type {
-  TCollection,
-  TItem,
-  TItemEntry,
-  TNewCollectionEntry,
-} from '../types';
+import type { TCollection, TItem, TItemEntry, TNewCollectionEntry } from '../types';
 import { isValidCollections } from '../utils/utils';
 
-const LS_NAME = 'oktaani-todo';
-const BASE_URL = import.meta.env.VITE_API_URL;
+const LS_NAME = import.meta.env.VITE_LS_NAME_TODOS;
+const api = axios.create({
+  baseURL: import.meta.env.VITE_API_URL,
+});
 
-export const createSharedCollection = async (collection: TCollection) => {
-  try {
-    await axios.post(`${BASE_URL}/share`, {
-      ...collection,
-      shared: true,
-    });
-  } catch (error) {
-    throw new Error('Creating shared collection failed.');
-  }
+export const getSharedCollectionData = async (id: string) => {
+  const { data } = await api.get<TCollection>(`/share/${id}`);
+  return data;
 };
 
-export const deleteSharedCollection = async (id: string) => {
-  try {
-    await axios.delete(`${BASE_URL}/share/${id}`);
-  } catch (error) {
-    throw new Error('Deleting shared collection failed.');
-  }
+export const createSharedCollection = async (collection: TCollection) => {
+  await api.post('/share', { ...collection, shared: true });
 };
 
 export const updateSharedCollection = async (collection: TCollection) => {
-  try {
-    await axios.put(`${BASE_URL}/share/${collection.id}`, collection);
-  } catch (error) {
-    throw new Error('Updating shared collection failed.');
-  }
+  await api.put(`/share/${collection.id}`, collection);
 };
 
-export const getSharedCollectionData = async (id: string) => {
-  try {
-    const { data } = await axios.get<TCollection>(`${BASE_URL}/share/${id}`);
-    return data;
-  } catch (error) {
-    throw new Error('Fetching shared collection failed.');
-  }
+export const deleteSharedCollection = async (id: string) => {
+  await api.delete(`/share/${id}`);
 };
 
 export const saveCollectionsToLS = (collections: TCollection[]) => {
-  try {
-    localStorage.setItem(LS_NAME, JSON.stringify(collections));
-  } catch (error) {
-    // TODO: error handling
-  }
+  localStorage.setItem(LS_NAME, JSON.stringify(collections));
 };
 
 export const getTodosFromLS = () => {
-  try {
-    const collections = localStorage.getItem(LS_NAME);
-    if (!collections) return [];
+  const collections = localStorage.getItem(LS_NAME);
+  if (!collections) return [];
 
-    const parsedCollections = JSON.parse(collections) as unknown;
+  const parsedCollections = JSON.parse(collections) as unknown;
 
-    if (!isValidCollections(parsedCollections)) {
-      throw new Error('localStorage data is not valid, using default values!');
-    }
-
-    return parsedCollections as TCollection[];
-  } catch (error) {
-    return [];
+  if (!isValidCollections(parsedCollections)) {
+    throw new Error('localStorage data is not valid, using default values!');
   }
+
+  return parsedCollections as TCollection[];
 };
 
-export const createCollectionEntry = (entry: TNewCollectionEntry) => {
-  const createdCollection: TCollection = {
-    shared: false,
-    todos: [],
-    created: Date(),
-    ...entry,
-  };
+export const createCollectionEntry = (entry: TNewCollectionEntry): TCollection => ({
+  shared: false,
+  todos: [],
+  created: Date(),
+  ...entry,
+});
 
-  return createdCollection;
-};
-
-export const createItemEntry = (entry: TItemEntry) => {
-  const createdCollection: TItem = {
-    id: nanoid(),
-    done: false,
-    created: Date(),
-    ...entry,
-  };
-
-  return createdCollection;
-};
+export const createItemEntry = (entry: TItemEntry): TItem => ({
+  id: nanoid(),
+  done: false,
+  created: Date(),
+  ...entry,
+});

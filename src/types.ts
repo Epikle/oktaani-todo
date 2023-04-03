@@ -23,10 +23,7 @@ export type TSelected = {
   selected: boolean;
 };
 
-export type TNewCollectionEntry = Omit<
-  TCollection,
-  'shared' | 'todos' | 'created'
->;
+export type TNewCollectionEntry = Omit<TCollection, 'shared' | 'todos' | 'created'>;
 
 export type TSelectedEntry = Omit<TSelected, 'edit' | 'selected'>;
 
@@ -82,7 +79,7 @@ export type Settings = {
   sort: boolean;
 };
 
-export type SettingsLS = Omit<Settings, 'availableLanguages' | 'language'>;
+export type SettingsLS = Omit<Settings, 'availableLanguages' | 'language' | 'sort'>;
 
 export const ItemTypes = {
   COLLECTION: 'collection',

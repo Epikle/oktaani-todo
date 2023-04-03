@@ -1,12 +1,6 @@
 import { PayloadAction, createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { nanoid } from 'nanoid';
 
-import type {
-  TCollection,
-  TItemEntry,
-  TNewCollectionEntry,
-  TSelectedEntry,
-} from '../types';
+import type { TCollection, TItemEntry, TNewCollectionEntry, TSelectedEntry } from '../types';
 import type { RootState } from './store';
 import {
   createCollectionEntry,
@@ -27,59 +21,56 @@ export const deleteCollectionById = createAsyncThunk(
   },
 );
 
-export const updateSharedCollectionById = createAsyncThunk(
-  'todo/updateSharedCollectionById',
-  async (id: string) => {
-    const sharedCollectionData = await getSharedCollectionData(id);
+export const updateSharedCollectionById = createAsyncThunk('todo/updateSharedCollectionById', async (id: string) => {
+  const sharedCollectionData = await getSharedCollectionData(id);
 
-    return sharedCollectionData;
-  },
-);
+  return sharedCollectionData;
+});
 
 export const createCollectionItem = createAsyncThunk(
   'todo/createCollectionItem',
-  async (
-    {
-      id,
-      newItemEntry,
-    }: {
-      id: string;
-      newItemEntry: TItemEntry;
-    },
-    thunkAPI,
-  ) => {
+  async ({ id, newItemEntry }: { id: string; newItemEntry: TItemEntry }, thunkAPI) => {
     const state = thunkAPI.getState() as RootState;
-    const selectedCollection = state.todo.find((col) => col.id === id);
+    const todoStateCopy = JSON.parse(JSON.stringify(state.todo)) as TCollection[];
+    const selectedCollection = todoStateCopy.find((col) => col.id === id);
+
+    if (!selectedCollection) return todoStateCopy;
+
     const createdItem = createItemEntry(newItemEntry);
 
     if (selectedCollection && selectedCollection.shared) {
-      const newCollection = { ...selectedCollection };
-      newCollection.todos = [createdItem, ...selectedCollection.todos];
-      await updateSharedCollection(newCollection);
+      const sharedCollectionData = await getSharedCollectionData(id);
+      selectedCollection.todos = [createdItem, ...sharedCollectionData.todos];
+      await updateSharedCollection(selectedCollection);
+
+      saveCollectionsToLS(todoStateCopy);
+
+      return todoStateCopy;
     }
 
-    return { id, createdItem };
+    selectedCollection.todos = [createdItem, ...selectedCollection.todos];
+
+    saveCollectionsToLS(todoStateCopy);
+
+    return todoStateCopy;
   },
 );
 
-export const editCollection = createAsyncThunk(
-  'todo/editCollection',
-  async (entry: TSelectedEntry, thunkAPI) => {
-    const state = thunkAPI.getState() as RootState;
-    const collection = state.todo.find((col) => col.id === entry.id);
+export const editCollection = createAsyncThunk('todo/editCollection', async (entry: TSelectedEntry, thunkAPI) => {
+  const state = thunkAPI.getState() as RootState;
+  const collection = state.todo.find((col) => col.id === entry.id);
 
-    if (collection && entry.shared) {
-      const newCollection = { ...collection, ...entry };
-      await updateSharedCollection(newCollection);
-    }
+  if (collection && entry.shared) {
+    const newCollection = { ...collection, ...entry };
+    await updateSharedCollection(newCollection);
+  }
 
-    if (collection && collection.shared && !entry.shared) {
-      await deleteSharedCollection(collection.id);
-    }
+  if (collection && collection.shared && !entry.shared) {
+    await deleteSharedCollection(collection.id);
+  }
 
-    return entry;
-  },
-);
+  return entry;
+});
 
 export const toggleItemDone = createAsyncThunk(
   'todo/toggleItemDone',
@@ -88,13 +79,9 @@ export const toggleItemDone = createAsyncThunk(
     const selectedCollection = state.todo.find((col) => col.id === colId);
 
     if (!selectedCollection || !selectedCollection.shared) return id;
-    const collectionCopy: TCollection = JSON.parse(
-      JSON.stringify(selectedCollection),
-    );
+    const collectionCopy: TCollection = JSON.parse(JSON.stringify(selectedCollection));
 
-    const toggleItem = collectionCopy.todos
-      .flat()
-      .find((item) => item.id === id);
+    const toggleItem = collectionCopy.todos.flat().find((item) => item.id === id);
 
     if (!toggleItem) return id;
 
@@ -106,51 +93,27 @@ export const toggleItemDone = createAsyncThunk(
   },
 );
 
-export const removeDoneItems = createAsyncThunk(
-  'todo/removeDoneItems',
-  async (id: string, thunkAPI) => {
-    const state = thunkAPI.getState() as RootState;
-    const selectedCollection = state.todo.find((col) => col.id === id);
-    if (!selectedCollection || !selectedCollection.shared) return id;
-    const collectionCopy: TCollection = JSON.parse(
-      JSON.stringify(selectedCollection),
-    );
-    collectionCopy.todos = [
-      ...collectionCopy.todos.filter((item) => !item.done),
-    ];
-    await updateSharedCollection(collectionCopy);
+export const removeDoneItems = createAsyncThunk('todo/removeDoneItems', async (id: string, thunkAPI) => {
+  const state = thunkAPI.getState() as RootState;
+  const selectedCollection = state.todo.find((col) => col.id === id);
+  if (!selectedCollection || !selectedCollection.shared) return id;
+  const collectionCopy: TCollection = JSON.parse(JSON.stringify(selectedCollection));
+  collectionCopy.todos = [...collectionCopy.todos.filter((item) => !item.done)];
+  await updateSharedCollection(collectionCopy);
 
-    return id;
-  },
-);
+  return id;
+});
 
 export const todoSlice = createSlice({
   name: 'todo',
   initialState,
   reducers: {
     initTodoState: (state, action: PayloadAction<TCollection[] | []>) => {
-      if (action.payload.length === 0) {
-        const createdEntry = [
-          createCollectionEntry({
-            title: '✨ First Collection ✨',
-            color: '#7b68ee',
-            id: nanoid(),
-          }),
-        ];
-
-        saveCollectionsToLS(createdEntry);
-
-        return createdEntry;
-      }
-
       saveCollectionsToLS(action.payload);
 
       return [...action.payload];
     },
-    changeOrder: (
-      state,
-      action: PayloadAction<{ dragIndex: number; hoverIndex: number }>,
-    ) => {
+    changeOrder: (state, action: PayloadAction<{ dragIndex: number; hoverIndex: number }>) => {
       const { dragIndex, hoverIndex } = action.payload;
 
       const movingCollection = state[dragIndex];
@@ -228,24 +191,10 @@ export const todoSlice = createSlice({
       return state;
     });
 
-    builder.addCase(createCollectionItem.fulfilled, (state, action) => {
-      const { id, createdItem } = action.payload;
-      const selectedCollection = state.find(
-        (collection) => collection.id === id,
-      );
-
-      if (!selectedCollection) return state;
-
-      selectedCollection.todos = [createdItem, ...selectedCollection.todos];
-      saveCollectionsToLS(state);
-
-      return state;
-    });
+    builder.addCase(createCollectionItem.fulfilled, (state, action) => action.payload);
 
     builder.addCase(deleteCollectionById.fulfilled, (state, action) => {
-      const filteredCollectionList = state.filter(
-        (collection) => collection.id !== action.payload,
-      );
+      const filteredCollectionList = state.filter((collection) => collection.id !== action.payload);
 
       saveCollectionsToLS([...filteredCollectionList]);
 
@@ -254,11 +203,6 @@ export const todoSlice = createSlice({
   },
 });
 
-export const {
-  initTodoState,
-  changeOrder,
-  createCollection,
-  createSharedCollection,
-} = todoSlice.actions;
+export const { initTodoState, changeOrder, createCollection, createSharedCollection } = todoSlice.actions;
 
 export default todoSlice.reducer;

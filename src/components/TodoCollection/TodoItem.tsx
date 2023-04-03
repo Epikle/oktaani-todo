@@ -1,9 +1,10 @@
 import { FC, useId, useState } from 'react';
 
 import type { Languages, TItem } from '../../types';
+import useSettingsStore from '../../context/useSettingsStore';
 import { toggleItemDone } from '../../context/todoSlice';
 import useLanguage from '../../hooks/useLanguage';
-import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
+import { useAppDispatch } from '../../hooks/useRedux';
 import { formatDate } from '../../utils/utils';
 
 import styles from './TodoItem.module.scss';
@@ -18,13 +19,7 @@ type ItemProps = Omit<TItem, 'id'> & {
   language: Languages;
 };
 
-export const Item: FC<ItemProps> = ({
-  onDone,
-  text: todoText,
-  done,
-  created,
-  language,
-}) => {
+export const Item: FC<ItemProps> = ({ onDone, text: todoText, done, created, language }) => {
   const id = useId();
   const [isDone, setIsDone] = useState(done);
   const { text } = useLanguage();
@@ -43,10 +38,7 @@ export const Item: FC<ItemProps> = ({
         onChange={todoDoneHandler}
         title={text.todo.markDone.replace('[]', todoText)}
       />
-      <label
-        htmlFor={id}
-        title={`${text.collection.created} ${formatDate(created, language)}`}
-      >
+      <label htmlFor={id} title={`${text.collection.created} ${formatDate(created, language)}`}>
         {todoText}
       </label>
     </li>
@@ -55,22 +47,14 @@ export const Item: FC<ItemProps> = ({
 
 const TodoItem: FC<Props> = ({ todo, colId }) => {
   const { id, text, done, created } = todo;
+  const { languageName } = useSettingsStore();
   const dispatch = useAppDispatch();
-  const { languageName } = useAppSelector((state) => state.settings);
 
   const doneInputHandler = async () => {
     await dispatch(toggleItemDone({ colId, id }));
   };
 
-  return (
-    <Item
-      text={text}
-      done={done}
-      created={created}
-      onDone={doneInputHandler}
-      language={languageName}
-    />
-  );
+  return <Item text={text} done={done} created={created} onDone={doneInputHandler} language={languageName} />;
 };
 
 export default TodoItem;

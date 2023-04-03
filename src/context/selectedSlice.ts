@@ -22,10 +22,7 @@ export const selectedSlice = createSlice({
       ...action.payload,
       selected: true,
     }),
-    setSelectedCollectionEdit: (
-      state,
-      action: PayloadAction<{ edit: boolean }>,
-    ) => ({ ...state, ...action.payload }),
+    setSelectedCollectionEdit: (state, action: PayloadAction<{ edit: boolean }>) => ({ ...state, ...action.payload }),
     setHasDone: (state, action: PayloadAction<boolean>) => ({
       ...state,
       hasDone: action.payload,
@@ -34,11 +31,6 @@ export const selectedSlice = createSlice({
   },
 });
 
-export const {
-  setSelectedCollection,
-  setSelectedCollectionEdit,
-  resetSelection,
-  setHasDone,
-} = selectedSlice.actions;
+export const { setSelectedCollection, setSelectedCollectionEdit, resetSelection, setHasDone } = selectedSlice.actions;
 
 export default selectedSlice.reducer;

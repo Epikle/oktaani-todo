@@ -6,22 +6,16 @@ import { useDrag, useDrop } from 'react-dnd';
 import type { Identifier, XYCoord } from 'dnd-core';
 
 import { ItemTypes, type TCollection } from '../../types';
-import {
-  resetSelection,
-  setHasDone,
-  setSelectedCollection,
-} from '../../context/selectedSlice';
+import useSettingsStore from '../../context/useSettingsStore';
+import { resetSelection, setHasDone, setSelectedCollection } from '../../context/selectedSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
 import useLanguage from '../../hooks/useLanguage';
 import { formatDate } from '../../utils/utils';
-import {
-  editCollection,
-  updateSharedCollectionById,
-} from '../../context/todoSlice';
+import { editCollection, updateSharedCollectionById } from '../../context/todoSlice';
 import TodoItem from './TodoItem';
+import Button from '../UI/Button';
 
 import styles from './TodoCollection.module.scss';
-import Button from '../UI/Button';
 
 type Props = {
   collection: TCollection;
@@ -37,15 +31,15 @@ type DragItem = {
 
 const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
   const { id, title, color, shared, created } = collection;
-  const dispatch = useAppDispatch();
-  const selectedCollection = useAppSelector((state) => state.selected);
-  const { languageName, sort } = useAppSelector((state) => state.settings);
-  const isSelected = selectedCollection.id === collection.id;
   const parent = useRef<HTMLUListElement>(null);
-  const { text } = useLanguage();
   const ref = useRef<HTMLElement>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+  const { sort, languageName } = useSettingsStore();
+  const dispatch = useAppDispatch();
+  const selectedCollection = useAppSelector((state) => state.selected);
+  const { text } = useLanguage();
+  const isSelected = selectedCollection.id === collection.id;
 
   useEffect(() => {
     const getSharedCollectionData = async () => {
@@ -68,11 +62,7 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
     setIsError(false);
   };
 
-  const [{ handlerId }, drop] = useDrop<
-    DragItem,
-    void,
-    { handlerId: Identifier | null }
-  >({
+  const [{ handlerId }, drop] = useDrop<DragItem, void, { handlerId: Identifier | null }>({
     accept: ItemTypes.COLLECTION,
     collect: (monitor) => ({
       handlerId: monitor.getHandlerId(),
@@ -86,8 +76,7 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
       if (dragIndex === hoverIndex) return;
 
       const hoverBoundingRect = ref.current?.getBoundingClientRect();
-      const hoverMiddleY =
-        (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+      const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
       const clientOffset = monitor.getClientOffset();
       const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top;
 
@@ -139,9 +128,7 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
 
   const totalTodos = collection.todos.length;
   const showDone = totalTodos > 0 && !sort ? `${doneTodos}/${totalTodos}` : '';
-  const articleStyles = isSelected
-    ? [styles.collection, styles.selected].join(' ')
-    : styles.collection;
+  const articleStyles = isSelected ? [styles.collection, styles.selected].join(' ') : styles.collection;
 
   const showCreated =
     isSelected && formatDate(created, languageName) && !sort
@@ -170,10 +157,7 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
         <h2>🚨 ERROR 🚨</h2>
         <div>
           <p>{text.errors.apiGetCollection}</p>
-          <Button
-            content={text.collection.shareFail}
-            onClick={disableShareBtnHandler}
-          />
+          <Button content={text.collection.shareFail} onClick={disableShareBtnHandler} />
         </div>
       </article>
     );
@@ -183,20 +167,13 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
     <article
       ref={ref}
       data-handler-id={handlerId}
-      className={
-        isSelected ? [articleStyles, 'print'].join(' ') : articleStyles
-      }
+      className={isSelected ? [articleStyles, 'print'].join(' ') : articleStyles}
       style={{ ...listStyles, opacity }}
       data-done={showDone}
       data-created={showCreated}
     >
       <h2>
-        <button
-          type="button"
-          onClick={selectedCollectionHandler}
-          style={headingStyles}
-          disabled={sort}
-        >
+        <button type="button" onClick={selectedCollectionHandler} style={headingStyles} disabled={sort}>
           {title}
         </button>
       </h2>
