@@ -1,12 +1,9 @@
 import { FC, useEffect, useRef, useState } from 'react';
 import autoAnimate from '@formkit/auto-animate';
-import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
-import { deleteCollectionById, editCollection } from '../../context/todoSlice';
+
 import { createSharedCollection } from '../../services/todo';
-import {
-  resetSelection,
-  setSelectedCollection,
-} from '../../context/selectedSlice';
+import useSelectedStore from '../../context/useSelectedStore';
+import useTodoStore from '../../context/useTodoStore';
 import useLanguage from '../../hooks/useLanguage';
 import TodoControls from '../TodoForm/TodoControls';
 import TodoForm from '../TodoForm/TodoForm';
@@ -22,15 +19,12 @@ export type TConfirm = {
 };
 
 const Header: FC = () => {
-  const [confirm, setConfirm] = useState<Omit<TConfirm, 'type'> | null>(null);
   const parent = useRef(null);
-  const { title, color, selected, id, shared } = useAppSelector(
-    (state) => state.selected,
-  );
-  const collections = useAppSelector((state) => state.todo);
-  const dispatch = useAppDispatch();
-  const { text } = useLanguage();
+  const [confirm, setConfirm] = useState<Omit<TConfirm, 'type'> | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const { title, color, selected, id, shared, setSelectedCollection, resetSelection } = useSelectedStore();
+  const { collections, deleteCollection, editCollection } = useTodoStore();
+  const { text } = useLanguage();
 
   useEffect(() => {
     if (parent.current) autoAnimate(parent.current);
@@ -38,32 +32,28 @@ const Header: FC = () => {
 
   const deleteConfirmBtnHandler = async () => {
     setIsLoading(true);
-    await dispatch(deleteCollectionById({ id, shared }));
-    dispatch(resetSelection());
+    await deleteCollection({ id, shared });
+    resetSelection();
     setConfirm(null);
     setIsLoading(false);
   };
 
   const shareConfirmBtnHandler = async () => {
-    const selectedCollection = collections.find(
-      (collection) => collection.id === id,
-    );
+    const selectedCollection = collections.find((collection) => collection.id === id);
     if (!selectedCollection) return;
     setIsLoading(true);
     try {
       await createSharedCollection(selectedCollection);
       // TODO: Better way to copy and show share link
-      await navigator.clipboard.writeText(
-        `${import.meta.env.VITE_BASE_URL}?share=${id}`,
-      );
+      await navigator.clipboard.writeText(`${import.meta.env.VITE_BASE_URL}?share=${id}`);
       const editedCollection = {
         id,
         title,
         color,
         shared: true,
       };
-      await dispatch(editCollection(editedCollection));
-      dispatch(setSelectedCollection(editedCollection));
+      await editCollection(editedCollection);
+      setSelectedCollection(editedCollection);
     } catch (error) {
       // TODO: error handling
     }
@@ -100,11 +90,7 @@ const Header: FC = () => {
               oktaani<strong>TODO</strong>
             </h1>
           </div>
-          {selected ? (
-            <TodoControls onConfirm={confirmBtnHandler} />
-          ) : (
-            <Settings />
-          )}
+          {selected ? <TodoControls onConfirm={confirmBtnHandler} /> : <Settings />}
         </div>
         {confirm ? (
           <Confirm

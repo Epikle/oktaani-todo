@@ -2,8 +2,7 @@ import { FC } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowDownShortWide } from '@fortawesome/free-solid-svg-icons';
 
-import { useAppDispatch, useAppSelector } from '../../../hooks/useRedux';
-import { setSettings } from '../../../context/settingsSlice';
+import useSettingsStore from '../../../context/useSettingsStore';
 import useLanguage from '../../../hooks/useLanguage';
 import Button from '../Button';
 
@@ -14,22 +13,13 @@ type Props = {
 };
 
 const Sort: FC<Props> = ({ disabled }) => {
-  const { languageName, darkMode, sort } = useAppSelector(
-    (state) => state.settings,
-  );
-  const dispatch = useAppDispatch();
+  const { sort, sortCollections } = useSettingsStore();
   const { text } = useLanguage();
-
-  const sortBtnHandler = () => {
-    dispatch(setSettings({ languageName, darkMode, sort: !sort }));
-  };
 
   return (
     <Button
-      className={
-        sort ? [styles.sort, styles['sort-active']].join(' ') : styles.sort
-      }
-      onClick={sortBtnHandler}
+      className={sort ? [styles.sort, styles['sort-active']].join(' ') : styles.sort}
+      onClick={sortCollections}
       title={text.controls.sort}
       disabled={disabled}
       content={<FontAwesomeIcon icon={faArrowDownShortWide} />}

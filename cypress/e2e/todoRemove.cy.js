@@ -2,12 +2,13 @@
 
 describe('oktaniTODO', () => {
   beforeEach(() => {
-    cy.visit('http://127.0.0.1:4173/todo-demo/');
+    cy.visit('http://localhost:4173/todo-demo/');
 
-    cy.get('article')
-      .first()
-      .should('have.text', '✨ First Collection ✨')
-      .click();
+    cy.get('[data-testid="todo-input"]').type('✨ First Collection ✨');
+    cy.get('[data-testid="submit-btn"]').click();
+    cy.get('[data-testid="submit-btn"]').click().should('not.be.visible');
+
+    cy.get('article').first().should('have.text', '✨ First Collection ✨').click();
 
     cy.get('[data-testid="todo-input"]').type('ITEM1');
     cy.get('[data-testid="submit-btn"]').click();
@@ -18,31 +19,17 @@ describe('oktaniTODO', () => {
     cy.get('[data-testid="todo-input"]').type('ITEM3');
     cy.get('[data-testid="submit-btn"]').click();
 
-    cy.get('article')
-      .first()
-      .should('have.attr', 'data-done')
-      .should('eq', '0/3');
+    cy.get('article').first().should('have.attr', 'data-done').should('eq', '0/3');
   });
 
   it('marks one item as done and clears all done items and should update collection correctly', () => {
-    cy.get('article')
-      .first()
-      .children()
-      .get('ul > li input[type="checkbox"]')
-      .first()
-      .click();
+    cy.get('article').first().children().get('ul > li input[type="checkbox"]').first().click();
 
-    cy.get('article')
-      .first()
-      .should('have.attr', 'data-done')
-      .should('eq', '1/3');
+    cy.get('article').first().should('have.attr', 'data-done').should('eq', '1/3');
 
     cy.get('[data-testid="remove-done-btn"]').click();
 
-    cy.get('article')
-      .first()
-      .should('have.attr', 'data-done')
-      .should('eq', '0/2');
+    cy.get('article').first().should('have.attr', 'data-done').should('eq', '0/2');
 
     cy.get('[data-testid="remove-done-btn"]').should('be.disabled');
   });

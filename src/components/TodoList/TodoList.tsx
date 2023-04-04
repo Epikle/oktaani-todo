@@ -1,8 +1,9 @@
 import { CSSProperties, FC, useEffect, useRef } from 'react';
 import autoAnimate from '@formkit/auto-animate';
 
-import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
-import { changeOrder } from '../../context/todoSlice';
+import useSettingsStore from '../../context/useSettingsStore';
+import useTodoStore from '../../context/useTodoStore';
+
 import useLanguage from '../../hooks/useLanguage';
 import TodoCollection from '../TodoCollection/TodoCollection';
 import Footer from '../UI/Footer';
@@ -10,10 +11,9 @@ import Footer from '../UI/Footer';
 import styles from './TodoList.module.scss';
 
 const TodoList: FC = () => {
-  const collections = useAppSelector((state) => state.todo);
-  const { sort } = useAppSelector((state) => state.settings);
   const parent = useRef<HTMLDivElement>(null);
-  const dispatch = useAppDispatch();
+  const { sort } = useSettingsStore();
+  const { collections, changeOrder } = useTodoStore();
   const { text } = useLanguage();
 
   useEffect(() => {
@@ -21,7 +21,7 @@ const TodoList: FC = () => {
   }, [parent]);
 
   const moveCollection = (dragIndex: number, hoverIndex: number) => {
-    dispatch(changeOrder({ dragIndex, hoverIndex }));
+    changeOrder({ dragIndex, hoverIndex });
   };
 
   const sortStyles: CSSProperties = sort ? { gridTemplateColumns: '1fr' } : {};

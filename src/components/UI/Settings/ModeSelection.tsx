@@ -2,9 +2,8 @@ import { FC } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
 
-import { useAppDispatch, useAppSelector } from '../../../hooks/useRedux';
-import { setSettings } from '../../../context/settingsSlice';
 import useLanguage from '../../../hooks/useLanguage';
+import useSettingsStore from '../../../context/useSettingsStore';
 import Button from '../Button';
 
 import styles from './ModeSelection.module.scss';
@@ -14,21 +13,12 @@ type Props = {
 };
 
 const ModeSelection: FC<Props> = ({ disabled }) => {
-  const { languageName, darkMode, sort } = useAppSelector(
-    (state) => state.settings,
-  );
-  const dispatch = useAppDispatch();
+  const { darkMode, languageName, setSettings } = useSettingsStore();
   const { text } = useLanguage();
 
   const modeBtnHandler = () => {
-    dispatch(setSettings({ sort, languageName, darkMode: !darkMode }));
+    setSettings({ languageName, darkMode: !darkMode });
   };
-
-  const modeBtnContent = darkMode ? (
-    <FontAwesomeIcon icon={faSun} />
-  ) : (
-    <FontAwesomeIcon icon={faMoon} />
-  );
 
   return (
     <Button
@@ -36,7 +26,7 @@ const ModeSelection: FC<Props> = ({ disabled }) => {
       onClick={modeBtnHandler}
       title={text.controls.changeColorMode}
       disabled={disabled}
-      content={modeBtnContent}
+      content={darkMode ? <FontAwesomeIcon icon={faSun} /> : <FontAwesomeIcon icon={faMoon} />}
     />
   );
 };

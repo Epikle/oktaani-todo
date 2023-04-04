@@ -1,30 +1,15 @@
-import type { SettingsLS } from '../types';
-import { isValidSettings } from '../utils/utils';
+import type { SettingsLS } from '../context/useSettingsStore';
 
-const LS_NAME = 'oktaani-todo-settings';
+const LS_NAME = import.meta.env.VITE_LS_NAME_SETTINGS;
 
 export const getSettingsFromLS = () => {
-  try {
-    const settings = localStorage.getItem(LS_NAME);
-    if (!settings) return null;
+  const settings = localStorage.getItem(LS_NAME);
+  if (!settings) return null;
 
-    const parsedSettings = JSON.parse(settings) as unknown;
-
-    if (!isValidSettings(parsedSettings)) {
-      throw new Error('localStorage data is not valid, using default values!');
-    }
-
-    return parsedSettings as SettingsLS;
-  } catch (error) {
-    // TODO: error handling
-    return null;
-  }
+  // TODO: VALIDATE
+  return JSON.parse(settings) as SettingsLS;
 };
 
 export const saveSettingsToLS = (settings: SettingsLS) => {
-  try {
-    localStorage.setItem(LS_NAME, JSON.stringify(settings));
-  } catch (error) {
-    // TODO: error handling
-  }
+  localStorage.setItem(LS_NAME, JSON.stringify(settings));
 };

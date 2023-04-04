@@ -5,26 +5,19 @@ import { faBars, faShareNodes } from '@fortawesome/free-solid-svg-icons';
 import { useDrag, useDrop } from 'react-dnd';
 import type { Identifier, XYCoord } from 'dnd-core';
 
-import { ItemTypes, type TCollection } from '../../types';
-import {
-  resetSelection,
-  setHasDone,
-  setSelectedCollection,
-} from '../../context/selectedSlice';
-import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
+import { ItemTypes, type Collection } from '../../types';
+import useSettingsStore from '../../context/useSettingsStore';
+import useSelectedStore from '../../context/useSelectedStore';
+import useTodoStore from '../../context/useTodoStore';
 import useLanguage from '../../hooks/useLanguage';
 import { formatDate } from '../../utils/utils';
-import {
-  editCollection,
-  updateSharedCollectionById,
-} from '../../context/todoSlice';
 import TodoItem from './TodoItem';
-
-import styles from './TodoCollection.module.scss';
 import Button from '../UI/Button';
 
+import styles from './TodoCollection.module.scss';
+
 type Props = {
-  collection: TCollection;
+  collection: Collection;
   index: number;
   moveCollection: (dragIndex: number, hoverIndex: number) => void;
 };
@@ -37,21 +30,21 @@ type DragItem = {
 
 const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
   const { id, title, color, shared, created } = collection;
-  const dispatch = useAppDispatch();
-  const selectedCollection = useAppSelector((state) => state.selected);
-  const { languageName, sort } = useAppSelector((state) => state.settings);
-  const isSelected = selectedCollection.id === collection.id;
   const parent = useRef<HTMLUListElement>(null);
-  const { text } = useLanguage();
   const ref = useRef<HTMLElement>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+  const { sort, languageName } = useSettingsStore();
+  const { id: selectedColId, setSelectedCollection, resetSelection } = useSelectedStore();
+  const { updateSharedCollection, editCollection } = useTodoStore();
+  const { text } = useLanguage();
+  const isSelected = selectedColId === id;
 
   useEffect(() => {
     const getSharedCollectionData = async () => {
       setIsLoading(true);
       try {
-        await dispatch(updateSharedCollectionById(id)).unwrap();
+        await updateSharedCollection(id);
       } catch (error) {
         setIsError(true);
       }
@@ -61,18 +54,14 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
     if (shared) {
       getSharedCollectionData();
     }
-  }, [shared, dispatch, id]);
+  }, [shared, id, updateSharedCollection]);
 
   const disableShareBtnHandler = async () => {
-    await dispatch(editCollection({ id, title, color, shared: false }));
+    await editCollection({ id, title, color, shared: false });
     setIsError(false);
   };
 
-  const [{ handlerId }, drop] = useDrop<
-    DragItem,
-    void,
-    { handlerId: Identifier | null }
-  >({
+  const [{ handlerId }, drop] = useDrop<DragItem, void, { handlerId: Identifier | null }>({
     accept: ItemTypes.COLLECTION,
     collect: (monitor) => ({
       handlerId: monitor.getHandlerId(),
@@ -86,8 +75,7 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
       if (dragIndex === hoverIndex) return;
 
       const hoverBoundingRect = ref.current?.getBoundingClientRect();
-      const hoverMiddleY =
-        (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+      const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
       const clientOffset = monitor.getClientOffset();
       const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top;
 
@@ -125,12 +113,11 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
 
   const selectedCollectionHandler = () => {
     if (isSelected) {
-      dispatch(resetSelection());
+      resetSelection();
       return;
     }
 
-    dispatch(setHasDone(!!doneTodos));
-    dispatch(setSelectedCollection({ id, title, color, shared }));
+    setSelectedCollection({ id, title, color, shared, hasDone: !!doneTodos });
   };
 
   useEffect(() => {
@@ -139,9 +126,7 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
 
   const totalTodos = collection.todos.length;
   const showDone = totalTodos > 0 && !sort ? `${doneTodos}/${totalTodos}` : '';
-  const articleStyles = isSelected
-    ? [styles.collection, styles.selected].join(' ')
-    : styles.collection;
+  const articleStyles = isSelected ? [styles.collection, styles.selected].join(' ') : styles.collection;
 
   const showCreated =
     isSelected && formatDate(created, languageName) && !sort
@@ -150,9 +135,9 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
 
   useEffect(() => {
     if (isSelected) {
-      dispatch(setHasDone(!!doneTodos));
+      setSelectedCollection({ hasDone: !!doneTodos });
     }
-  }, [doneTodos, dispatch, isSelected]);
+  }, [doneTodos, isSelected, setSelectedCollection]);
 
   preview(drop(ref));
 
@@ -170,10 +155,7 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
         <h2>🚨 ERROR 🚨</h2>
         <div>
           <p>{text.errors.apiGetCollection}</p>
-          <Button
-            content={text.collection.shareFail}
-            onClick={disableShareBtnHandler}
-          />
+          <Button content={text.collection.shareFail} onClick={disableShareBtnHandler} />
         </div>
       </article>
     );
@@ -183,20 +165,13 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
     <article
       ref={ref}
       data-handler-id={handlerId}
-      className={
-        isSelected ? [articleStyles, 'print'].join(' ') : articleStyles
-      }
+      className={isSelected ? [articleStyles, 'print'].join(' ') : articleStyles}
       style={{ ...listStyles, opacity }}
       data-done={showDone}
       data-created={showCreated}
     >
       <h2>
-        <button
-          type="button"
-          onClick={selectedCollectionHandler}
-          style={headingStyles}
-          disabled={sort}
-        >
+        <button type="button" onClick={selectedCollectionHandler} style={headingStyles} disabled={sort}>
           {title}
         </button>
       </h2>
