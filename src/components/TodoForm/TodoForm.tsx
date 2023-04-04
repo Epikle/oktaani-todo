@@ -12,7 +12,7 @@ import TodoInput from './TodoInput';
 
 import styles from './TodoForm.module.scss';
 
-const DEFAULT_COLOR = '#7b68ee';
+export const DEFAULT_COLOR = '#7b68ee';
 const COLLECTION_LENGTH = 100;
 const ITEM_LENGTH = 300;
 
