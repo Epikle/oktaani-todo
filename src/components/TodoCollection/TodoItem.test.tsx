@@ -2,12 +2,10 @@
 import { vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
-import { Provider } from 'react-redux';
 import '@testing-library/jest-dom/extend-expect';
 
 import type { Languages } from '../../types';
 import { Item } from './TodoItem';
-import { setupStore } from '../../context/store';
 
 describe('TodoItem', () => {
   const itemSetup = {
@@ -19,11 +17,7 @@ describe('TodoItem', () => {
   };
 
   it('Item is showing with all attributes', () => {
-    render(
-      <Provider store={setupStore()}>
-        <Item {...itemSetup} />
-      </Provider>,
-    );
+    render(<Item {...itemSetup} />);
 
     const item = screen.getByLabelText(itemSetup.text);
 
@@ -32,11 +26,7 @@ describe('TodoItem', () => {
   });
 
   it('When clicked label should call handlerFn', () => {
-    render(
-      <Provider store={setupStore()}>
-        <Item {...itemSetup} />
-      </Provider>,
-    );
+    render(<Item {...itemSetup} />);
 
     const checkbox = screen.getByRole('checkbox');
     const item = screen.getByLabelText(itemSetup.text);
@@ -50,11 +40,7 @@ describe('TodoItem', () => {
   });
 
   it('Should render checkbox already checked', () => {
-    render(
-      <Provider store={setupStore()}>
-        <Item {...itemSetup} done />
-      </Provider>,
-    );
+    render(<Item {...itemSetup} done />);
 
     const checkbox = screen.getByRole('checkbox');
 

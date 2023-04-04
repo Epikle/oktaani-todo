@@ -1,9 +1,8 @@
 import { Dispatch, FC, SetStateAction, useEffect, useRef } from 'react';
 
+import type { Texts, Selected } from '../../types';
 import useSelectedStore from '../../context/useSelectedStore';
-import { editCollection } from '../../context/todoSlice';
-import { useAppDispatch } from '../../hooks/useRedux';
-import type { Texts, TSelected } from '../../types';
+import useTodoStore from '../../context/useTodoStore';
 
 import styles from './ColorChooser.module.scss';
 
@@ -11,14 +10,14 @@ type Props = {
   defaultColor: string;
   color: string;
   setColor: Dispatch<SetStateAction<string>>;
-  selectedCollection: TSelected;
+  selectedCollection: Selected;
   text: Texts;
 };
 
 const ColorChooser: FC<Props> = ({ defaultColor, color, setColor, selectedCollection, text }) => {
   const colorInputRef = useRef<HTMLInputElement>(null);
   const { setSelectedCollection } = useSelectedStore();
-  const dispatch = useAppDispatch();
+  const { editCollection } = useTodoStore();
 
   const colorInputHandler = async () => {
     if (!colorInputRef.current) return;
@@ -34,7 +33,7 @@ const ColorChooser: FC<Props> = ({ defaultColor, color, setColor, selectedCollec
       shared: selectedCollection.shared,
     };
 
-    await dispatch(editCollection(editedCollection));
+    await editCollection(editedCollection);
 
     setSelectedCollection({
       ...selectedCollection,

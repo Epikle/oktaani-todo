@@ -1,9 +1,9 @@
 import { FC, useEffect, useRef, useState } from 'react';
 import autoAnimate from '@formkit/auto-animate';
-import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
-import { deleteCollectionById, editCollection } from '../../context/todoSlice';
+
 import { createSharedCollection } from '../../services/todo';
 import useSelectedStore from '../../context/useSelectedStore';
+import useTodoStore from '../../context/useTodoStore';
 import useLanguage from '../../hooks/useLanguage';
 import TodoControls from '../TodoForm/TodoControls';
 import TodoForm from '../TodoForm/TodoForm';
@@ -23,10 +23,8 @@ const Header: FC = () => {
   const [confirm, setConfirm] = useState<Omit<TConfirm, 'type'> | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const { title, color, selected, id, shared, setSelectedCollection, resetSelection } = useSelectedStore();
+  const { collections, deleteCollection, editCollection } = useTodoStore();
   const { text } = useLanguage();
-  // TODO: Zustand
-  const collections = useAppSelector((state) => state.todo);
-  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (parent.current) autoAnimate(parent.current);
@@ -34,7 +32,7 @@ const Header: FC = () => {
 
   const deleteConfirmBtnHandler = async () => {
     setIsLoading(true);
-    await dispatch(deleteCollectionById({ id, shared }));
+    await deleteCollection({ id, shared });
     resetSelection();
     setConfirm(null);
     setIsLoading(false);
@@ -54,7 +52,7 @@ const Header: FC = () => {
         color,
         shared: true,
       };
-      await dispatch(editCollection(editedCollection));
+      await editCollection(editedCollection);
       setSelectedCollection(editedCollection);
     } catch (error) {
       // TODO: error handling

@@ -5,20 +5,19 @@ import { faBars, faShareNodes } from '@fortawesome/free-solid-svg-icons';
 import { useDrag, useDrop } from 'react-dnd';
 import type { Identifier, XYCoord } from 'dnd-core';
 
-import { ItemTypes, type TCollection } from '../../types';
+import { ItemTypes, type Collection } from '../../types';
 import useSettingsStore from '../../context/useSettingsStore';
-import { useAppDispatch } from '../../hooks/useRedux';
-import useLanguage from '../../hooks/useLanguage';
 import useSelectedStore from '../../context/useSelectedStore';
+import useTodoStore from '../../context/useTodoStore';
+import useLanguage from '../../hooks/useLanguage';
 import { formatDate } from '../../utils/utils';
-import { editCollection, updateSharedCollectionById } from '../../context/todoSlice';
 import TodoItem from './TodoItem';
 import Button from '../UI/Button';
 
 import styles from './TodoCollection.module.scss';
 
 type Props = {
-  collection: TCollection;
+  collection: Collection;
   index: number;
   moveCollection: (dragIndex: number, hoverIndex: number) => void;
 };
@@ -36,8 +35,8 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const { sort, languageName } = useSettingsStore();
-  const dispatch = useAppDispatch();
   const { id: selectedColId, setSelectedCollection, resetSelection } = useSelectedStore();
+  const { updateSharedCollection, editCollection } = useTodoStore();
   const { text } = useLanguage();
   const isSelected = selectedColId === id;
 
@@ -45,7 +44,7 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
     const getSharedCollectionData = async () => {
       setIsLoading(true);
       try {
-        await dispatch(updateSharedCollectionById(id)).unwrap();
+        await updateSharedCollection(id);
       } catch (error) {
         setIsError(true);
       }
@@ -55,10 +54,10 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
     if (shared) {
       getSharedCollectionData();
     }
-  }, [shared, dispatch, id]);
+  }, [shared, id, updateSharedCollection]);
 
   const disableShareBtnHandler = async () => {
-    await dispatch(editCollection({ id, title, color, shared: false }));
+    await editCollection({ id, title, color, shared: false });
     setIsError(false);
   };
 

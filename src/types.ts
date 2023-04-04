@@ -1,20 +1,20 @@
-export type TCollection = {
+export type Collection = {
   id: string;
   title: string;
   color: string;
   shared: boolean;
-  todos: TItem[];
+  todos: Item[];
   created: string;
 };
 
-export type TItem = {
+export type Item = {
   id: string;
   text: string;
   done: boolean;
   created: string;
 };
 
-export type TSelected = {
+export type Selected = {
   id: string;
   title: string;
   color: string;
@@ -23,11 +23,11 @@ export type TSelected = {
   selected: boolean;
 };
 
-export type TNewCollectionEntry = Omit<TCollection, 'shared' | 'todos' | 'created'>;
+export type NewCollectionEntry = Omit<Collection, 'shared' | 'todos' | 'created'>;
 
-export type TSelectedEntry = Omit<TSelected, 'edit' | 'selected'>;
+export type SelectedEntry = Omit<Selected, 'edit' | 'selected'>;
 
-export type TItemEntry = Omit<TItem, 'id' | 'done' | 'created'>;
+export type ItemEntry = Omit<Item, 'id' | 'done' | 'created'>;
 
 export type Languages = 'en-us' | 'fi';
 

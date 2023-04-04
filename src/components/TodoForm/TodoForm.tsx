@@ -3,9 +3,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { nanoid } from 'nanoid';
 
-import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
-import { createCollection, createCollectionItem, editCollection } from '../../context/todoSlice';
 import useSelectedStore from '../../context/useSelectedStore';
+import useTodoStore from '../../context/useTodoStore';
 import useLanguage from '../../hooks/useLanguage';
 import Button from '../UI/Button';
 import ColorChooser from './ColorChooser';
@@ -20,8 +19,8 @@ const ITEM_LENGTH = 300;
 const TodoForm: FC = () => {
   const [color, setColor] = useState(DEFAULT_COLOR);
   const [todoInput, setTodoInput] = useState('');
-  const dispatch = useAppDispatch();
   const selectedCollection = useSelectedStore();
+  const { createCollection, createCollectionItem, editCollection } = useTodoStore();
   const { text } = useLanguage();
   const trimmedInput = todoInput.trim().replace(/\s+/g, ' ');
   const [isLoading, setIsLoading] = useState(false);
@@ -46,7 +45,7 @@ const TodoForm: FC = () => {
         color: selectedCollection.color,
         shared: selectedCollection.shared,
       };
-      await dispatch(editCollection(editedCollection));
+      await editCollection(editedCollection);
       selectedCollection.setSelectedCollection(editedCollection);
       selectedCollection.setSelectedCollection({ edit: false });
       setIsLoading(false);
@@ -54,12 +53,11 @@ const TodoForm: FC = () => {
     }
 
     if (selectedCollection.selected) {
-      await dispatch(
-        createCollectionItem({
-          id: selectedCollection.id,
-          newItemEntry: { text: trimmedInput },
-        }),
-      );
+      await createCollectionItem({
+        id: selectedCollection.id,
+        itemEntry: { text: trimmedInput },
+      });
+
       setTodoInput('');
       setIsLoading(false);
       return;
@@ -72,7 +70,7 @@ const TodoForm: FC = () => {
       shared: false,
     };
 
-    dispatch(createCollection(newCollectionEntry));
+    createCollection(newCollectionEntry);
     selectedCollection.setSelectedCollection(newCollectionEntry);
 
     setTodoInput('');

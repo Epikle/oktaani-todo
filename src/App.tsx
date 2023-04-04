@@ -1,61 +1,42 @@
-import { FC, useEffect, useState } from 'react';
-import { useAppDispatch } from './hooks/useRedux';
+import { FC, useEffect } from 'react';
+
+import useSelectedStore from './context/useSelectedStore';
+import useSettingsStore from './context/useSettingsStore';
+import useTodoStore from './context/useTodoStore';
 import useLanguage from './hooks/useLanguage';
-import { createSharedCollection, initTodoState } from './context/todoSlice';
-import * as todoService from './services/todo';
 import { getSettingsFromLS } from './services/settings';
 import { isStorageAvailable } from './utils/utils';
 import Header from './components/UI/Header';
 import TodoList from './components/TodoList/TodoList';
 import Overlay from './components/UI/Overlay';
-import useSettingsStore from './context/useSettingsStore';
-import useSelectedStore from './context/useSelectedStore';
 
 const shareParam = new URLSearchParams(document.location.search).get('share');
 
 const App: FC = () => {
-  const dispatch = useAppDispatch();
   const { title } = useSelectedStore();
-  const [isError, setIsError] = useState(false);
   const { darkMode, setSettings } = useSettingsStore();
+  const { initCollections, createSharedCollection } = useTodoStore();
   const { text } = useLanguage();
 
   document.title = title ? `${title} | oktaaniTODO` : 'oktaaniTODO';
 
   useEffect(() => {
-    dispatch(initTodoState(todoService.getTodosFromLS()));
-
+    initCollections();
     setSettings(getSettingsFromLS());
 
     if (shareParam) {
-      const getSharedCollection = async () => {
-        try {
-          const data = await todoService.getSharedCollectionData(shareParam);
-          dispatch(createSharedCollection(data));
-          window.location.replace(import.meta.env.VITE_BASE_URL);
-        } catch (error) {
-          setIsError(true);
-          setTimeout(() => {
-            setIsError(false);
-            window.location.replace(import.meta.env.VITE_BASE_URL);
-          }, 2000);
-        }
-      };
-      getSharedCollection();
+      (async () => {
+        await createSharedCollection(shareParam);
+        window.location.replace(import.meta.env.VITE_BASE_URL);
+      })();
     }
-  }, [dispatch, setSettings]);
+  }, [setSettings, initCollections, createSharedCollection]);
 
   return (
     <div className={darkMode ? 'content dark-mode' : 'content'}>
-      {/* TODO: useEffect and run only once */}
       {!isStorageAvailable() && <Overlay>{text.errors.localStorage}</Overlay>}
       <Header />
-      {isError && (
-        <main>
-          <p>{text.errors.default}</p>
-        </main>
-      )}
-      {!shareParam && !isError && <TodoList />}
+      {!shareParam && <TodoList />}
     </div>
   );
 };

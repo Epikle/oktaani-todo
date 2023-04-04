@@ -1,6 +1,6 @@
 import { Dispatch, FC, SetStateAction, useEffect, useRef } from 'react';
 
-import type { Texts, TSelected } from '../../types';
+import type { Texts, Selected } from '../../types';
 import useSettingsStore from '../../context/useSettingsStore';
 
 import styles from './TodoInput.module.scss';
@@ -8,7 +8,7 @@ import styles from './TodoInput.module.scss';
 type Props = {
   todoInput: string;
   setTodoInput: Dispatch<SetStateAction<string>>;
-  selectedCollection: TSelected;
+  selectedCollection: Selected;
   text: Texts;
   maxLength: number;
   isLoading: boolean;

@@ -1,10 +1,9 @@
 import { FC, useId, useState } from 'react';
 
-import type { Languages, TItem } from '../../types';
+import type { Languages, Item as TItem } from '../../types';
 import useSettingsStore from '../../context/useSettingsStore';
-import { toggleItemDone } from '../../context/todoSlice';
+import useTodoStore from '../../context/useTodoStore';
 import useLanguage from '../../hooks/useLanguage';
-import { useAppDispatch } from '../../hooks/useRedux';
 import { formatDate } from '../../utils/utils';
 
 import styles from './TodoItem.module.scss';
@@ -48,10 +47,10 @@ export const Item: FC<ItemProps> = ({ onDone, text: todoText, done, created, lan
 const TodoItem: FC<Props> = ({ todo, colId }) => {
   const { id, text, done, created } = todo;
   const { languageName } = useSettingsStore();
-  const dispatch = useAppDispatch();
+  const { toggleItemDone } = useTodoStore();
 
   const doneInputHandler = async () => {
-    await dispatch(toggleItemDone({ colId, id }));
+    await toggleItemDone({ id, colId });
   };
 
   return <Item text={text} done={done} created={created} onDone={doneInputHandler} language={languageName} />;
