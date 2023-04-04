@@ -1,0 +1,56 @@
+@import 'src/mixin';
+
+.welcome {
+  h2,
+  h3,
+  h4 {
+    text-align: center;
+    color: var(--color-text-green);
+  }
+
+  h3 {
+    margin-top: 1rem;
+  }
+
+  h4 {
+    margin-bottom: 1rem;
+  }
+
+  p {
+    font-family: var(--ff-secondary);
+  }
+
+  .how {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.controls {
+  margin-inline: auto;
+  display: flex;
+  justify-content: start;
+  width: min-content;
+  gap: 1px;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+
+  li {
+    button {
+      @include text-green;
+      @include btn-hover-focus;
+      @include btn-bg-color;
+      @include transition;
+
+      display: grid;
+      place-content: center;
+      width: 3rem;
+      height: 3rem;
+      font-size: 1.5rem;
+
+      &.trash:is(:hover, :focus-visible) {
+        color: var(--color-p-red);
+      }
+    }
+  }
+}

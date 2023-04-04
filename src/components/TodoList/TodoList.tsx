@@ -4,17 +4,16 @@ import autoAnimate from '@formkit/auto-animate';
 import useSettingsStore from '../../context/useSettingsStore';
 import useTodoStore from '../../context/useTodoStore';
 
-import useLanguage from '../../hooks/useLanguage';
 import TodoCollection from '../TodoCollection/TodoCollection';
 import Footer from '../UI/Footer';
 
 import styles from './TodoList.module.scss';
+import Welcome from '../UI/Welcome';
 
 const TodoList: FC = () => {
   const parent = useRef<HTMLDivElement>(null);
   const { sort } = useSettingsStore();
   const { collections, changeOrder } = useTodoStore();
-  const { text } = useLanguage();
 
   useEffect(() => {
     if (parent.current) autoAnimate(parent.current);
@@ -40,7 +39,7 @@ const TodoList: FC = () => {
               />
             ))
           ) : (
-            <div className={styles.empty}>{text.collection.empty}</div>
+            <Welcome />
           )}
         </div>
         <Footer />
