@@ -13,7 +13,7 @@ import Welcome from '../UI/Welcome';
 const TodoList: FC = () => {
   const parent = useRef<HTMLDivElement>(null);
   const { sort } = useSettingsStore();
-  const { collections, changeOrder } = useTodoStore();
+  const { collections, changeOrder, help } = useTodoStore();
 
   useEffect(() => {
     if (parent.current) autoAnimate(parent.current);
@@ -29,7 +29,7 @@ const TodoList: FC = () => {
     <main className={styles.main}>
       <div className={styles.container}>
         <div className={styles.collections} ref={parent} style={sortStyles}>
-          {collections.length > 0 ? (
+          {collections.length > 0 && !help ? (
             collections.map((collection, index) => (
               <TodoCollection
                 key={collection.id}

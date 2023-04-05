@@ -19,6 +19,7 @@ const languages: Record<Languages, Texts> = {
       deleteConfirm: 'Are you sure?',
       shareConfirm: 'Share collection?',
       sort: 'Sort collections',
+      help: 'How to use?',
     },
     collection: {
       created: 'created',
@@ -58,6 +59,7 @@ const languages: Record<Languages, Texts> = {
       deleteConfirm: 'Haluatko varmasti poistaa?',
       shareConfirm: 'Haluatko jakaa kokoelman?',
       sort: 'Järjestä kokoelmat',
+      help: 'Käyttöohjeet',
     },
     collection: {
       created: 'luotu',
@@ -74,8 +76,7 @@ const languages: Record<Languages, Texts> = {
       editing: 'Muokkaa',
     },
     errors: {
-      localStorage:
-        'Sovellus tarvitsee paikallisen tallennuksen päälle toimiakseen.',
+      localStorage: 'Sovellus tarvitsee paikallisen tallennuksen päälle toimiakseen.',
       apiGetCollection: 'Jaetun listan haku epäonnistui.',
       default: 'Jotain meni pieleen.',
     },

@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowDownShortWide } from '@fortawesome/free-solid-svg-icons';
 
 import useSettingsStore from '../../../context/useSettingsStore';
+import useTodoStore from '../../../context/useTodoStore';
 import useLanguage from '../../../hooks/useLanguage';
 import Button from '../Button';
 
@@ -14,6 +15,7 @@ type Props = {
 
 const Sort: FC<Props> = ({ disabled }) => {
   const { sort, sortCollections } = useSettingsStore();
+  const { collections } = useTodoStore();
   const { text } = useLanguage();
 
   return (
@@ -21,7 +23,7 @@ const Sort: FC<Props> = ({ disabled }) => {
       className={sort ? [styles.sort, styles['sort-active']].join(' ') : styles.sort}
       onClick={sortCollections}
       title={text.controls.sort}
-      disabled={disabled}
+      disabled={disabled || collections.length === 0}
       content={<FontAwesomeIcon icon={faArrowDownShortWide} />}
     />
   );

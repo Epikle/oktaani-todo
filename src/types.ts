@@ -49,6 +49,7 @@ export type Texts = {
     deleteConfirm: string;
     shareConfirm: string;
     sort: string;
+    help: string;
   };
   collection: {
     created: string;

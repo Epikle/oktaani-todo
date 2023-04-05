@@ -26,8 +26,12 @@ const App: FC = () => {
 
     if (shareParam) {
       (async () => {
-        await createSharedCollection(shareParam);
-        window.location.replace(import.meta.env.VITE_BASE_URL);
+        try {
+          await createSharedCollection(shareParam);
+          window.location.replace(import.meta.env.VITE_BASE_URL);
+        } catch (error) {
+          window.location.replace(import.meta.env.VITE_BASE_URL);
+        }
       })();
     }
   }, [setSettings, initCollections, createSharedCollection]);
@@ -36,6 +40,11 @@ const App: FC = () => {
     <div className={darkMode ? 'content dark-mode' : 'content'}>
       {!isStorageAvailable() && <Overlay>{text.errors.localStorage}</Overlay>}
       <Header />
+      {shareParam && (
+        <main>
+          <p>Loading...</p>
+        </main>
+      )}
       {!shareParam && <TodoList />}
     </div>
   );
