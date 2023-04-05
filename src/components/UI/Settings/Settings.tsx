@@ -3,12 +3,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGear } from '@fortawesome/free-solid-svg-icons';
 
 import useLanguage from '../../../hooks/useLanguage';
+import HelpSelection from './HelpSelection';
 import LanguageSelection from './LanguageSelection';
 import ModeSelection from './ModeSelection';
+import Sort from './Sort';
 import Button from '../Button';
 
 import styles from './Settings.module.scss';
-import Sort from './Sort';
 
 const Settings: FC = () => {
   const [showSettings, setShowSettings] = useState(false);
@@ -18,30 +19,28 @@ const Settings: FC = () => {
     setShowSettings((prevS) => !prevS);
   };
 
-  const hiddenBtnsStyles = showSettings
-    ? [styles['hidden-btns'], styles.selected].join(' ')
-    : styles['hidden-btns'];
+  const hiddenBtnsStyles = showSettings ? [styles['hidden-btns'], styles.selected].join(' ') : styles['hidden-btns'];
 
-  const settingsBtnStyles = showSettings
-    ? [styles.gear, styles.selected].join(' ')
-    : styles.gear;
+  const settingsBtnStyles = showSettings ? [styles.gear, styles.selected].join(' ') : styles.gear;
 
   return (
     <ul className={styles.settings} data-testid="todo-settings">
       <li className={hiddenBtnsStyles}>
         <ul>
           <li>
+            <HelpSelection disabled={!showSettings} />
+          </li>
+          <li>
+            <Sort disabled={!showSettings} />
+          </li>
+          <li>
             <LanguageSelection disabled={!showSettings} />
           </li>
           <li>
             <ModeSelection disabled={!showSettings} />
           </li>
-          <li>
-            <Sort disabled={!showSettings} />
-          </li>
         </ul>
       </li>
-
       <li>
         <Button
           className={settingsBtnStyles}

@@ -16,9 +16,10 @@ type TodoActions = {
   toggleItemDone: ({ id, colId }: { id: string; colId: string }) => Promise<void>;
   removeDoneItems: (id: string) => Promise<void>;
   editCollection: (entry: SelectedEntry) => Promise<void>;
+  toggleHelp: () => void;
 };
 
-const initialTodoState: { collections: Collection[] | [] } = { collections: [] };
+const initialTodoState: { collections: Collection[] | []; help: boolean } = { collections: [], help: false };
 
 const useTodoStore = create(
   immer<TodoState & TodoActions>((set, get) => ({
@@ -154,6 +155,7 @@ const useTodoStore = create(
         }
       });
     },
+    toggleHelp: () => set((state) => ({ help: !state.help })),
   })),
 );
 
