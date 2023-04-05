@@ -92,7 +92,7 @@ const Welcome: FC = () => (
         <form className={styles.form}>
           <input type="color" className={styles['color-picker']} defaultValue={DEFAULT_COLOR} disabled />
           <input type="text" className={styles.todo} placeholder="Set collection title here" disabled />
-          <Button className={styles.add} disabled content={<FontAwesomeIcon icon={faPlus} />} testId="submit-btn" />
+          <Button className={styles.add} disabled content={<FontAwesomeIcon icon={faPlus} />} />
         </form>
         <div className={styles['help-input-desc']}>
           <div>
