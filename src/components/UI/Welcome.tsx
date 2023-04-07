@@ -33,22 +33,22 @@ const Welcome: FC = () => (
           <h4>General Settings</h4>
           <ul className={styles.controls}>
             <li>
-              <Button data-language="en-us" className={styles.language}>
+              <Button data-language="en-us" className={styles.language} title="Select Language">
                 <FontAwesomeIcon icon={faEarthAmericas} />
               </Button>
             </li>
             <li>
-              <Button>
+              <Button title="Select Normal/Dark Mode">
                 <FontAwesomeIcon icon={faSun} />
               </Button>
             </li>
             <li>
-              <Button>
+              <Button title="Sort Collections">
                 <FontAwesomeIcon icon={faArrowDownShortWide} />
               </Button>
             </li>
             <li>
-              <Button disabled>
+              <Button title="Settings" disabled>
                 <FontAwesomeIcon icon={faGear} />
               </Button>
             </li>
@@ -57,7 +57,7 @@ const Welcome: FC = () => (
           <div className={styles['help-desc']}>
             <div>
               <div>Sort Collections</div>
-              Select Normal/dark mode
+              Select Normal/Dark Mode
             </div>
             Select Language
           </div>
@@ -67,22 +67,22 @@ const Welcome: FC = () => (
 
           <ul className={styles.controls}>
             <li>
-              <Button>
+              <Button title="Remove Done Items">
                 <FontAwesomeIcon icon={faListCheck} />
               </Button>
             </li>
             <li>
-              <Button>
+              <Button title="Share Collection">
                 <FontAwesomeIcon icon={faShareNodes} />
               </Button>
             </li>
             <li>
-              <Button>
+              <Button title="Edit Title">
                 <FontAwesomeIcon icon={faPen} />
               </Button>
             </li>
             <li>
-              <Button>
+              <Button title="Delete Collection">
                 <FontAwesomeIcon icon={faTrash} />
               </Button>
             </li>
@@ -102,9 +102,21 @@ const Welcome: FC = () => (
       <div>
         <h4>Add new collection</h4>
         <form className={styles.form}>
-          <input type="color" className={styles['color-picker']} defaultValue={DEFAULT_COLOR} disabled />
-          <input type="text" className={styles.todo} placeholder="Set collection title here" disabled />
-          <Button className={styles.add} disabled>
+          <input
+            type="color"
+            title="Choose Collection Color"
+            className={styles['color-picker']}
+            defaultValue={DEFAULT_COLOR}
+            disabled
+          />
+          <input
+            type="text"
+            title="Set Collection or Item Title Here"
+            className={styles.todo}
+            placeholder="Set collection title here"
+            disabled
+          />
+          <Button className={styles.add} title="Save Collection or Item" disabled>
             <FontAwesomeIcon icon={faPlus} />
           </Button>
         </form>
