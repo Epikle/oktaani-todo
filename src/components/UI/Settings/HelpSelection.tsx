@@ -8,11 +8,7 @@ import Button from '../Button';
 
 import styles from './HelpSelection.module.scss';
 
-type Props = {
-  disabled: boolean;
-};
-
-const HelpSelection: FC<Props> = ({ disabled }) => {
+const HelpSelection: FC = () => {
   const { text } = useLanguage();
   const { toggleHelp, help, collections } = useTodoStore();
 
@@ -21,7 +17,7 @@ const HelpSelection: FC<Props> = ({ disabled }) => {
       className={help ? [styles.help, styles['help-active']].join(' ') : styles.help}
       title={text.controls.help}
       onClick={toggleHelp}
-      disabled={disabled || collections.length === 0}
+      disabled={collections.length === 0}
     >
       <FontAwesomeIcon icon={faCircleQuestion} />
     </Button>

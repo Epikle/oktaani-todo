@@ -1,5 +1,10 @@
 @import 'src/mixin';
 
+.group {
+  display: flex;
+  gap: 0.5rem;
+}
+
 .settings {
   display: flex;
   gap: 1px;
@@ -53,4 +58,9 @@
       }
     }
   }
+}
+
+.help {
+  border-radius: var(--border-radius);
+  overflow: hidden;
 }

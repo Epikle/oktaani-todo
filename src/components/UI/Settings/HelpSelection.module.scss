@@ -21,6 +21,7 @@
   &:disabled {
     cursor: not-allowed;
     opacity: 0.35;
+    box-shadow: inset 0 -3px var(--color-p-red);
 
     &:is(:hover, :focus-visible) {
       background-color: var(--color-bg-btn);

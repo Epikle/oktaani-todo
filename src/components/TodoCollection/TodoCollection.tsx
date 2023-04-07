@@ -104,9 +104,6 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
   const listStyles: CSSProperties = {
     borderColor: color,
   };
-  const headingStyles: CSSProperties = {
-    textDecorationColor: color,
-  };
 
   const doneTodos = collection.todos.filter((todo) => todo.done).length;
 
@@ -170,7 +167,7 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
       data-created={showCreated}
     >
       <h2>
-        <button type="button" onClick={selectedCollectionHandler} style={headingStyles} disabled={sort}>
+        <button type="button" onClick={selectedCollectionHandler} disabled={sort}>
           {title}
         </button>
       </h2>
