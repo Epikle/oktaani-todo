@@ -1,17 +1,15 @@
-import type { Languages } from '../types';
+import { typedLanguages, allowedLanguages } from '../utils/languages';
 import useSettingsStore from '../context/useSettingsStore';
-import languages from '../utils/languages';
 
 const useLanguage = () => {
   const { darkMode, languageName, setSettings } = useSettingsStore();
-  let text = languages[languageName];
+  let text = typedLanguages[languageName];
 
   const nextLang = () => {
-    const languagesList = Object.keys(languages) as Languages[];
-    const currentLanguageIndex = languagesList.indexOf(languageName);
-    const nextIndex = (currentLanguageIndex + 1) % languagesList.length;
-    const nextLanguage = languagesList[nextIndex];
-    text = languages[languagesList[nextIndex]];
+    const currentLanguageIndex = allowedLanguages.indexOf(languageName);
+    const nextIndex = (currentLanguageIndex + 1) % allowedLanguages.length;
+    const nextLanguage = allowedLanguages[nextIndex];
+    text = typedLanguages[allowedLanguages[nextIndex]];
 
     setSettings({ languageName: nextLanguage, darkMode });
   };

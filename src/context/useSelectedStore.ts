@@ -1,8 +1,10 @@
 import { create } from 'zustand';
 
-type SelectedState = typeof initialSelectedState;
+export type Selected = typeof initialSelectedState;
+export type SelectedEntry = Omit<Selected, 'edit' | 'selected' | 'hasDone'>;
+
 type SelectedActions = {
-  setSelectedCollection: (collection: Partial<SelectedState>) => void;
+  setSelectedCollection: (collection: Partial<Selected>) => void;
   resetSelection: () => void;
 };
 
@@ -16,7 +18,7 @@ const initialSelectedState = {
   hasDone: false,
 };
 
-const useSelectedStore = create<SelectedState & SelectedActions>((set) => ({
+const useSelectedStore = create<Selected & SelectedActions>((set) => ({
   ...initialSelectedState,
   setSelectedCollection: (collection) => set((state) => ({ ...state, ...collection, selected: true })),
   resetSelection: () => set(initialSelectedState),

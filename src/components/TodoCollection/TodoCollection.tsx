@@ -5,10 +5,9 @@ import { faBars, faShareNodes } from '@fortawesome/free-solid-svg-icons';
 import { useDrag, useDrop } from 'react-dnd';
 import type { Identifier, XYCoord } from 'dnd-core';
 
-import { ItemTypes, type Collection } from '../../types';
 import useSettingsStore from '../../context/useSettingsStore';
 import useSelectedStore from '../../context/useSelectedStore';
-import useTodoStore from '../../context/useTodoStore';
+import useTodoStore, { type Collection } from '../../context/useTodoStore';
 import useLanguage from '../../hooks/useLanguage';
 import { formatDate } from '../../utils/utils';
 import TodoItem from './TodoItem';
@@ -62,7 +61,7 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
   };
 
   const [{ handlerId }, drop] = useDrop<DragItem, void, { handlerId: Identifier | null }>({
-    accept: ItemTypes.COLLECTION,
+    accept: 'collection',
     collect: (monitor) => ({
       handlerId: monitor.getHandlerId(),
     }),
@@ -95,7 +94,7 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
   });
 
   const [{ opacity }, drag, preview] = useDrag({
-    type: ItemTypes.COLLECTION,
+    type: 'collection',
     item: () => ({ id, index }),
     collect: (monitor) => ({
       opacity: monitor.isDragging() ? 0.2 : 1,

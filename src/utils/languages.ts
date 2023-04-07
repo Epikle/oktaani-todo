@@ -1,6 +1,4 @@
-import type { Languages, Texts } from '../types';
-
-const languages: Record<Languages, Texts> = {
+const languages = {
   'en-us': {
     header: {
       newCollection: 'Add a new collection',
@@ -83,4 +81,7 @@ const languages: Record<Languages, Texts> = {
   },
 };
 
-export default languages;
+export const allowedLanguages = ['en-us', 'fi'] as const;
+export type Languages = (typeof allowedLanguages)[number];
+type EnUsType = (typeof languages)['en-us'];
+export const typedLanguages: Record<Languages, EnUsType> = languages;
