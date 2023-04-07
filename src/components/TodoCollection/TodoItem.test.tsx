@@ -4,8 +4,8 @@ import { render, screen } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 import '@testing-library/jest-dom/extend-expect';
 
-import type { Languages } from '../../types';
 import { Item } from './TodoItem';
+import type { Languages } from '../../utils/languages';
 
 describe('TodoItem', () => {
   const itemSetup = {

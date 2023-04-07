@@ -1,11 +1,6 @@
 import { FC } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faCheck,
-  faCircleQuestion,
-  faSpinner,
-  faXmark,
-} from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faCircleQuestion, faSpinner, faXmark } from '@fortawesome/free-solid-svg-icons';
 
 import useLanguage from '../../hooks/useLanguage';
 import Button from './Button';
@@ -19,12 +14,7 @@ type Props = {
   isLoading: boolean;
 };
 
-const Confirm: FC<Props> = ({
-  confirmText,
-  onConfirm,
-  onCancel,
-  isLoading,
-}) => {
+const Confirm: FC<Props> = ({ confirmText, onConfirm, onCancel, isLoading }) => {
   const { text } = useLanguage();
 
   return (
@@ -35,29 +25,20 @@ const Confirm: FC<Props> = ({
       </div>
       <ul className={styles.controls}>
         <li>
-          <Button
-            title={text.common.confirm}
-            content={
-              isLoading ? (
-                <FontAwesomeIcon icon={faSpinner} spinPulse />
-              ) : (
-                <FontAwesomeIcon icon={faCheck} />
-              )
-            }
-            onClick={onConfirm}
-            testId="confirm-delete-btn"
-            disabled={isLoading}
-          />
+          <Button title={text.common.confirm} onClick={onConfirm} testId="confirm-delete-btn" disabled={isLoading}>
+            {isLoading ? <FontAwesomeIcon icon={faSpinner} spinPulse /> : <FontAwesomeIcon icon={faCheck} />}
+          </Button>
         </li>
         <li>
           <Button
             className={styles['cancel-btn']}
             title={text.common.cancel}
-            content={<FontAwesomeIcon icon={faXmark} />}
             onClick={onCancel}
             testId="cancel-delete-btn"
             disabled={isLoading}
-          />
+          >
+            <FontAwesomeIcon icon={faXmark} />
+          </Button>
         </li>
       </ul>
     </div>

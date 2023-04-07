@@ -83,5 +83,5 @@ const languages = {
 
 export const allowedLanguages = ['en-us', 'fi'] as const;
 export type Languages = (typeof allowedLanguages)[number];
-type EnUsType = (typeof languages)['en-us'];
-export const typedLanguages: Record<Languages, EnUsType> = languages;
+export type Texts = (typeof languages)['en-us'];
+export const typedLanguages: Record<Languages, Texts> = languages;

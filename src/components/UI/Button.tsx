@@ -1,18 +1,10 @@
 import { FC, ComponentPropsWithoutRef } from 'react';
 
 type Props = ComponentPropsWithoutRef<'button'> & {
-  content: React.ReactNode;
   testId?: string;
 };
 
-const Button: FC<Props> = ({
-  className,
-  title,
-  testId,
-  onClick,
-  content,
-  ...rest
-}) => (
+const Button: FC<Props> = ({ className, title, testId, onClick, content, children, ...rest }) => (
   <button
     type="button"
     className={className}
@@ -22,7 +14,7 @@ const Button: FC<Props> = ({
     data-testid={testId}
     {...rest}
   >
-    {content}
+    {children}
   </button>
 );
 

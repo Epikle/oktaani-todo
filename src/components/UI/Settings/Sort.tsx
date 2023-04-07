@@ -24,8 +24,9 @@ const Sort: FC<Props> = ({ disabled }) => {
       onClick={sortCollections}
       title={text.controls.sort}
       disabled={disabled || collections.length === 0}
-      content={<FontAwesomeIcon icon={faArrowDownShortWide} />}
-    />
+    >
+      <FontAwesomeIcon icon={faArrowDownShortWide} />
+    </Button>
   );
 };
 

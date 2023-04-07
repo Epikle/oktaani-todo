@@ -1,8 +1,8 @@
 import { FC, useId, useState } from 'react';
 
-import type { Languages, Item as TItem } from '../../types';
+import type { Languages } from '../../utils/languages';
 import useSettingsStore from '../../context/useSettingsStore';
-import useTodoStore from '../../context/useTodoStore';
+import useTodoStore, { type Item as TItem } from '../../context/useTodoStore';
 import useLanguage from '../../hooks/useLanguage';
 import { formatDate } from '../../utils/utils';
 
