@@ -1,6 +1,7 @@
 import { Dispatch, FC, SetStateAction, useEffect, useRef } from 'react';
 
-import type { Texts, Selected } from '../../types';
+import type { Selected } from '../../context/useSelectedStore';
+import type { Texts } from '../../utils/languages';
 import useSettingsStore from '../../context/useSettingsStore';
 
 import styles from './TodoInput.module.scss';

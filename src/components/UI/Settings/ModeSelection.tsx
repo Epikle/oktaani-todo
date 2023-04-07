@@ -21,13 +21,9 @@ const ModeSelection: FC<Props> = ({ disabled }) => {
   };
 
   return (
-    <Button
-      className={styles.mode}
-      onClick={modeBtnHandler}
-      title={text.controls.changeColorMode}
-      disabled={disabled}
-      content={darkMode ? <FontAwesomeIcon icon={faSun} /> : <FontAwesomeIcon icon={faMoon} />}
-    />
+    <Button className={styles.mode} onClick={modeBtnHandler} title={text.controls.changeColorMode} disabled={disabled}>
+      {darkMode ? <FontAwesomeIcon icon={faSun} /> : <FontAwesomeIcon icon={faMoon} />}
+    </Button>
   );
 };
 

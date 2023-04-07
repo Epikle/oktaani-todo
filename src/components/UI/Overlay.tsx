@@ -6,8 +6,6 @@ type Props = {
   children: ReactNode;
 };
 
-const Overlay: FC<Props> = ({ children }) => (
-  <div className={styles.overlay}>{children}</div>
-);
+const Overlay: FC<Props> = ({ children }) => <div className={styles.overlay}>{children}</div>;
 
 export default Overlay;

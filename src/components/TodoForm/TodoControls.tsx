@@ -47,37 +47,41 @@ const TodoControls: FC<Props> = ({ onConfirm }) => {
         <Button
           title={text.controls.removeDone}
           onClick={removeDoneBtnHandler}
-          content={isLoading ? <FontAwesomeIcon icon={faSpinner} spinPulse /> : <FontAwesomeIcon icon={faListCheck} />}
           disabled={!hasDone || isLoading}
           testId="remove-done-btn"
-        />
+        >
+          {isLoading ? <FontAwesomeIcon icon={faSpinner} spinPulse /> : <FontAwesomeIcon icon={faListCheck} />}
+        </Button>
       </li>
       <li>
         <Button
           className={shared ? styles.shared : ''}
           title={shared ? text.controls.stopShareCol : text.controls.shareCol}
           onClick={() => (shared ? stopShareBtnHandler() : onConfirm('share'))}
-          content={<FontAwesomeIcon icon={faShareNodes} />}
           testId="share-col-btn"
-        />
+        >
+          <FontAwesomeIcon icon={faShareNodes} />
+        </Button>
       </li>
       <li>
         <Button
           title={text.controls.editCol}
           onClick={editBtnHandler}
-          content={<FontAwesomeIcon icon={faPen} />}
           className={edit ? styles['edit-active'] : ''}
           testId="edit-collection-title-btn"
-        />
+        >
+          <FontAwesomeIcon icon={faPen} />
+        </Button>
       </li>
       <li>
         <Button
           title={text.controls.removeCol}
           onClick={() => onConfirm('delete')}
           className={styles.trash}
-          content={<FontAwesomeIcon icon={faTrash} />}
           testId="delete-collection-btn"
-        />
+        >
+          <FontAwesomeIcon icon={faTrash} />
+        </Button>
       </li>
     </ul>
   );

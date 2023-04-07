@@ -42,12 +42,9 @@ const Settings: FC = () => {
         </ul>
       </li>
       <li>
-        <Button
-          className={settingsBtnStyles}
-          onClick={settingsBtnHandler}
-          title={text.controls.settings}
-          content={<FontAwesomeIcon icon={faGear} />}
-        />
+        <Button className={settingsBtnStyles} onClick={settingsBtnHandler} title={text.controls.settings}>
+          <FontAwesomeIcon icon={faGear} />
+        </Button>
       </li>
     </ul>
   );

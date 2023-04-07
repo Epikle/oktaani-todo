@@ -4,10 +4,7 @@ const LS_NAME = import.meta.env.VITE_LS_NAME_SETTINGS;
 
 export const getSettingsFromLS = () => {
   const settings = localStorage.getItem(LS_NAME);
-  if (!settings) return null;
-
-  // TODO: VALIDATE
-  return JSON.parse(settings) as SettingsLS;
+  return JSON.parse(settings || '{}') as unknown;
 };
 
 export const saveSettingsToLS = (settings: SettingsLS) => {

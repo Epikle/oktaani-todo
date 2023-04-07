@@ -22,8 +22,9 @@ const HelpSelection: FC<Props> = ({ disabled }) => {
       title={text.controls.help}
       onClick={toggleHelp}
       disabled={disabled || collections.length === 0}
-      content={<FontAwesomeIcon icon={faCircleQuestion} />}
-    />
+    >
+      <FontAwesomeIcon icon={faCircleQuestion} />
+    </Button>
   );
 };
 

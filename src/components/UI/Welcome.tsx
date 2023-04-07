@@ -33,20 +33,24 @@ const Welcome: FC = () => (
           <h4>General Settings</h4>
           <ul className={styles.controls}>
             <li>
-              <Button
-                data-language="en-us"
-                className={styles.language}
-                content={<FontAwesomeIcon icon={faEarthAmericas} />}
-              />
+              <Button data-language="en-us" className={styles.language}>
+                <FontAwesomeIcon icon={faEarthAmericas} />
+              </Button>
             </li>
             <li>
-              <Button content={<FontAwesomeIcon icon={faSun} />} />
+              <Button>
+                <FontAwesomeIcon icon={faSun} />
+              </Button>
             </li>
             <li>
-              <Button content={<FontAwesomeIcon icon={faArrowDownShortWide} />} />
+              <Button>
+                <FontAwesomeIcon icon={faArrowDownShortWide} />
+              </Button>
             </li>
             <li>
-              <Button content={<FontAwesomeIcon icon={faGear} />} disabled />
+              <Button disabled>
+                <FontAwesomeIcon icon={faGear} />
+              </Button>
             </li>
           </ul>
 
@@ -63,16 +67,24 @@ const Welcome: FC = () => (
 
           <ul className={styles.controls}>
             <li>
-              <Button content={<FontAwesomeIcon icon={faListCheck} />} />
+              <Button>
+                <FontAwesomeIcon icon={faListCheck} />
+              </Button>
             </li>
             <li>
-              <Button content={<FontAwesomeIcon icon={faShareNodes} />} />
+              <Button>
+                <FontAwesomeIcon icon={faShareNodes} />
+              </Button>
             </li>
             <li>
-              <Button content={<FontAwesomeIcon icon={faPen} />} />
+              <Button>
+                <FontAwesomeIcon icon={faPen} />
+              </Button>
             </li>
             <li>
-              <Button content={<FontAwesomeIcon icon={faTrash} />} />
+              <Button>
+                <FontAwesomeIcon icon={faTrash} />
+              </Button>
             </li>
           </ul>
           <div className={styles['help-desc']}>
@@ -92,7 +104,9 @@ const Welcome: FC = () => (
         <form className={styles.form}>
           <input type="color" className={styles['color-picker']} defaultValue={DEFAULT_COLOR} disabled />
           <input type="text" className={styles.todo} placeholder="Set collection title here" disabled />
-          <Button className={styles.add} disabled content={<FontAwesomeIcon icon={faPlus} />} />
+          <Button className={styles.add} disabled>
+            <FontAwesomeIcon icon={faPlus} />
+          </Button>
         </form>
         <div className={styles['help-input-desc']}>
           <div>

@@ -9,8 +9,6 @@ describe('Footer', () => {
 
     const currentYear = new Date().getFullYear();
 
-    expect(
-      screen.getByText(`${currentYear} © oktaani.com`),
-    ).toBeInTheDocument();
+    expect(screen.getByText(`${currentYear} © oktaani.com`)).toBeInTheDocument();
   });
 });

@@ -1,8 +1,25 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
+import { z } from 'zod';
 
-import type { Collection, ItemEntry, NewCollectionEntry, SelectedEntry } from '../types';
+import type { SelectedEntry } from './useSelectedStore';
 import * as todoService from '../services/todo';
+
+export const ItemZ = z.object({
+  id: z.string(),
+  text: z.string(),
+  done: z.boolean(),
+  created: z.string(),
+});
+
+export const CollectionZ = z.object({
+  id: z.string(),
+  title: z.string(),
+  color: z.string(),
+  shared: z.boolean(),
+  created: z.string(),
+  todos: ItemZ.array(),
+});
 
 type TodoState = typeof initialTodoState;
 type TodoActions = {
@@ -19,12 +36,25 @@ type TodoActions = {
   toggleHelp: () => void;
 };
 
+export type Collection = z.infer<typeof CollectionZ>;
+export type Item = z.infer<typeof ItemZ>;
+export type NewCollectionEntry = Omit<Collection, 'shared' | 'todos' | 'created'>;
+export type ItemEntry = Omit<Item, 'id' | 'done' | 'created'>;
+
 const initialTodoState: { collections: Collection[] | []; help: boolean } = { collections: [], help: false };
 
 const useTodoStore = create(
   immer<TodoState & TodoActions>((set, get) => ({
     ...initialTodoState,
-    initCollections: () => set(() => ({ collections: todoService.getTodosFromLS() })),
+    initCollections: () =>
+      set(() => {
+        try {
+          const collections = CollectionZ.array().parse(todoService.getTodosFromLS());
+          return { collections };
+        } catch (error) {
+          return { collections: [] };
+        }
+      }),
     createCollection: (entry) =>
       set((state) => {
         const createdEntry = todoService.createCollectionEntry(entry);

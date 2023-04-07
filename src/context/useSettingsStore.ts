@@ -1,38 +1,40 @@
 import { create } from 'zustand';
+import { z } from 'zod';
 
-import languages from '../utils/languages';
 import { saveSettingsToLS } from '../services/settings';
-import type { Languages } from '../types';
+import { allowedLanguages } from '../utils/languages';
 
-type SettingsState = typeof initialSettingsState;
+const SettingsZ = z.object({
+  languageName: z.enum(allowedLanguages),
+  darkMode: z.boolean(),
+  sort: z.boolean(),
+});
+
+type SettingsState = z.infer<typeof SettingsZ>;
+export type SettingsLS = Omit<SettingsState, 'sort'>;
 type SettingsActions = {
-  setSettings: (settings: SettingsLS | null) => void;
+  setSettings: (settings: unknown) => void;
   sortCollections: () => void;
 };
-export type SettingsLS = Omit<SettingsState, 'availableLanguages' | 'sort'>;
 
 const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-const availableLanguages = Object.keys(languages) as Languages[]; // ISO639-1
-
-const initialSettingsState = {
-  availableLanguages,
-  languageName: availableLanguages[0],
-  darkMode: isDarkMode,
-  sort: false,
-};
 
 const useSettingsStore = create<SettingsState & SettingsActions>((set) => ({
-  ...initialSettingsState,
+  languageName: 'en-us',
+  darkMode: isDarkMode,
+  sort: false,
+
   setSettings: (settings) =>
     set((state) => {
-      if (!settings) {
+      try {
+        const validatedSettings = SettingsZ.omit({ sort: true }).parse(settings);
+        saveSettingsToLS(validatedSettings);
+        return { ...state, ...validatedSettings };
+      } catch (error) {
         const { languageName, darkMode } = state;
         saveSettingsToLS({ languageName, darkMode });
         return state;
       }
-
-      saveSettingsToLS(settings);
-      return { ...state, ...settings };
     }),
   sortCollections: () => set((state) => ({ ...state, sort: !state.sort })),
 }));

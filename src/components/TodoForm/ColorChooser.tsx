@@ -1,7 +1,7 @@
 import { Dispatch, FC, SetStateAction, useEffect, useRef } from 'react';
 
-import type { Texts, Selected } from '../../types';
-import useSelectedStore from '../../context/useSelectedStore';
+import type { Texts } from '../../utils/languages';
+import useSelectedStore, { type Selected } from '../../context/useSelectedStore';
 import useTodoStore from '../../context/useTodoStore';
 
 import styles from './ColorChooser.module.scss';

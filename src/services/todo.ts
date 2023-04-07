@@ -1,8 +1,7 @@
 import axios from 'axios';
 import { nanoid } from 'nanoid';
 
-import type { Collection, Item, ItemEntry, NewCollectionEntry } from '../types';
-import { isValidCollections } from '../utils/utils';
+import type { Collection, Item, ItemEntry, NewCollectionEntry } from '../context/useTodoStore';
 
 const LS_NAME = import.meta.env.VITE_LS_NAME_TODOS;
 const api = axios.create({
@@ -32,16 +31,7 @@ export const saveCollectionsToLS = (collections: Collection[]) => {
 
 export const getTodosFromLS = () => {
   const collections = localStorage.getItem(LS_NAME);
-  if (!collections) return [];
-
-  const parsedCollections = JSON.parse(collections) as unknown;
-
-  // TODO: VALIDATE
-  if (!isValidCollections(parsedCollections)) {
-    throw new Error('localStorage data is not valid, using default values!');
-  }
-
-  return parsedCollections as Collection[];
+  return JSON.parse(collections || '[]') as unknown;
 };
 
 export const createCollectionEntry = (entry: NewCollectionEntry): Collection => ({

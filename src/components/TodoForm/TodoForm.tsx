@@ -125,9 +125,10 @@ const TodoForm: FC = () => {
         title={isAddBtn ? text.common.add : text.common.cancel}
         onClick={addBtnHandler}
         disabled={isBtnDisabled || isLoading}
-        content={isLoading ? <FontAwesomeIcon icon={faSpinner} spinPulse /> : <FontAwesomeIcon icon={faPlus} />}
         testId="submit-btn"
-      />
+      >
+        {isLoading ? <FontAwesomeIcon icon={faSpinner} spinPulse /> : <FontAwesomeIcon icon={faPlus} />}
+      </Button>
     </form>
   );
 };
