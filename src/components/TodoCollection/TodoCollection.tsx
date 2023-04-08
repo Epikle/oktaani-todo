@@ -1,7 +1,7 @@
 import { FC, CSSProperties, useEffect, useRef, useState } from 'react';
 import autoAnimate from '@formkit/auto-animate';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faShareNodes } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faCheck, faCopy, faShareNodes } from '@fortawesome/free-solid-svg-icons';
 import { useDrag, useDrop } from 'react-dnd';
 import type { Identifier, XYCoord } from 'dnd-core';
 
@@ -9,7 +9,7 @@ import useSettingsStore from '../../context/useSettingsStore';
 import useSelectedStore from '../../context/useSelectedStore';
 import useTodoStore, { type Collection } from '../../context/useTodoStore';
 import useLanguage from '../../hooks/useLanguage';
-import { formatDate } from '../../utils/utils';
+import { copyToClipboard, formatDate } from '../../utils/utils';
 import TodoItem from './TodoItem';
 import Button from '../UI/Button';
 
@@ -33,6 +33,7 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
   const ref = useRef<HTMLElement>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [isCopy, setIsCopy] = useState(false);
   const { sort, languageName } = useSettingsStore();
   const { id: selectedColId, setSelectedCollection, resetSelection } = useSelectedStore();
   const { updateSharedCollection, editCollection } = useTodoStore();
@@ -116,6 +117,15 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
     setSelectedCollection({ id, title, color, shared, hasDone: !!doneTodos });
   };
 
+  const copyShareBtnHandler = async () => {
+    await copyToClipboard(id);
+    setIsCopy(true);
+
+    setTimeout(() => {
+      setIsCopy(false);
+    }, 2000);
+  };
+
   useEffect(() => {
     if (parent.current) autoAnimate(parent.current);
   }, [parent]);
@@ -184,10 +194,18 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
           <FontAwesomeIcon icon={faBars} size="2x" />
         </button>
       )}
-      {shared && (
-        <span className={styles.shared}>
-          <FontAwesomeIcon icon={faShareNodes} />
-        </span>
+      {shared && !sort && (
+        <div className={styles.shared}>
+          {isSelected && (
+            // TODO: LANG
+            <Button title="Copy Share Link" onClick={copyShareBtnHandler} disabled={isCopy}>
+              {isCopy ? <FontAwesomeIcon icon={faCheck} /> : <FontAwesomeIcon icon={faCopy} />}
+            </Button>
+          )}
+          <span>
+            <FontAwesomeIcon icon={faShareNodes} />
+          </span>
+        </div>
       )}
     </article>
   );
