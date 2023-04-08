@@ -5,6 +5,7 @@ import { createSharedCollection } from '../../services/todo';
 import useSelectedStore from '../../context/useSelectedStore';
 import useTodoStore from '../../context/useTodoStore';
 import useLanguage from '../../hooks/useLanguage';
+import { copyToClipboard } from '../../utils/utils';
 import TodoControls from '../TodoForm/TodoControls';
 import TodoForm from '../TodoForm/TodoForm';
 import Settings from './Settings/Settings';
@@ -44,8 +45,7 @@ const Header: FC = () => {
     setIsLoading(true);
     try {
       await createSharedCollection(selectedCollection);
-      // TODO: Better way to copy and show share link
-      await navigator.clipboard.writeText(`${import.meta.env.VITE_BASE_URL}?share=${id}`);
+      await copyToClipboard(id);
       const editedCollection = {
         id,
         title,
