@@ -7,11 +7,12 @@ import type { Identifier, XYCoord } from 'dnd-core';
 
 import useSettingsStore from '../../context/useSettingsStore';
 import useSelectedStore from '../../context/useSelectedStore';
-import useTodoStore, { type Collection } from '../../context/useTodoStore';
+import useTodoStore, { TodoTypeEnum, type Collection } from '../../context/useTodoStore';
 import useLanguage from '../../hooks/useLanguage';
 import { copyToClipboard, formatDate } from '../../utils/utils';
 import TodoItem from './TodoItem';
 import Button from '../UI/Button';
+import TodoNote from './TodoNote';
 
 import styles from './TodoCollection.module.scss';
 
@@ -28,7 +29,7 @@ type DragItem = {
 };
 
 const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
-  const { id, title, color, shared, created } = collection;
+  const { id, title, color, shared, created, type } = collection;
   const parent = useRef<HTMLUListElement>(null);
   const ref = useRef<HTMLElement>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -106,7 +107,7 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
     borderColor: color,
   };
 
-  const doneTodos = collection.todos.filter((todo) => todo.done).length;
+  const doneTodos = TodoTypeEnum.Enum.todo === type ? collection.todos.filter((todo) => todo.done).length : '';
 
   const selectedCollectionHandler = () => {
     if (isSelected) {
@@ -147,6 +148,8 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
 
   preview(drop(ref));
 
+  if (TodoTypeEnum.Enum.unset === type) return <p>select type</p>;
+
   if (isLoading) {
     return (
       <article className={articleStyles}>
@@ -181,7 +184,8 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
           {title}
         </button>
       </h2>
-      {!sort && (
+      {!sort && <TodoNote isSelected={isSelected} />}
+      {!sort && TodoTypeEnum.Enum.todo === type && (
         <ul ref={parent} className={styles['item-list']}>
           {collection.todos.map((todo) => (
             <TodoItem key={todo.id} todo={todo} colId={id} />

@@ -4,14 +4,15 @@ import { z } from 'zod';
 
 import type { SelectedEntry } from './useSelectedStore';
 import * as todoService from '../services/todo';
+import useSelectedStore from './useSelectedStore';
 
+export const TodoTypeEnum = z.enum(['todo', 'note', 'unset']);
 export const ItemZ = z.object({
   id: z.string(),
   text: z.string(),
   done: z.boolean(),
   created: z.string(),
 });
-
 export const CollectionZ = z.object({
   id: z.string(),
   title: z.string(),
@@ -19,6 +20,8 @@ export const CollectionZ = z.object({
   shared: z.boolean(),
   created: z.string(),
   todos: ItemZ.array(),
+  note: z.string(),
+  type: TodoTypeEnum,
 });
 
 type TodoState = typeof initialTodoState;
@@ -36,9 +39,10 @@ type TodoActions = {
   toggleHelp: () => void;
 };
 
+export type TodoTypes = z.infer<typeof TodoTypeEnum>;
 export type Collection = z.infer<typeof CollectionZ>;
 export type Item = z.infer<typeof ItemZ>;
-export type NewCollectionEntry = Omit<Collection, 'shared' | 'todos' | 'created'>;
+export type NewCollectionEntry = Pick<Collection, 'title' | 'color'>;
 export type ItemEntry = Omit<Item, 'id' | 'done' | 'created'>;
 
 const initialTodoState: { collections: Collection[] | []; help: boolean } = { collections: [], help: false };
@@ -52,6 +56,7 @@ const useTodoStore = create(
           const collections = CollectionZ.array().parse(todoService.getTodosFromLS());
           return { collections };
         } catch (error) {
+          console.error(error);
           return { collections: [] };
         }
       }),
@@ -59,6 +64,7 @@ const useTodoStore = create(
       set((state) => {
         const createdEntry = todoService.createCollectionEntry(entry);
         todoService.saveCollectionsToLS([createdEntry, ...state.collections]);
+        useSelectedStore.setSelectedCollection(createdEntry);
         return { collections: [createdEntry, ...state.collections] };
       }),
     createSharedCollection: async (shareId) => {

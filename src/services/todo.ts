@@ -2,6 +2,7 @@ import axios from 'axios';
 import { nanoid } from 'nanoid';
 
 import type { Collection, Item, ItemEntry, NewCollectionEntry } from '../context/useTodoStore';
+import { TodoTypeEnum } from '../context/useTodoStore';
 
 const LS_NAME = import.meta.env.VITE_LS_NAME_TODOS;
 const api = axios.create({
@@ -37,7 +38,10 @@ export const getTodosFromLS = () => {
 export const createCollectionEntry = (entry: NewCollectionEntry): Collection => ({
   shared: false,
   todos: [],
+  note: '',
   created: Date(),
+  id: nanoid(),
+  type: TodoTypeEnum.Enum.unset,
   ...entry,
 });
 

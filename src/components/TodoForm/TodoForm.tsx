@@ -1,7 +1,6 @@
 import { FC, FormEvent, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faSpinner } from '@fortawesome/free-solid-svg-icons';
-import { nanoid } from 'nanoid';
 
 import useSelectedStore from '../../context/useSelectedStore';
 import useTodoStore from '../../context/useTodoStore';
@@ -66,31 +65,21 @@ const TodoForm: FC = () => {
     const newCollectionEntry = {
       title: trimmedInput,
       color,
-      id: nanoid(),
-      shared: false,
     };
 
     createCollection(newCollectionEntry);
-    selectedCollection.setSelectedCollection(newCollectionEntry);
 
     setTodoInput('');
     setIsLoading(false);
   };
 
   const isBtnDisabled = !selectedCollection.selected && trimmedInput.length === 0;
-
   const isAddBtn = (selectedCollection.selected && trimmedInput.length > 0) || trimmedInput.length > 0;
-
   const showAddBtnStyles = selectedCollection.selected && trimmedInput.length === 0 ? styles.blur : styles.hide;
-
   const btnStyles = isAddBtn ? styles.add : [styles.add, showAddBtnStyles].join(' ');
-
   const addBtnHandler = isAddBtn ? submitHandler : () => selectedCollection.resetSelection();
-
   const formStyles = selectedCollection.selected ? [styles.form, styles.selected].join(' ') : styles.form;
-
   const maxLength = !selectedCollection.selected || selectedCollection.edit ? COLLECTION_LENGTH : ITEM_LENGTH;
-
   const inputLengthText = `${todoInput.length}/${maxLength}`;
   const showInputLength = isAddBtn ? inputLengthText : '';
 
