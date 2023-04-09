@@ -46,7 +46,7 @@ export const Item: FC<ItemProps> = ({ onDone, text: todoText, done, created, lan
 
 const TodoItem: FC<Props> = ({ todo, colId }) => {
   const { id, text, done, created } = todo;
-  const { languageName, toggleItemDone } = useBoundStore();
+  const { toggleItemDone, languageName } = useBoundStore((state) => state);
 
   const doneInputHandler = async () => {
     await toggleItemDone({ id, colId });

@@ -10,7 +10,7 @@ import styles from './TodoList.module.scss';
 
 const TodoList: FC = () => {
   const parent = useRef<HTMLDivElement>(null);
-  const { sort, collections, changeOrder, help } = useBoundStore();
+  const { collections, changeOrder, help, sort } = useBoundStore((state) => state);
 
   useEffect(() => {
     if (parent.current) autoAnimate(parent.current);

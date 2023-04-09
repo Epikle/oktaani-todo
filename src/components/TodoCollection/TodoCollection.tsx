@@ -35,14 +35,14 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
   const [isError, setIsError] = useState(false);
   const [isCopy, setIsCopy] = useState(false);
   const {
-    sort,
-    languageName,
     id: selectedColId,
     setSelectedCollection,
     resetSelection,
+    sort,
+    languageName,
     updateSharedCollection,
     editCollection,
-  } = useBoundStore();
+  } = useBoundStore((state) => state);
   const { text } = useLanguage();
   const isSelected = selectedColId === id;
 

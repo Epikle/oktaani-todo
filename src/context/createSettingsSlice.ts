@@ -3,8 +3,7 @@ import { z } from 'zod';
 
 import { saveSettingsToLS } from '../services/settings';
 import { allowedLanguages } from '../utils/languages';
-import { type SelectedSlice } from './createSelectedSlice';
-import { type TodoSlice } from './createTodoSlice';
+import { type BoundStore } from './useBoundStore';
 
 const SettingsZ = z.object({
   languageName: z.enum(allowedLanguages),
@@ -21,7 +20,7 @@ export type SettingsSlice = SettingsState & {
 
 const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-const createSettingsSlice: StateCreator<SettingsSlice & SelectedSlice & TodoSlice, [], [], SettingsSlice> = (set) => ({
+const createSettingsSlice: StateCreator<BoundStore, [], [], SettingsSlice> = (set) => ({
   languageName: 'en-us',
   darkMode: isDarkMode,
   sort: false,

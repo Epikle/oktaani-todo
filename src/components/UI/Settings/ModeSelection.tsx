@@ -13,7 +13,7 @@ type Props = {
 };
 
 const ModeSelection: FC<Props> = ({ disabled }) => {
-  const { darkMode, languageName, setSettings } = useBoundStore();
+  const { darkMode, languageName, setSettings } = useBoundStore((state) => state);
   const { text } = useLanguage();
 
   const modeBtnHandler = () => {

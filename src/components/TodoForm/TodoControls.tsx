@@ -16,7 +16,7 @@ type Props = {
 const TodoControls: FC<Props> = ({ onConfirm }) => {
   const [isLoading, setIsLoading] = useState(false);
   const { id, edit, hasDone, shared, title, color, setSelectedCollection, removeDoneItems, editCollection } =
-    useBoundStore();
+    useBoundStore((state) => state);
   const { text } = useLanguage();
 
   const removeDoneBtnHandler = async () => {

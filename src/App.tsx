@@ -11,7 +11,7 @@ import Overlay from './components/UI/Overlay';
 const shareParam = new URLSearchParams(document.location.search).get('share');
 
 const App: FC = () => {
-  const { title, darkMode, setSettings, initCollections, createSharedCollection } = useBoundStore();
+  const { title, darkMode, setSettings, initCollections, createSharedCollection } = useBoundStore((state) => state);
   const { text } = useLanguage();
 
   document.title = title ? `${title} | oktaaniTODO` : 'oktaaniTODO';

@@ -13,7 +13,14 @@ type Props = {
 
 const ColorChooser: FC<Props> = ({ defaultColor, color, setColor }) => {
   const colorInputRef = useRef<HTMLInputElement>(null);
-  const { editCollection, setSelectedCollection, color: storeColor, id, title, shared } = useBoundStore();
+  const {
+    editCollection,
+    setSelectedCollection,
+    color: storeColor,
+    id,
+    title,
+    shared,
+  } = useBoundStore((state) => state);
   const { text } = useLanguage();
 
   const colorInputHandler = async () => {

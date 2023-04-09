@@ -13,7 +13,7 @@ type Props = {
 };
 
 const Sort: FC<Props> = ({ disabled }) => {
-  const { sort, collections, sortCollections } = useBoundStore();
+  const { collections, sort, sortCollections } = useBoundStore((state) => state);
   const { text } = useLanguage();
 
   return (

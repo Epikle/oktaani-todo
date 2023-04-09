@@ -1,7 +1,6 @@
 import { StateCreator } from 'zustand';
 
-import { type SettingsSlice } from './createSettingsSlice';
-import { type TodoSlice } from './createTodoSlice';
+import { type BoundStore } from './useBoundStore';
 
 export type Selected = typeof initialSelectedState;
 export type SelectedEntry = Omit<Selected, 'edit' | 'selected' | 'hasDone'>;
@@ -20,7 +19,7 @@ const initialSelectedState = {
   hasDone: false,
 };
 
-const createSelectedSlice: StateCreator<SelectedSlice & SettingsSlice & TodoSlice, [], [], SelectedSlice> = (set) => ({
+const createSelectedSlice: StateCreator<BoundStore, [], [], SelectedSlice> = (set) => ({
   ...initialSelectedState,
   setSelectedCollection: (collection) => set((state) => ({ ...state, ...collection, selected: true })),
   resetSelection: () => set(initialSelectedState),

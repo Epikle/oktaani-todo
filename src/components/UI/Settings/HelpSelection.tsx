@@ -10,7 +10,7 @@ import styles from './HelpSelection.module.scss';
 
 const HelpSelection: FC = () => {
   const { text } = useLanguage();
-  const { toggleHelp, help, collections } = useBoundStore();
+  const { toggleHelp, help, collections } = useBoundStore((state) => state);
 
   return (
     <Button

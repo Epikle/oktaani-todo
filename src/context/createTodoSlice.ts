@@ -2,8 +2,8 @@ import { StateCreator } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 import { z } from 'zod';
 
-import type { SelectedEntry, SelectedSlice } from './createSelectedSlice';
-import { type SettingsSlice } from './createSettingsSlice';
+import { type SelectedEntry } from './createSelectedSlice';
+import { type BoundStore } from './useBoundStore';
 import * as todoService from '../services/todo';
 
 export const TodoTypeEnum = z.enum(['todo', 'note', 'unset']);
@@ -27,7 +27,7 @@ export const CollectionZ = z.object({
 type TodoState = typeof initialTodoState;
 export type TodoSlice = TodoState & {
   initCollections: () => void;
-  createCollection: (entry: NewCollectionEntry) => void;
+  createCollection: (entry: Collection) => void;
   createSharedCollection: (shareId: string) => Promise<void>;
   updateSharedCollection: (id: string) => Promise<void>;
   createCollectionItem: ({ id, itemEntry }: { id: string; itemEntry: ItemEntry }) => Promise<void>;
@@ -47,12 +47,7 @@ export type ItemEntry = Omit<Item, 'id' | 'done' | 'created'>;
 
 const initialTodoState: { collections: Collection[] | []; help: boolean } = { collections: [], help: false };
 
-const createTodoSlice: StateCreator<
-  SelectedSlice & SettingsSlice & TodoSlice,
-  [['zustand/immer', never]],
-  [['zustand/immer', never]],
-  TodoSlice
-> = immer((set, get) => ({
+const createTodoSlice: StateCreator<BoundStore, [], [['zustand/immer', never]], TodoSlice> = immer((set, get) => ({
   ...initialTodoState,
   initCollections: () =>
     set(() => {
@@ -65,10 +60,11 @@ const createTodoSlice: StateCreator<
     }),
   createCollection: (entry) =>
     set((state) => {
-      const createdEntry = todoService.createCollectionEntry(entry, 'unset');
+      const createdEntry = todoService.createCollectionEntry(entry, 'todo');
       todoService.saveCollectionsToLS([createdEntry, ...state.collections]);
       return { collections: [createdEntry, ...state.collections] };
     }),
+
   createSharedCollection: async (shareId) => {
     const collection = await todoService.getSharedCollectionData(shareId);
 

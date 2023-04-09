@@ -13,7 +13,7 @@ type Props = {
 };
 
 const LanguageSelection: FC<Props> = ({ disabled }) => {
-  const { languageName } = useBoundStore();
+  const { languageName } = useBoundStore((state) => state);
   const { text, nextLang } = useLanguage();
 
   return (

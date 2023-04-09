@@ -23,6 +23,9 @@ const Header: FC = () => {
   const [confirm, setConfirm] = useState<Omit<TConfirm, 'type'> | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const {
+    collections,
+    deleteCollection,
+    editCollection,
     title,
     color,
     selected,
@@ -30,11 +33,7 @@ const Header: FC = () => {
     shared,
     setSelectedCollection,
     resetSelection,
-    collections,
-    deleteCollection,
-    editCollection,
-  } = useBoundStore();
-
+  } = useBoundStore((state) => state);
   const { text } = useLanguage();
 
   useEffect(() => {

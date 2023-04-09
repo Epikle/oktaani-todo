@@ -18,7 +18,6 @@ const TodoForm: FC = () => {
   const [color, setColor] = useState(DEFAULT_COLOR);
   const [todoInput, setTodoInput] = useState('');
   const {
-    createCollection,
     createCollectionItem,
     editCollection,
     setSelectedCollection,
@@ -29,7 +28,8 @@ const TodoForm: FC = () => {
     shared,
     id,
     selected,
-  } = useBoundStore();
+    createCollectionAndSelect,
+  } = useBoundStore((state) => state);
   const { text } = useLanguage();
   const trimmedInput = todoInput.trim().replace(/\s+/g, ' ');
   const [isLoading, setIsLoading] = useState(false);
@@ -77,7 +77,7 @@ const TodoForm: FC = () => {
       color,
     };
 
-    createCollection(newCollectionEntry);
+    createCollectionAndSelect(newCollectionEntry);
 
     setTodoInput('');
     setIsLoading(false);

@@ -14,7 +14,7 @@ type Props = {
 
 const TodoInput: FC<Props> = ({ todoInput, setTodoInput, maxLength, isLoading }) => {
   const ref = useRef<HTMLInputElement>(null);
-  const { sort, title, selected } = useBoundStore();
+  const { sort, title, selected } = useBoundStore((state) => state);
   const { text } = useLanguage();
 
   const placeholderText = selected ? `${text.header.newTodo} ${title}` : text.header.newCollection;
