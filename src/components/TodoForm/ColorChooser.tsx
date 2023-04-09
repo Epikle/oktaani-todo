@@ -1,6 +1,7 @@
 import { Dispatch, FC, SetStateAction, useEffect, useRef } from 'react';
 
-import useBoundStore from '../../context/useBoundStore';
+import useSelectedStore from '../../context/useSelectedStore';
+import useTodoStore from '../../context/useTodoStore';
 import useLanguage from '../../hooks/useLanguage';
 
 import styles from './ColorChooser.module.scss';
@@ -13,14 +14,12 @@ type Props = {
 
 const ColorChooser: FC<Props> = ({ defaultColor, color, setColor }) => {
   const colorInputRef = useRef<HTMLInputElement>(null);
-  const {
-    editCollection,
-    setSelectedCollection,
-    color: storeColor,
-    id,
-    title,
-    shared,
-  } = useBoundStore((state) => state);
+  const title = useSelectedStore((state) => state.title);
+  const storeColor = useSelectedStore((state) => state.color);
+  const shared = useSelectedStore((state) => state.shared);
+  const id = useSelectedStore((state) => state.id);
+  const { setSelectedCollection } = useSelectedStore((state) => state.actions);
+  const { editCollection } = useTodoStore((state) => state.actions);
   const { text } = useLanguage();
 
   const colorInputHandler = async () => {

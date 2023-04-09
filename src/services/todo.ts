@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { nanoid } from 'nanoid';
 
-import type { Collection, Item, ItemEntry, NewCollectionEntry, TodoTypes } from '../context/createTodoSlice';
+import type { Collection, Item, ItemEntry, NewCollectionEntry, TodoTypes } from '../context/useTodoStore';
 
 const LS_NAME = import.meta.env.VITE_LS_NAME_TODOS;
 const api = axios.create({

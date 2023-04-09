@@ -1,8 +1,9 @@
 import { FC, useEffect, useRef, useState } from 'react';
 import autoAnimate from '@formkit/auto-animate';
 
+import useTodoStore from '../../context/useTodoStore';
+import useSelectedStore from '../../context/useSelectedStore';
 import { createSharedCollection } from '../../services/todo';
-import useBoundStore from '../../context/useBoundStore';
 import useLanguage from '../../hooks/useLanguage';
 import { copyToClipboard } from '../../utils/utils';
 import TodoControls from '../TodoForm/TodoControls';
@@ -22,18 +23,14 @@ const Header: FC = () => {
   const parent = useRef(null);
   const [confirm, setConfirm] = useState<Omit<TConfirm, 'type'> | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const {
-    collections,
-    deleteCollection,
-    editCollection,
-    title,
-    color,
-    selected,
-    id,
-    shared,
-    setSelectedCollection,
-    resetSelection,
-  } = useBoundStore((state) => state);
+  const title = useSelectedStore((state) => state.title);
+  const color = useSelectedStore((state) => state.color);
+  const selected = useSelectedStore((state) => state.selected);
+  const id = useSelectedStore((state) => state.id);
+  const shared = useSelectedStore((state) => state.shared);
+  const collections = useTodoStore((state) => state.collections);
+  const { setSelectedCollection, resetSelection } = useSelectedStore((state) => state.actions);
+  const { editCollection, deleteCollection } = useTodoStore((state) => state.actions);
   const { text } = useLanguage();
 
   useEffect(() => {

@@ -2,13 +2,14 @@ import { FC, FormEvent, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faSpinner } from '@fortawesome/free-solid-svg-icons';
 
+import useSelectedStore from '../../context/useSelectedStore';
+import useTodoStore from '../../context/useTodoStore';
 import useLanguage from '../../hooks/useLanguage';
 import Button from '../UI/Button';
 import ColorChooser from './ColorChooser';
 import TodoInput from './TodoInput';
 
 import styles from './TodoForm.module.scss';
-import useBoundStore from '../../context/useBoundStore';
 
 export const DEFAULT_COLOR = '#7b68ee';
 const COLLECTION_LENGTH = 100;
@@ -17,19 +18,15 @@ const ITEM_LENGTH = 300;
 const TodoForm: FC = () => {
   const [color, setColor] = useState(DEFAULT_COLOR);
   const [todoInput, setTodoInput] = useState('');
-  const {
-    createCollectionItem,
-    editCollection,
-    setSelectedCollection,
-    resetSelection,
-    edit,
-    title,
-    color: storeColor,
-    shared,
-    id,
-    selected,
-    createCollectionAndSelect,
-  } = useBoundStore((state) => state);
+  const title = useSelectedStore((state) => state.title);
+  const storeColor = useSelectedStore((state) => state.color);
+  const edit = useSelectedStore((state) => state.edit);
+  const shared = useSelectedStore((state) => state.shared);
+  const id = useSelectedStore((state) => state.id);
+  const selected = useSelectedStore((state) => state.selected);
+  const { createCollectionItem, editCollection, createCollection } = useTodoStore((state) => state.actions);
+  const { setSelectedCollection, resetSelection } = useSelectedStore((state) => state.actions);
+
   const { text } = useLanguage();
   const trimmedInput = todoInput.trim().replace(/\s+/g, ' ');
   const [isLoading, setIsLoading] = useState(false);
@@ -76,8 +73,7 @@ const TodoForm: FC = () => {
       title: trimmedInput,
       color,
     };
-
-    createCollectionAndSelect(newCollectionEntry);
+    createCollection(newCollectionEntry);
 
     setTodoInput('');
     setIsLoading(false);

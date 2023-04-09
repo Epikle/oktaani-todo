@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEarthAmericas } from '@fortawesome/free-solid-svg-icons';
 
-import useBoundStore from '../../../context/useBoundStore';
+import useSettingsStore from '../../../context/useSettingsStore';
 import useLanguage from '../../../hooks/useLanguage';
 import Button from '../Button';
 
@@ -13,7 +13,7 @@ type Props = {
 };
 
 const LanguageSelection: FC<Props> = ({ disabled }) => {
-  const { languageName } = useBoundStore((state) => state);
+  const languageName = useSettingsStore((state) => state.languageName);
   const { text, nextLang } = useLanguage();
 
   return (

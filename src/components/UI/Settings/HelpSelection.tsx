@@ -2,15 +2,17 @@ import { FC } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleQuestion } from '@fortawesome/free-solid-svg-icons';
 
+import useTodoStore from '../../../context/useTodoStore';
 import useLanguage from '../../../hooks/useLanguage';
-import useBoundStore from '../../../context/useBoundStore';
 import Button from '../Button';
 
 import styles from './HelpSelection.module.scss';
 
 const HelpSelection: FC = () => {
   const { text } = useLanguage();
-  const { toggleHelp, help, collections } = useBoundStore((state) => state);
+  const collections = useTodoStore((state) => state.collections);
+  const help = useTodoStore((state) => state.help);
+  const { toggleHelp } = useTodoStore((state) => state.actions);
 
   return (
     <Button

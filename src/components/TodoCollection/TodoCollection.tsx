@@ -5,7 +5,9 @@ import { faBars, faCheck, faCopy, faShareNodes } from '@fortawesome/free-solid-s
 import { useDrag, useDrop } from 'react-dnd';
 import type { Identifier, XYCoord } from 'dnd-core';
 
-import { TodoTypeEnum, type Collection } from '../../context/createTodoSlice';
+import useSelectedStore from '../../context/useSelectedStore';
+import useSettingsStore from '../../context/useSettingsStore';
+import useTodoStore, { TodoTypeEnum, type Collection } from '../../context/useTodoStore';
 import useLanguage from '../../hooks/useLanguage';
 import { copyToClipboard, formatDate } from '../../utils/utils';
 import TodoItem from './TodoItem';
@@ -13,7 +15,6 @@ import Button from '../UI/Button';
 import TodoNote from './TodoNote';
 
 import styles from './TodoCollection.module.scss';
-import useBoundStore from '../../context/useBoundStore';
 
 type Props = {
   collection: Collection;
@@ -34,15 +35,11 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [isCopy, setIsCopy] = useState(false);
-  const {
-    id: selectedColId,
-    setSelectedCollection,
-    resetSelection,
-    sort,
-    languageName,
-    updateSharedCollection,
-    editCollection,
-  } = useBoundStore((state) => state);
+  const selectedColId = useSelectedStore((state) => state.id);
+  const sort = useSettingsStore((state) => state.sort);
+  const languageName = useSettingsStore((state) => state.languageName);
+  const { setSelectedCollection, resetSelection } = useSelectedStore((state) => state.actions);
+  const { updateSharedCollection, editCollection } = useTodoStore((state) => state.actions);
   const { text } = useLanguage();
   const isSelected = selectedColId === id;
 
@@ -189,7 +186,7 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
           {title}
         </button>
       </h2>
-      {!sort && <TodoNote isSelected={isSelected} />}
+      {!sort && TodoTypeEnum.Enum.note === type && <TodoNote isSelected={isSelected} />}
       {!sort && TodoTypeEnum.Enum.todo === type && (
         <ul ref={parent} className={styles['item-list']}>
           {collection.todos.map((todo) => (

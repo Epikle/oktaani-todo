@@ -1,8 +1,11 @@
 import { typedLanguages, allowedLanguages } from '../utils/languages';
-import useBoundStore from '../context/useBoundStore';
+
+import useSettingsStore from '../context/useSettingsStore';
 
 const useLanguage = () => {
-  const { darkMode, languageName, setSettings } = useBoundStore((state) => state);
+  const darkMode = useSettingsStore((state) => state.darkMode);
+  const languageName = useSettingsStore((state) => state.languageName);
+  const { setSettings } = useSettingsStore((state) => state.actions);
   let text = typedLanguages[languageName];
 
   const nextLang = () => {

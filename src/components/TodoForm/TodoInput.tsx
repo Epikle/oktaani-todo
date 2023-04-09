@@ -1,6 +1,7 @@
 import { Dispatch, FC, SetStateAction, useEffect, useRef } from 'react';
 
-import useBoundStore from '../../context/useBoundStore';
+import useSelectedStore from '../../context/useSelectedStore';
+import useSettingsStore from '../../context/useSettingsStore';
 import useLanguage from '../../hooks/useLanguage';
 
 import styles from './TodoInput.module.scss';
@@ -14,7 +15,9 @@ type Props = {
 
 const TodoInput: FC<Props> = ({ todoInput, setTodoInput, maxLength, isLoading }) => {
   const ref = useRef<HTMLInputElement>(null);
-  const { sort, title, selected } = useBoundStore((state) => state);
+  const title = useSelectedStore((state) => state.title);
+  const selected = useSelectedStore((state) => state.selected);
+  const sort = useSettingsStore((state) => state.sort);
   const { text } = useLanguage();
 
   const placeholderText = selected ? `${text.header.newTodo} ${title}` : text.header.newCollection;

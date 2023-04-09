@@ -1,17 +1,22 @@
 import { FC, useEffect } from 'react';
 
-import useBoundStore from './context/useBoundStore';
 import useLanguage from './hooks/useLanguage';
 import { getSettingsFromLS } from './services/settings';
 import { isStorageAvailable } from './utils/utils';
 import Header from './components/UI/Header';
 import TodoList from './components/TodoList/TodoList';
 import Overlay from './components/UI/Overlay';
+import useSelectedStore from './context/useSelectedStore';
+import useSettingsStore from './context/useSettingsStore';
+import useTodoStore from './context/useTodoStore';
 
 const shareParam = new URLSearchParams(document.location.search).get('share');
 
 const App: FC = () => {
-  const { title, darkMode, setSettings, initCollections, createSharedCollection } = useBoundStore((state) => state);
+  const title = useSelectedStore((state) => state.title);
+  const darkMode = useSettingsStore((state) => state.darkMode);
+  const { setSettings } = useSettingsStore((state) => state.actions);
+  const { initCollections, createSharedCollection } = useTodoStore((state) => state.actions);
   const { text } = useLanguage();
 
   document.title = title ? `${title} | oktaaniTODO` : 'oktaaniTODO';
