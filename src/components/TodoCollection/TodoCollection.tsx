@@ -190,6 +190,7 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
         </button>
       </h2>
       {TodoTypeEnum.Enum.unset === type && (
+        // TODO: LANG
         <div className={styles.unset}>
           <span>Select Type</span>
           <Button onClick={() => todoTypeBtnHandler(TodoTypeEnum.Enum.todo)}>TODO</Button>

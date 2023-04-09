@@ -30,6 +30,12 @@
     }
   }
 
+  .item-list {
+    @include scrollbars(8px, var(--color-border-header), var(--color-bg-collection));
+    max-height: 24rem;
+    overflow-y: auto;
+  }
+
   &.error {
     border-color: var(--color-p-red-d-15);
 
