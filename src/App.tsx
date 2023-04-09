@@ -1,8 +1,6 @@
 import { FC, useEffect } from 'react';
 
-import useSelectedStore from './context/useSelectedStore';
-import useSettingsStore from './context/useSettingsStore';
-import useTodoStore from './context/useTodoStore';
+import useBoundStore from './context/useBoundStore';
 import useLanguage from './hooks/useLanguage';
 import { getSettingsFromLS } from './services/settings';
 import { isStorageAvailable } from './utils/utils';
@@ -13,9 +11,7 @@ import Overlay from './components/UI/Overlay';
 const shareParam = new URLSearchParams(document.location.search).get('share');
 
 const App: FC = () => {
-  const { title } = useSelectedStore();
-  const { darkMode, setSettings } = useSettingsStore();
-  const { initCollections, createSharedCollection } = useTodoStore();
+  const { title, darkMode, setSettings, initCollections, createSharedCollection } = useBoundStore();
   const { text } = useLanguage();
 
   document.title = title ? `${title} | oktaaniTODO` : 'oktaaniTODO';

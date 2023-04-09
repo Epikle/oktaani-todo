@@ -1,8 +1,10 @@
-import { create } from 'zustand';
+import { StateCreator } from 'zustand';
 import { z } from 'zod';
 
 import { saveSettingsToLS } from '../services/settings';
 import { allowedLanguages } from '../utils/languages';
+import { type SelectedSlice } from './createSelectedSlice';
+import { type TodoSlice } from './createTodoSlice';
 
 const SettingsZ = z.object({
   languageName: z.enum(allowedLanguages),
@@ -12,14 +14,14 @@ const SettingsZ = z.object({
 
 type SettingsState = z.infer<typeof SettingsZ>;
 export type SettingsLS = Omit<SettingsState, 'sort'>;
-type SettingsActions = {
+export type SettingsSlice = SettingsState & {
   setSettings: (settings: unknown) => void;
   sortCollections: () => void;
 };
 
 const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-const useSettingsStore = create<SettingsState & SettingsActions>((set) => ({
+const createSettingsSlice: StateCreator<SettingsSlice & SelectedSlice & TodoSlice, [], [], SettingsSlice> = (set) => ({
   languageName: 'en-us',
   darkMode: isDarkMode,
   sort: false,
@@ -37,6 +39,6 @@ const useSettingsStore = create<SettingsState & SettingsActions>((set) => ({
       }
     }),
   sortCollections: () => set((state) => ({ ...state, sort: !state.sort })),
-}));
+});
 
-export default useSettingsStore;
+export default createSettingsSlice;

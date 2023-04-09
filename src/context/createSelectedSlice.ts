@@ -1,9 +1,11 @@
-import { create } from 'zustand';
+import { StateCreator } from 'zustand';
+
+import { type SettingsSlice } from './createSettingsSlice';
+import { type TodoSlice } from './createTodoSlice';
 
 export type Selected = typeof initialSelectedState;
 export type SelectedEntry = Omit<Selected, 'edit' | 'selected' | 'hasDone'>;
-
-type SelectedActions = {
+export type SelectedSlice = typeof initialSelectedState & {
   setSelectedCollection: (collection: Partial<Selected>) => void;
   resetSelection: () => void;
 };
@@ -18,10 +20,10 @@ const initialSelectedState = {
   hasDone: false,
 };
 
-const useSelectedStore = create<Selected & SelectedActions>((set) => ({
+const createSelectedSlice: StateCreator<SelectedSlice & SettingsSlice & TodoSlice, [], [], SelectedSlice> = (set) => ({
   ...initialSelectedState,
   setSelectedCollection: (collection) => set((state) => ({ ...state, ...collection, selected: true })),
   resetSelection: () => set(initialSelectedState),
-}));
+});
 
-export default useSelectedStore;
+export default createSelectedSlice;

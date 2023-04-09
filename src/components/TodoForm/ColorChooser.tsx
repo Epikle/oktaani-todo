@@ -1,8 +1,7 @@
 import { Dispatch, FC, SetStateAction, useEffect, useRef } from 'react';
 
-import type { Texts } from '../../utils/languages';
-import useSelectedStore, { type Selected } from '../../context/useSelectedStore';
-import useTodoStore from '../../context/useTodoStore';
+import useBoundStore from '../../context/useBoundStore';
+import useLanguage from '../../hooks/useLanguage';
 
 import styles from './ColorChooser.module.scss';
 
@@ -10,46 +9,43 @@ type Props = {
   defaultColor: string;
   color: string;
   setColor: Dispatch<SetStateAction<string>>;
-  selectedCollection: Selected;
-  text: Texts;
 };
 
-const ColorChooser: FC<Props> = ({ defaultColor, color, setColor, selectedCollection, text }) => {
+const ColorChooser: FC<Props> = ({ defaultColor, color, setColor }) => {
   const colorInputRef = useRef<HTMLInputElement>(null);
-  const { setSelectedCollection } = useSelectedStore();
-  const { editCollection } = useTodoStore();
+  const { editCollection, setSelectedCollection, color: storeColor, id, title, shared } = useBoundStore();
+  const { text } = useLanguage();
 
   const colorInputHandler = async () => {
     if (!colorInputRef.current) return;
-    if (!selectedCollection.color) {
+    if (!storeColor) {
       setColor(colorInputRef.current.value);
       return;
     }
 
     const editedCollection = {
-      id: selectedCollection.id,
-      title: selectedCollection.title,
+      id,
+      title,
       color: colorInputRef.current.value,
-      shared: selectedCollection.shared,
+      shared,
     };
 
     await editCollection(editedCollection);
 
     setSelectedCollection({
-      ...selectedCollection,
       color: colorInputRef.current.value,
     });
   };
 
   useEffect(() => {
     if (!colorInputRef.current) return;
-    if (!selectedCollection.color) {
+    if (!storeColor) {
       colorInputRef.current.value = color;
       return;
     }
 
-    colorInputRef.current.value = selectedCollection.color;
-  }, [selectedCollection.color, color]);
+    colorInputRef.current.value = storeColor;
+  }, [storeColor, color]);
 
   return (
     <input

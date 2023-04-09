@@ -2,20 +2,18 @@ import { FC } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowDownShortWide } from '@fortawesome/free-solid-svg-icons';
 
-import useSettingsStore from '../../../context/useSettingsStore';
-import useTodoStore from '../../../context/useTodoStore';
 import useLanguage from '../../../hooks/useLanguage';
 import Button from '../Button';
 
 import styles from './Sort.module.scss';
+import useBoundStore from '../../../context/useBoundStore';
 
 type Props = {
   disabled: boolean;
 };
 
 const Sort: FC<Props> = ({ disabled }) => {
-  const { sort, sortCollections } = useSettingsStore();
-  const { collections } = useTodoStore();
+  const { sort, collections, sortCollections } = useBoundStore();
   const { text } = useLanguage();
 
   return (

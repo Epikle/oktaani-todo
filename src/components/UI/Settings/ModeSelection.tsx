@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
 
 import useLanguage from '../../../hooks/useLanguage';
-import useSettingsStore from '../../../context/useSettingsStore';
+import useBoundStore from '../../../context/useBoundStore';
 import Button from '../Button';
 
 import styles from './ModeSelection.module.scss';
@@ -13,7 +13,7 @@ type Props = {
 };
 
 const ModeSelection: FC<Props> = ({ disabled }) => {
-  const { darkMode, languageName, setSettings } = useSettingsStore();
+  const { darkMode, languageName, setSettings } = useBoundStore();
   const { text } = useLanguage();
 
   const modeBtnHandler = () => {

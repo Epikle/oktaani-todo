@@ -2,8 +2,7 @@ import { FC, useEffect, useRef, useState } from 'react';
 import autoAnimate from '@formkit/auto-animate';
 
 import { createSharedCollection } from '../../services/todo';
-import useSelectedStore from '../../context/useSelectedStore';
-import useTodoStore from '../../context/useTodoStore';
+import useBoundStore from '../../context/useBoundStore';
 import useLanguage from '../../hooks/useLanguage';
 import { copyToClipboard } from '../../utils/utils';
 import TodoControls from '../TodoForm/TodoControls';
@@ -23,8 +22,19 @@ const Header: FC = () => {
   const parent = useRef(null);
   const [confirm, setConfirm] = useState<Omit<TConfirm, 'type'> | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const { title, color, selected, id, shared, setSelectedCollection, resetSelection } = useSelectedStore();
-  const { collections, deleteCollection, editCollection } = useTodoStore();
+  const {
+    title,
+    color,
+    selected,
+    id,
+    shared,
+    setSelectedCollection,
+    resetSelection,
+    collections,
+    deleteCollection,
+    editCollection,
+  } = useBoundStore();
+
   const { text } = useLanguage();
 
   useEffect(() => {

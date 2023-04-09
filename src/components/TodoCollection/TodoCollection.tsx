@@ -5,9 +5,7 @@ import { faBars, faCheck, faCopy, faShareNodes } from '@fortawesome/free-solid-s
 import { useDrag, useDrop } from 'react-dnd';
 import type { Identifier, XYCoord } from 'dnd-core';
 
-import useSettingsStore from '../../context/useSettingsStore';
-import useSelectedStore from '../../context/useSelectedStore';
-import useTodoStore, { TodoTypeEnum, type Collection } from '../../context/useTodoStore';
+import { TodoTypeEnum, type Collection } from '../../context/createTodoSlice';
 import useLanguage from '../../hooks/useLanguage';
 import { copyToClipboard, formatDate } from '../../utils/utils';
 import TodoItem from './TodoItem';
@@ -15,6 +13,7 @@ import Button from '../UI/Button';
 import TodoNote from './TodoNote';
 
 import styles from './TodoCollection.module.scss';
+import useBoundStore from '../../context/useBoundStore';
 
 type Props = {
   collection: Collection;
@@ -35,9 +34,15 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [isCopy, setIsCopy] = useState(false);
-  const { sort, languageName } = useSettingsStore();
-  const { id: selectedColId, setSelectedCollection, resetSelection } = useSelectedStore();
-  const { updateSharedCollection, editCollection } = useTodoStore();
+  const {
+    sort,
+    languageName,
+    id: selectedColId,
+    setSelectedCollection,
+    resetSelection,
+    updateSharedCollection,
+    editCollection,
+  } = useBoundStore();
   const { text } = useLanguage();
   const isSelected = selectedColId === id;
 

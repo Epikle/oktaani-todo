@@ -3,12 +3,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faListCheck, faPen, faShareNodes, faSpinner, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 import type { TConfirm } from '../UI/Header';
-import useSelectedStore from '../../context/useSelectedStore';
-import useTodoStore from '../../context/useTodoStore';
 import useLanguage from '../../hooks/useLanguage';
 import Button from '../UI/Button';
 
 import styles from './TodoControls.module.scss';
+import useBoundStore from '../../context/useBoundStore';
 
 type Props = {
   onConfirm: (type: TConfirm['type']) => void;
@@ -16,8 +15,8 @@ type Props = {
 
 const TodoControls: FC<Props> = ({ onConfirm }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const { id, edit, hasDone, shared, title, color, setSelectedCollection } = useSelectedStore();
-  const { removeDoneItems, editCollection } = useTodoStore();
+  const { id, edit, hasDone, shared, title, color, setSelectedCollection, removeDoneItems, editCollection } =
+    useBoundStore();
   const { text } = useLanguage();
 
   const removeDoneBtnHandler = async () => {

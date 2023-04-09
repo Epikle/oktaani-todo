@@ -1,4 +1,4 @@
-import type { SettingsLS } from '../context/useSettingsStore';
+import type { SettingsLS } from '../context/createSettingsSlice';
 
 const LS_NAME = import.meta.env.VITE_LS_NAME_SETTINGS;
 

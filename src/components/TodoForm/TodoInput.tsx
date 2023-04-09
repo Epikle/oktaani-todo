@@ -1,35 +1,31 @@
 import { Dispatch, FC, SetStateAction, useEffect, useRef } from 'react';
 
-import type { Selected } from '../../context/useSelectedStore';
-import type { Texts } from '../../utils/languages';
-import useSettingsStore from '../../context/useSettingsStore';
+import useBoundStore from '../../context/useBoundStore';
+import useLanguage from '../../hooks/useLanguage';
 
 import styles from './TodoInput.module.scss';
 
 type Props = {
   todoInput: string;
   setTodoInput: Dispatch<SetStateAction<string>>;
-  selectedCollection: Selected;
-  text: Texts;
   maxLength: number;
   isLoading: boolean;
 };
 
-const TodoInput: FC<Props> = ({ todoInput, setTodoInput, selectedCollection, text, maxLength, isLoading }) => {
+const TodoInput: FC<Props> = ({ todoInput, setTodoInput, maxLength, isLoading }) => {
   const ref = useRef<HTMLInputElement>(null);
-  const { sort } = useSettingsStore();
+  const { sort, title, selected } = useBoundStore();
+  const { text } = useLanguage();
 
-  const placeholderText = selectedCollection.selected
-    ? `${text.header.newTodo} ${selectedCollection.title}`
-    : text.header.newCollection;
+  const placeholderText = selected ? `${text.header.newTodo} ${title}` : text.header.newCollection;
 
-  const styleClasses = selectedCollection.selected ? [styles.todo, styles.selected].join(' ') : styles.todo;
+  const styleClasses = selected ? [styles.todo, styles.selected].join(' ') : styles.todo;
 
   useEffect(() => {
-    if (selectedCollection.selected && ref.current) {
+    if (selected && ref.current) {
       ref.current.focus();
     }
-  }, [selectedCollection, isLoading]);
+  }, [selected, isLoading]);
 
   return (
     <input
