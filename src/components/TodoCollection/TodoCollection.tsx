@@ -7,7 +7,7 @@ import type { Identifier, XYCoord } from 'dnd-core';
 
 import useSelectedStore from '../../context/useSelectedStore';
 import useSettingsStore from '../../context/useSettingsStore';
-import useTodoStore, { TodoTypeEnum, type Collection } from '../../context/useTodoStore';
+import useTodoStore, { TodoTypeEnum, type Collection, type TodoTypes } from '../../context/useTodoStore';
 import useLanguage from '../../hooks/useLanguage';
 import { copyToClipboard, formatDate } from '../../utils/utils';
 import TodoItem from './TodoItem';
@@ -60,7 +60,7 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
   }, [shared, id, updateSharedCollection]);
 
   const disableShareBtnHandler = async () => {
-    await editCollection({ id, title, color, shared: false });
+    await editCollection({ id, title, color, type, shared: false });
     setIsError(false);
   };
 
@@ -112,12 +112,13 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
   const doneTodos = TodoTypeEnum.Enum.todo === type ? collection.todos.filter((todo) => todo.done).length : '';
 
   const selectedCollectionHandler = () => {
+    if (TodoTypeEnum.Enum.unset === type) return;
     if (isSelected) {
       resetSelection();
       return;
     }
 
-    setSelectedCollection({ id, title, color, shared, hasDone: !!doneTodos });
+    setSelectedCollection({ id, title, color, shared, type, hasDone: !!doneTodos });
   };
 
   const copyShareBtnHandler = async () => {
@@ -150,7 +151,9 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
 
   preview(drop(ref));
 
-  if (TodoTypeEnum.Enum.unset === type) return <p>select type</p>;
+  const todoTypeBtnHandler = async (selectedType: TodoTypes) => {
+    await editCollection({ id, title, color, shared, type: selectedType });
+  };
 
   if (isLoading) {
     return (
@@ -186,6 +189,13 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
           {title}
         </button>
       </h2>
+      {TodoTypeEnum.Enum.unset === type && (
+        <div className={styles.unset}>
+          <span>Select Type</span>
+          <Button onClick={() => todoTypeBtnHandler(TodoTypeEnum.Enum.todo)}>TODO</Button>
+          <Button onClick={() => todoTypeBtnHandler(TodoTypeEnum.Enum.note)}>NOTE</Button>
+        </div>
+      )}
       {!sort && TodoTypeEnum.Enum.note === type && <TodoNote isSelected={isSelected} />}
       {!sort && TodoTypeEnum.Enum.todo === type && (
         <ul ref={parent} className={styles['item-list']}>

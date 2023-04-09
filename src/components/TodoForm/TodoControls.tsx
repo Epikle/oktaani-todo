@@ -20,6 +20,7 @@ const TodoControls: FC<Props> = ({ onConfirm }) => {
   const color = useSelectedStore((state) => state.color);
   const edit = useSelectedStore((state) => state.edit);
   const shared = useSelectedStore((state) => state.shared);
+  const type = useSelectedStore((state) => state.type);
   const id = useSelectedStore((state) => state.id);
   const hasDone = useSelectedStore((state) => state.hasDone);
   const { setSelectedCollection } = useSelectedStore((state) => state.actions);
@@ -42,6 +43,7 @@ const TodoControls: FC<Props> = ({ onConfirm }) => {
       id,
       title,
       color,
+      type,
       shared: false,
     };
     setSelectedCollection({ id, title, color, shared: false });

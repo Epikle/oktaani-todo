@@ -35,6 +35,7 @@ describe('TodoItem', () => {
   });
 
   it('Should render checkbox already checked', () => {
+    itemSetup.todo.done = true;
     render(<TodoItem {...itemSetup} />);
 
     const checkbox = screen.getByRole('checkbox');

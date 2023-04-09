@@ -9,6 +9,27 @@
   border-top: 6px solid var(--color-gray-800);
   border-bottom: 3px solid var(--color-gray-800);
 
+  .unset {
+    display: grid;
+    place-items: center;
+    gap: 1rem;
+    padding-inline: 1rem;
+    padding-bottom: 0.5rem;
+
+    button {
+      @include text-green;
+      @include btn-hover-focus;
+      @include btn-bg-color;
+      @include transition;
+
+      display: grid;
+      place-content: center;
+      font-size: 1.25rem;
+      width: 100%;
+      padding: 0.5rem 0.75rem;
+    }
+  }
+
   &.error {
     border-color: var(--color-p-red-d-15);
 

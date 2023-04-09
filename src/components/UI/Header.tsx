@@ -26,6 +26,7 @@ const Header: FC = () => {
   const title = useSelectedStore((state) => state.title);
   const color = useSelectedStore((state) => state.color);
   const selected = useSelectedStore((state) => state.selected);
+  const type = useSelectedStore((state) => state.type);
   const id = useSelectedStore((state) => state.id);
   const shared = useSelectedStore((state) => state.shared);
   const collections = useTodoStore((state) => state.collections);
@@ -56,6 +57,7 @@ const Header: FC = () => {
         id,
         title,
         color,
+        type,
         shared: true,
       };
       await editCollection(editedCollection);
@@ -68,8 +70,8 @@ const Header: FC = () => {
     setIsLoading(false);
   };
 
-  const confirmBtnHandler = (type?: TConfirm['type']) => {
-    switch (type) {
+  const confirmBtnHandler = (confirmType?: TConfirm['type']) => {
+    switch (confirmType) {
       case 'delete':
         setConfirm({
           confirmText: text.controls.deleteConfirm,

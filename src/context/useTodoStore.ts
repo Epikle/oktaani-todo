@@ -63,9 +63,7 @@ const useTodoStore = create<TodoSlice>()(
         }),
       createCollection: (entry) =>
         set((state) => {
-          const createdEntry = todoService.createCollectionEntry(entry, 'todo');
-          const { id, title, color } = createdEntry;
-          useSelectedStore.setState((s) => ({ ...s, id, title, color }));
+          const createdEntry = todoService.createCollectionEntry(entry, 'unset');
           todoService.saveCollectionsToLS([createdEntry, ...state.collections]);
           return { collections: [createdEntry, ...state.collections] };
         }),
@@ -191,6 +189,8 @@ const useTodoStore = create<TodoSlice>()(
           if (stateCollection) {
             Object.assign(stateCollection, entry);
             todoService.saveCollectionsToLS(state.collections);
+            const { id, title, color } = stateCollection;
+            useSelectedStore.setState((s) => ({ ...s, id, title, color, type: entry.type }));
           }
         });
       },

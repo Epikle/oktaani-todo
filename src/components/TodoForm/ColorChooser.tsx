@@ -17,6 +17,7 @@ const ColorChooser: FC<Props> = ({ defaultColor, color, setColor }) => {
   const title = useSelectedStore((state) => state.title);
   const storeColor = useSelectedStore((state) => state.color);
   const shared = useSelectedStore((state) => state.shared);
+  const type = useSelectedStore((state) => state.type);
   const id = useSelectedStore((state) => state.id);
   const { setSelectedCollection } = useSelectedStore((state) => state.actions);
   const { editCollection } = useTodoStore((state) => state.actions);
@@ -34,6 +35,7 @@ const ColorChooser: FC<Props> = ({ defaultColor, color, setColor }) => {
       title,
       color: colorInputRef.current.value,
       shared,
+      type,
     };
 
     await editCollection(editedCollection);

@@ -22,11 +22,11 @@ const TodoForm: FC = () => {
   const storeColor = useSelectedStore((state) => state.color);
   const edit = useSelectedStore((state) => state.edit);
   const shared = useSelectedStore((state) => state.shared);
+  const type = useSelectedStore((state) => state.type);
   const id = useSelectedStore((state) => state.id);
   const selected = useSelectedStore((state) => state.selected);
   const { createCollectionItem, editCollection, createCollection } = useTodoStore((state) => state.actions);
   const { setSelectedCollection, resetSelection } = useSelectedStore((state) => state.actions);
-
   const { text } = useLanguage();
   const trimmedInput = todoInput.trim().replace(/\s+/g, ' ');
   const [isLoading, setIsLoading] = useState(false);
@@ -50,10 +50,10 @@ const TodoForm: FC = () => {
         title: trimmedInput,
         color: storeColor,
         shared,
+        type,
       };
       await editCollection(editedCollection);
-      setSelectedCollection(editedCollection);
-      setSelectedCollection({ edit: false });
+      setSelectedCollection({ ...editedCollection, edit: false });
       setIsLoading(false);
       return;
     }
