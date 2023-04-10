@@ -169,7 +169,7 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
         <h2>🚨 ERROR 🚨</h2>
         <div>
           <p>{text.errors.apiGetCollection}</p>
-          <Button content={text.collection.shareFail} onClick={disableShareBtnHandler} />
+          <Button onClick={disableShareBtnHandler}>{text.collection.shareFail}</Button>
         </div>
       </article>
     );
