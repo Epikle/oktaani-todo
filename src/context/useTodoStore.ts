@@ -19,8 +19,8 @@ export const CollectionZ = z.object({
   shared: z.boolean(),
   created: z.string(),
   todos: ItemZ.array(),
-  note: z.string(),
-  type: TodoTypeEnum,
+  note: z.string().default(''),
+  type: TodoTypeEnum.default('todo'),
 });
 
 type TodoState = typeof initialTodoState;
@@ -30,6 +30,7 @@ export type TodoSlice = TodoState & {
     createCollection: (entry: NewCollectionEntry) => void;
     createSharedCollection: (shareId: string) => Promise<void>;
     updateSharedCollection: (id: string) => Promise<void>;
+    editNote: ({ id, note }: { id: string; note: string }) => Promise<void>;
     createCollectionItem: ({ id, itemEntry }: { id: string; itemEntry: ItemEntry }) => Promise<void>;
     changeOrder: ({ dragIndex, hoverIndex }: { dragIndex: number; hoverIndex: number }) => void;
     deleteCollection: ({ id, shared }: { id: string; shared: boolean }) => Promise<void>;
@@ -90,6 +91,23 @@ const useTodoStore = create<TodoSlice>()(
             todoService.saveCollectionsToLS(state.collections);
           }
         });
+      },
+      editNote: async ({ id, note }) => {
+        const { collections } = get();
+        const collectionStateCopy = JSON.parse(JSON.stringify(collections)) as TodoState['collections'];
+        const selectedCollection = collectionStateCopy.find((col) => col.id === id);
+
+        if (!selectedCollection) return;
+
+        selectedCollection.note = note;
+
+        if (selectedCollection && selectedCollection.shared) {
+          await todoService.updateSharedCollection(selectedCollection);
+        }
+
+        todoService.saveCollectionsToLS(collectionStateCopy);
+
+        set(() => ({ collections: collectionStateCopy }));
       },
       createCollectionItem: async ({ id, itemEntry }) => {
         const { collections } = get();

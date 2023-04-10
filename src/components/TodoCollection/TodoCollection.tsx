@@ -29,7 +29,7 @@ type DragItem = {
 };
 
 const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
-  const { id, title, color, shared, created, type } = collection;
+  const { id, title, color, shared, created, type, note } = collection;
   const parent = useRef<HTMLUListElement>(null);
   const ref = useRef<HTMLElement>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -193,11 +193,15 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
         // TODO: LANG
         <div className={styles.unset}>
           <span>Select Type</span>
-          <Button onClick={() => todoTypeBtnHandler(TodoTypeEnum.Enum.todo)}>TODO</Button>
-          <Button onClick={() => todoTypeBtnHandler(TodoTypeEnum.Enum.note)}>NOTE</Button>
+          <Button onClick={() => todoTypeBtnHandler(TodoTypeEnum.Enum.todo)} testId="add-todo-btn">
+            TODO
+          </Button>
+          <Button onClick={() => todoTypeBtnHandler(TodoTypeEnum.Enum.note)} testId="add-note-btn">
+            NOTE
+          </Button>
         </div>
       )}
-      {!sort && TodoTypeEnum.Enum.note === type && <TodoNote isSelected={isSelected} />}
+      {!sort && TodoTypeEnum.Enum.note === type && <TodoNote id={id} isSelected={isSelected} note={note} />}
       {!sort && TodoTypeEnum.Enum.todo === type && (
         <ul ref={parent} className={styles['item-list']}>
           {collection.todos.map((todo) => (

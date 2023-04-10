@@ -19,6 +19,7 @@ const TodoInput: FC<Props> = ({ todoInput, setTodoInput, maxLength, isLoading })
   const title = useSelectedStore((state) => state.title);
   const selected = useSelectedStore((state) => state.selected);
   const type = useSelectedStore((state) => state.type);
+  const edit = useSelectedStore((state) => state.edit);
   const sort = useSettingsStore((state) => state.sort);
   const { text } = useLanguage();
   const placeholderText = selected ? `${text.header.newTodo} ${title}` : text.header.newCollection;
@@ -40,7 +41,7 @@ const TodoInput: FC<Props> = ({ todoInput, setTodoInput, maxLength, isLoading })
       value={todoInput}
       onChange={(e) => setTodoInput(e.target.value)}
       maxLength={maxLength}
-      disabled={sort || isLoading || TodoTypeEnum.Enum.note === type}
+      disabled={sort || isLoading || (TodoTypeEnum.Enum.note === type && !edit)}
       data-testid="todo-input"
     />
   );

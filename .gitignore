@@ -28,3 +28,4 @@ cypress/downloads
 .env**
 TODO.md
 tyoaikakirjanpito.md
+lsTestData.json

@@ -2,15 +2,27 @@
 
 .note {
   display: flex;
-  padding-inline: 0.75rem 0;
   font-family: var(--ff-secondary);
+  margin-bottom: 0.5rem;
 
-  span {
+  textarea {
     @include scrollbars(8px, var(--color-border-header), var(--color-bg-collection));
     flex-grow: 1;
-    padding: 0.25rem;
-
+    padding: 0.25rem 0.75rem;
+    min-height: 8rem;
     max-height: 24rem;
     overflow-y: auto;
+    background-color: var(--color-bg-todo-input);
+    border: none;
+    color: var(--color-text-green);
   }
+}
+
+.markdown {
+  @include scrollbars(8px, var(--color-border-header), var(--color-bg-collection));
+  @include markdown;
+  overflow: hidden;
+  overflow-y: auto;
+  max-height: 24rem;
+  padding-inline: 1rem;
 }

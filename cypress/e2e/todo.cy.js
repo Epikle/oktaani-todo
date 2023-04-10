@@ -5,19 +5,18 @@ describe('oktaniTODO', () => {
     cy.visit('http://localhost:4173/todo-demo/');
     cy.get('[data-testid="todo-input"]').type('✨ First Collection ✨');
     cy.get('[data-testid="submit-btn"]').click();
+    cy.get('[data-testid="submit-btn"]').should('not.be.visible');
+    cy.get('[data-testid="add-todo-btn"]').click();
     cy.get('[data-testid="submit-btn"]').click().should('not.be.visible');
   });
 
   it('displays collection named First Collection default', () => {
-    cy.get('article').first().should('have.text', '✨ First Collection ✨').click();
+    cy.get('article').first().should('have.text', '✨ First Collection ✨');
   });
 
   it('selects first collection and deselects it', () => {
     cy.get('article').first().should('have.text', '✨ First Collection ✨').click();
-
     cy.get('[data-testid="submit-btn"]').click().should('not.be.visible');
-
-    cy.get('[data-testid="todo-input"]').should('be.visible');
   });
 
   it('selects collection and adds item to it', () => {

@@ -3,9 +3,10 @@
 describe('oktaniTODO', () => {
   beforeEach(() => {
     cy.visit('http://localhost:4173/todo-demo/');
-
     cy.get('[data-testid="todo-input"]').type('✨ First Collection ✨');
     cy.get('[data-testid="submit-btn"]').click();
+    cy.get('[data-testid="submit-btn"]').should('not.be.visible');
+    cy.get('[data-testid="add-todo-btn"]').click();
     cy.get('[data-testid="submit-btn"]').click().should('not.be.visible');
 
     cy.get('article').first().should('have.text', '✨ First Collection ✨').click();
@@ -42,7 +43,7 @@ describe('oktaniTODO', () => {
     cy.get('article').first().contains('✨ First Collection ✨');
   });
 
-  it.only('should delete collection when confirming delete', () => {
+  it('should delete collection when confirming delete', () => {
     cy.get('[data-testid="delete-collection-btn"]').click();
 
     cy.get('[data-testid="confirm-delete-btn"]').click();
