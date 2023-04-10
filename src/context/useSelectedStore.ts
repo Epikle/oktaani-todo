@@ -1,11 +1,14 @@
 import { create } from 'zustand';
 
+import { type TodoTypes } from './useTodoStore';
+
 export type Selected = typeof initialSelectedState;
 export type SelectedEntry = Omit<Selected, 'edit' | 'selected' | 'hasDone'>;
-
-type SelectedActions = {
-  setSelectedCollection: (collection: Partial<Selected>) => void;
-  resetSelection: () => void;
+export type SelectedSlice = Selected & {
+  actions: {
+    setSelectedCollection: (collection: Partial<Selected>) => void;
+    resetSelection: () => void;
+  };
 };
 
 const initialSelectedState = {
@@ -16,12 +19,15 @@ const initialSelectedState = {
   shared: false,
   selected: false,
   hasDone: false,
+  type: 'unset' as TodoTypes,
 };
 
-const useSelectedStore = create<Selected & SelectedActions>((set) => ({
+const useSelectedStore = create<SelectedSlice>((set) => ({
   ...initialSelectedState,
-  setSelectedCollection: (collection) => set((state) => ({ ...state, ...collection, selected: true })),
-  resetSelection: () => set(initialSelectedState),
+  actions: {
+    setSelectedCollection: (collection) => set((state) => ({ ...state, ...collection, selected: true })),
+    resetSelection: () => set(initialSelectedState),
+  },
 }));
 
 export default useSelectedStore;

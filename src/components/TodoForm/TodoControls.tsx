@@ -2,9 +2,9 @@ import { FC, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faListCheck, faPen, faShareNodes, faSpinner, faTrash } from '@fortawesome/free-solid-svg-icons';
 
-import type { TConfirm } from '../UI/Header';
-import useSelectedStore from '../../context/useSelectedStore';
 import useTodoStore from '../../context/useTodoStore';
+import useSelectedStore from '../../context/useSelectedStore';
+import type { TConfirm } from '../UI/Header';
 import useLanguage from '../../hooks/useLanguage';
 import Button from '../UI/Button';
 
@@ -16,8 +16,16 @@ type Props = {
 
 const TodoControls: FC<Props> = ({ onConfirm }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const { id, edit, hasDone, shared, title, color, setSelectedCollection } = useSelectedStore();
-  const { removeDoneItems, editCollection } = useTodoStore();
+  const title = useSelectedStore((state) => state.title);
+  const color = useSelectedStore((state) => state.color);
+  const edit = useSelectedStore((state) => state.edit);
+  const shared = useSelectedStore((state) => state.shared);
+  const type = useSelectedStore((state) => state.type);
+  const id = useSelectedStore((state) => state.id);
+  const hasDone = useSelectedStore((state) => state.hasDone);
+  const { setSelectedCollection } = useSelectedStore((state) => state.actions);
+  const { editCollection, removeDoneItems } = useTodoStore((state) => state.actions);
+
   const { text } = useLanguage();
 
   const removeDoneBtnHandler = async () => {
@@ -35,6 +43,7 @@ const TodoControls: FC<Props> = ({ onConfirm }) => {
       id,
       title,
       color,
+      type,
       shared: false,
     };
     setSelectedCollection({ id, title, color, shared: false });

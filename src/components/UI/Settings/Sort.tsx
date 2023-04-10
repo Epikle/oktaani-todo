@@ -2,8 +2,8 @@ import { FC } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowDownShortWide } from '@fortawesome/free-solid-svg-icons';
 
-import useSettingsStore from '../../../context/useSettingsStore';
 import useTodoStore from '../../../context/useTodoStore';
+import useSettingsStore from '../../../context/useSettingsStore';
 import useLanguage from '../../../hooks/useLanguage';
 import Button from '../Button';
 
@@ -14,8 +14,9 @@ type Props = {
 };
 
 const Sort: FC<Props> = ({ disabled }) => {
-  const { sort, sortCollections } = useSettingsStore();
-  const { collections } = useTodoStore();
+  const collections = useTodoStore((state) => state.collections);
+  const sort = useSettingsStore((state) => state.sort);
+  const { sortCollections } = useSettingsStore((state) => state.actions);
   const { text } = useLanguage();
 
   return (

@@ -1,35 +1,35 @@
 import { Dispatch, FC, SetStateAction, useEffect, useRef } from 'react';
 
-import type { Selected } from '../../context/useSelectedStore';
-import type { Texts } from '../../utils/languages';
+import useSelectedStore from '../../context/useSelectedStore';
 import useSettingsStore from '../../context/useSettingsStore';
+import { TodoTypeEnum } from '../../context/useTodoStore';
+import useLanguage from '../../hooks/useLanguage';
 
 import styles from './TodoInput.module.scss';
 
 type Props = {
   todoInput: string;
   setTodoInput: Dispatch<SetStateAction<string>>;
-  selectedCollection: Selected;
-  text: Texts;
   maxLength: number;
   isLoading: boolean;
 };
 
-const TodoInput: FC<Props> = ({ todoInput, setTodoInput, selectedCollection, text, maxLength, isLoading }) => {
+const TodoInput: FC<Props> = ({ todoInput, setTodoInput, maxLength, isLoading }) => {
   const ref = useRef<HTMLInputElement>(null);
-  const { sort } = useSettingsStore();
-
-  const placeholderText = selectedCollection.selected
-    ? `${text.header.newTodo} ${selectedCollection.title}`
-    : text.header.newCollection;
-
-  const styleClasses = selectedCollection.selected ? [styles.todo, styles.selected].join(' ') : styles.todo;
+  const title = useSelectedStore((state) => state.title);
+  const selected = useSelectedStore((state) => state.selected);
+  const type = useSelectedStore((state) => state.type);
+  const edit = useSelectedStore((state) => state.edit);
+  const sort = useSettingsStore((state) => state.sort);
+  const { text } = useLanguage();
+  const placeholderText = selected ? `${text.header.newTodo} ${title}` : text.header.newCollection;
+  const styleClasses = selected ? [styles.todo, styles.selected].join(' ') : styles.todo;
 
   useEffect(() => {
-    if (selectedCollection.selected && ref.current) {
+    if (selected && ref.current && TodoTypeEnum.enum.todo === type) {
       ref.current.focus();
     }
-  }, [selectedCollection, isLoading]);
+  }, [selected, isLoading, title, type]);
 
   return (
     <input
@@ -41,7 +41,7 @@ const TodoInput: FC<Props> = ({ todoInput, setTodoInput, selectedCollection, tex
       value={todoInput}
       onChange={(e) => setTodoInput(e.target.value)}
       maxLength={maxLength}
-      disabled={sort || isLoading}
+      disabled={sort || isLoading || (TodoTypeEnum.Enum.note === type && !edit)}
       data-testid="todo-input"
     />
   );

@@ -2,7 +2,7 @@
 
 [oktaaniTODO | DEMO](https://oktaani.com/todo-demo/)
 
-![Preview image](https://raw.githubusercontent.com/Epikle/oktaani-todo/main/public/oktaani-todo-meta.png)
+![Preview image](https://raw.githubusercontent.com/Epikle/oktaani-todo/main/oktaani-todo-preview.png)
 
 ## My process
 
@@ -16,8 +16,8 @@
 - Cypress E2E
 - Prettier
 - ESLint
-- [React](https://reactjs.org/) - JS library
-- [Vite](https://vitejs.dev/) - Next Generation Frontend Tooling
+- [React](https://reactjs.org/)
+- [Vite](https://vitejs.dev/)
 
 ## Available Scripts
 

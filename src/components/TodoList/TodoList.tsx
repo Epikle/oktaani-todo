@@ -1,19 +1,20 @@
 import { CSSProperties, FC, useEffect, useRef } from 'react';
 import autoAnimate from '@formkit/auto-animate';
 
-import useSettingsStore from '../../context/useSettingsStore';
 import useTodoStore from '../../context/useTodoStore';
-
+import useSettingsStore from '../../context/useSettingsStore';
+import Welcome from '../UI/Welcome';
 import TodoCollection from '../TodoCollection/TodoCollection';
 import Footer from '../UI/Footer';
 
 import styles from './TodoList.module.scss';
-import Welcome from '../UI/Welcome';
 
 const TodoList: FC = () => {
   const parent = useRef<HTMLDivElement>(null);
-  const { sort } = useSettingsStore();
-  const { collections, changeOrder, help } = useTodoStore();
+  const collections = useTodoStore((state) => state.collections);
+  const help = useTodoStore((state) => state.help);
+  const sort = useSettingsStore((state) => state.sort);
+  const { changeOrder } = useTodoStore((state) => state.actions);
 
   useEffect(() => {
     if (parent.current) autoAnimate(parent.current);

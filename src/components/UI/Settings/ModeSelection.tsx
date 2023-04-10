@@ -2,8 +2,8 @@ import { FC } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
 
-import useLanguage from '../../../hooks/useLanguage';
 import useSettingsStore from '../../../context/useSettingsStore';
+import useLanguage from '../../../hooks/useLanguage';
 import Button from '../Button';
 
 import styles from './ModeSelection.module.scss';
@@ -13,7 +13,9 @@ type Props = {
 };
 
 const ModeSelection: FC<Props> = ({ disabled }) => {
-  const { darkMode, languageName, setSettings } = useSettingsStore();
+  const darkMode = useSettingsStore((state) => state.darkMode);
+  const languageName = useSettingsStore((state) => state.languageName);
+  const { setSettings } = useSettingsStore((state) => state.actions);
   const { text } = useLanguage();
 
   const modeBtnHandler = () => {

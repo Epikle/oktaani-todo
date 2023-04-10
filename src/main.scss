@@ -1,5 +1,6 @@
 @import 'src/reset';
 @import 'src/colors';
+@import 'src/mixin';
 
 body {
   font-family: var(--ff-primary);
@@ -19,6 +20,7 @@ main {
     text-align: center;
     color: var(--color-text-p);
   }
+  @include scrollbars(8px, var(--color-border-header), var(--color-bg-collection));
 }
 
 @media print {

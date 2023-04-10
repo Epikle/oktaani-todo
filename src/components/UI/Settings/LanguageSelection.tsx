@@ -13,7 +13,7 @@ type Props = {
 };
 
 const LanguageSelection: FC<Props> = ({ disabled }) => {
-  const { languageName } = useSettingsStore();
+  const languageName = useSettingsStore((state) => state.languageName);
   const { text, nextLang } = useLanguage();
 
   return (

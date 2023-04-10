@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { nanoid } from 'nanoid';
 
-import type { Collection, Item, ItemEntry, NewCollectionEntry } from '../context/useTodoStore';
+import type { Collection, Item, ItemEntry, NewCollectionEntry, TodoTypes } from '../context/useTodoStore';
 
 const LS_NAME = import.meta.env.VITE_LS_NAME_TODOS;
 const api = axios.create({
@@ -34,10 +34,13 @@ export const getTodosFromLS = () => {
   return JSON.parse(collections || '[]') as unknown;
 };
 
-export const createCollectionEntry = (entry: NewCollectionEntry): Collection => ({
+export const createCollectionEntry = (entry: NewCollectionEntry, type: TodoTypes): Collection => ({
   shared: false,
   todos: [],
+  note: '',
   created: Date(),
+  id: nanoid(),
+  type,
   ...entry,
 });
 

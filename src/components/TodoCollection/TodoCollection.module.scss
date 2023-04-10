@@ -9,6 +9,33 @@
   border-top: 6px solid var(--color-gray-800);
   border-bottom: 3px solid var(--color-gray-800);
 
+  .unset {
+    display: grid;
+    place-items: center;
+    gap: 1rem;
+    padding-inline: 1rem;
+    padding-bottom: 0.5rem;
+
+    button {
+      @include text-green;
+      @include btn-hover-focus;
+      @include btn-bg-color;
+      @include transition;
+
+      display: grid;
+      place-content: center;
+      font-size: 1.25rem;
+      width: 100%;
+      padding: 0.5rem 0.75rem;
+    }
+  }
+
+  .item-list {
+    @include scrollbars(8px, var(--color-border-header), var(--color-bg-collection));
+    max-height: 24rem;
+    overflow-y: auto;
+  }
+
   &.error {
     border-color: var(--color-p-red-d-15);
 
@@ -39,6 +66,7 @@
     transform: translateY(-50%);
     color: var(--color-text-p);
     background-color: transparent;
+    z-index: 10;
 
     &:hover {
       cursor: move;

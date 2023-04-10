@@ -1,9 +1,9 @@
 import { FC, useEffect, useRef, useState } from 'react';
 import autoAnimate from '@formkit/auto-animate';
 
-import { createSharedCollection } from '../../services/todo';
-import useSelectedStore from '../../context/useSelectedStore';
 import useTodoStore from '../../context/useTodoStore';
+import useSelectedStore from '../../context/useSelectedStore';
+import { createSharedCollection } from '../../services/todo';
 import useLanguage from '../../hooks/useLanguage';
 import { copyToClipboard } from '../../utils/utils';
 import TodoControls from '../TodoForm/TodoControls';
@@ -23,8 +23,15 @@ const Header: FC = () => {
   const parent = useRef(null);
   const [confirm, setConfirm] = useState<Omit<TConfirm, 'type'> | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const { title, color, selected, id, shared, setSelectedCollection, resetSelection } = useSelectedStore();
-  const { collections, deleteCollection, editCollection } = useTodoStore();
+  const title = useSelectedStore((state) => state.title);
+  const color = useSelectedStore((state) => state.color);
+  const selected = useSelectedStore((state) => state.selected);
+  const type = useSelectedStore((state) => state.type);
+  const id = useSelectedStore((state) => state.id);
+  const shared = useSelectedStore((state) => state.shared);
+  const collections = useTodoStore((state) => state.collections);
+  const { setSelectedCollection, resetSelection } = useSelectedStore((state) => state.actions);
+  const { editCollection, deleteCollection } = useTodoStore((state) => state.actions);
   const { text } = useLanguage();
 
   useEffect(() => {
@@ -50,6 +57,7 @@ const Header: FC = () => {
         id,
         title,
         color,
+        type,
         shared: true,
       };
       await editCollection(editedCollection);
@@ -62,8 +70,8 @@ const Header: FC = () => {
     setIsLoading(false);
   };
 
-  const confirmBtnHandler = (type?: TConfirm['type']) => {
-    switch (type) {
+  const confirmBtnHandler = (confirmType?: TConfirm['type']) => {
+    switch (confirmType) {
       case 'delete':
         setConfirm({
           confirmText: text.controls.deleteConfirm,
