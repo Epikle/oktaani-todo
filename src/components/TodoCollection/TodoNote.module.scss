@@ -1,6 +1,7 @@
 @import 'src/mixin';
 
 .note {
+  position: relative;
   display: flex;
   font-family: var(--ff-secondary);
   margin-bottom: 0.5rem;
@@ -16,6 +17,14 @@
     border: none;
     color: var(--color-text-green);
   }
+
+  &::before {
+    content: attr(data-saved);
+    position: absolute;
+    top: 0.25rem;
+    right: 1rem;
+    color: var(--color-p-green);
+  }
 }
 
 .markdown {
@@ -25,4 +34,5 @@
   overflow-y: auto;
   max-height: 24rem;
   padding-inline: 1rem;
+  margin-bottom: 0.5rem;
 }

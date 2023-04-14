@@ -158,7 +158,7 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
   if (isLoading) {
     return (
       <article className={articleStyles}>
-        <h2>Loading...</h2>
+        <h2>{text.common.loading}</h2>
       </article>
     );
   }
@@ -166,7 +166,7 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
   if (isError) {
     return (
       <article className={[articleStyles, styles.error].join(' ')}>
-        <h2>🚨 ERROR 🚨</h2>
+        <h2>🚨 {text.common.error} 🚨</h2>
         <div>
           <p>{text.errors.apiGetCollection}</p>
           <Button onClick={disableShareBtnHandler}>{text.collection.shareFail}</Button>
@@ -189,15 +189,14 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
           {title}
         </button>
       </h2>
-      {TodoTypeEnum.Enum.unset === type && (
-        // TODO: LANG
+      {TodoTypeEnum.Enum.unset === type && !sort && (
         <div className={styles.unset}>
-          <span>Select Type</span>
+          <span>{text.collection.selectType}</span>
           <Button onClick={() => todoTypeBtnHandler(TodoTypeEnum.Enum.todo)} testId="add-todo-btn">
-            TODO
+            {text.collection.todo}
           </Button>
           <Button onClick={() => todoTypeBtnHandler(TodoTypeEnum.Enum.note)} testId="add-note-btn">
-            NOTE
+            {text.collection.note}
           </Button>
         </div>
       )}
@@ -218,8 +217,7 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
       {shared && !sort && (
         <div className={styles.shared}>
           {isSelected && (
-            // TODO: LANG
-            <Button title="Copy Share Link" onClick={copyShareBtnHandler} disabled={isCopy}>
+            <Button title={text.collection.copyLink} onClick={copyShareBtnHandler} disabled={isCopy}>
               {isCopy ? <FontAwesomeIcon icon={faCheck} /> : <FontAwesomeIcon icon={faCopy} />}
             </Button>
           )}

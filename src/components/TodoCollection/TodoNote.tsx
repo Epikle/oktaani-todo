@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 
 import styles from './TodoNote.module.scss';
@@ -11,26 +11,24 @@ type Props = {
 };
 
 let timeoutId: ReturnType<typeof setTimeout> | null = null;
-
-// TODO: this
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function debounce<T extends (...args: any[]) => void>(callback: T, delay: number): (...args: Parameters<T>) => void {
-  return (...args: Parameters<T>) => {
-    if (timeoutId) {
-      clearTimeout(timeoutId);
-    }
-    timeoutId = setTimeout(() => {
-      callback(...args);
-    }, delay);
-  };
-}
+let timeoutId2: ReturnType<typeof setTimeout> | null = null;
 
 const TodoNote: FC<Props> = ({ id, isSelected, note }) => {
   const { editNote } = useTodoStore((state) => state.actions);
+  const [saving, setSaving] = useState('');
+
   const textareaChangeHandler: React.ChangeEventHandler<HTMLTextAreaElement> = (event) => {
-    debounce(async () => {
+    if (timeoutId) clearTimeout(timeoutId);
+    if (timeoutId2) clearTimeout(timeoutId2);
+
+    timeoutId = setTimeout(async () => {
       await editNote({ id, note: event.target.value });
-    }, 2000)();
+      setSaving('✓ Saved...');
+    }, 2000);
+
+    timeoutId2 = setTimeout(() => {
+      setSaving('');
+    }, 5000);
   };
 
   if (!isSelected) {
@@ -42,8 +40,8 @@ const TodoNote: FC<Props> = ({ id, isSelected, note }) => {
   }
 
   return (
-    <div className={styles.note}>
-      <textarea rows={10} placeholder="Enter your text here..." onChange={textareaChangeHandler} defaultValue={note} />
+    <div className={styles.note} data-saved={saving}>
+      <textarea rows={16} placeholder="Enter your text here..." onChange={textareaChangeHandler} defaultValue={note} />
     </div>
   );
 };

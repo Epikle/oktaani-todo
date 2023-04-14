@@ -3,7 +3,7 @@ const languages = {
     header: {
       newCollection: 'Add a new collection',
       newTodo: 'Add a new todo to',
-      setColorTitle: 'Set todo collection color',
+      setColorTitle: 'Choose Collection Color',
     },
     controls: {
       settings: 'Settings',
@@ -23,15 +23,31 @@ const languages = {
       created: 'created',
       empty: 'No collections, start by creating one.',
       shareFail: 'Show local copy',
+      selectType: 'Select Type',
+      todo: 'Todo',
+      note: 'Note',
+      copyLink: 'Copy Share Link',
     },
     todo: {
       markDone: 'Mark [] as done',
+    },
+    welcome: {
+      header: 'Welcome to oktaaniTODO!',
+      bodyText:
+        'We are excited to introduce you to our powerful task management tool that will help you stay organized and productive. Our app has a number of great features that will make managing your tasks easier and more efficient than ever before.',
+      howToUse: 'How to use?',
+      generalSettings: 'General Settings',
+      collectionControls: 'Collection Controls',
+      titleHere: 'Set Collection or Item Title Here',
+      saveColItem: 'Save Collection or Item',
     },
     common: {
       confirm: 'Confirm',
       cancel: 'Cancel',
       add: 'Add',
       editing: 'Editing',
+      loading: 'Loading...',
+      error: 'Error',
     },
     errors: {
       localStorage: 'You need to allow localStorage usage to use this app.',
@@ -63,15 +79,31 @@ const languages = {
       created: 'luotu',
       empty: 'Ei kokoelmia, aloita luomalla uusi.',
       shareFail: 'Näytä paikallinen versio',
+      selectType: 'Valitse tyyppi',
+      todo: 'Tehtävälista',
+      note: 'Muistiinpano',
+      copyLink: 'Kopioi jakolinkki',
     },
     todo: {
       markDone: 'Merkkaa [] tehdyksi',
+    },
+    welcome: {
+      header: 'Tervetuloa OktaaniTODO:on!',
+      bodyText:
+        'Olemme innoissamme esitellessämme sinulle voimakkaan tehtävienhallintatyökalumme, joka auttaa sinua pysymään järjestäytyneenä ja tuottavana. Sovelluksessamme on useita loistavia ominaisuuksia, jotka tekevät tehtävien hallinnasta helpompaa ja tehokkaampaa kuin koskaan aiemmin.',
+      howToUse: 'Kuinka käytetään?',
+      generalSettings: 'Yleiset asetukset',
+      collectionControls: 'Kokoelman kontrollit',
+      titleHere: 'Laita kokoelman tai tehtävän nimi tähän.',
+      saveColItem: 'Tallenna kokoelma tai tehtävä.',
     },
     common: {
       confirm: 'Vahvista',
       cancel: 'Peruuta',
       add: 'Lisää',
       editing: 'Muokkaa',
+      loading: 'Ladataan...',
+      error: 'Virhe',
     },
     errors: {
       localStorage: 'Sovellus tarvitsee paikallisen tallennuksen päälle toimiakseen.',
