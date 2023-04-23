@@ -1,6 +1,7 @@
 import { Dispatch, FC, SetStateAction, useEffect, useRef } from 'react';
 
 import useSelectedStore from '../../context/useSelectedStore';
+import useStatusStore from '../../context/useStatusStore';
 import useTodoStore from '../../context/useTodoStore';
 import useLanguage from '../../hooks/useLanguage';
 
@@ -21,6 +22,7 @@ const ColorChooser: FC<Props> = ({ defaultColor, color, setColor }) => {
   const id = useSelectedStore((state) => state.id);
   const { setSelectedCollection } = useSelectedStore((state) => state.actions);
   const { editCollection } = useTodoStore((state) => state.actions);
+  const { setError } = useStatusStore((state) => state.actions);
   const { text } = useLanguage();
 
   const colorInputHandler = async () => {
@@ -37,8 +39,11 @@ const ColorChooser: FC<Props> = ({ defaultColor, color, setColor }) => {
       shared,
       type,
     };
-
-    await editCollection(editedCollection);
+    try {
+      await editCollection(editedCollection);
+    } catch (error) {
+      setError(text.errors.apiUpdateCollection);
+    }
 
     setSelectedCollection({
       color: colorInputRef.current.value,

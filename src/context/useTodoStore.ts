@@ -36,7 +36,7 @@ export type TodoSlice = TodoState & {
     deleteCollection: ({ id, shared }: { id: string; shared: boolean }) => Promise<void>;
     toggleItemDone: ({ id, colId }: { id: string; colId: string }) => Promise<void>;
     removeDoneItems: (id: string) => Promise<void>;
-    editCollection: (entry: SelectedEntry) => Promise<void>;
+    editCollection: (entry: SelectedEntry & { noShare?: boolean }) => Promise<void>;
     toggleHelp: () => void;
   };
 };
@@ -197,7 +197,7 @@ const useTodoStore = create<TodoSlice>()(
           await todoService.updateSharedCollection(newCollection);
         }
 
-        if (collection && collection.shared && !entry.shared) {
+        if (collection && collection.shared && !entry.shared && !entry.noShare) {
           await todoService.deleteSharedCollection(collection.id);
         }
 

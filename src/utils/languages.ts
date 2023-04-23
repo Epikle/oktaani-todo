@@ -4,6 +4,7 @@ const languages = {
       newCollection: 'Add a new collection',
       newTodo: 'Add a new todo to',
       setColorTitle: 'Choose Collection Color',
+      editNote: 'Edit note',
     },
     controls: {
       settings: 'Settings',
@@ -23,6 +24,7 @@ const languages = {
       created: 'created',
       empty: 'No collections, start by creating one.',
       shareFail: 'Show local copy',
+      shareTryAgain: 'Try again',
       selectType: 'Select Type',
       todo: 'Todo',
       note: 'Note',
@@ -51,7 +53,9 @@ const languages = {
     },
     errors: {
       localStorage: 'You need to allow localStorage usage to use this app.',
-      apiGetCollection: 'Failed to fetch shared collection data.',
+      apiGetCollection: 'Fetching the shared collection failed. Please try again.',
+      apiUpdateCollection: 'There was a failure in updating the shared collection. Please try again.',
+      apiShareCollection: 'Failed to share the collection. Please try again.',
       default: 'Something went wrong.',
     },
   },
@@ -60,6 +64,7 @@ const languages = {
       newCollection: 'Lisää uusi kokoelma',
       newTodo: 'Lisää uusi todo kokoelmaan',
       setColorTitle: 'Aseta kokoelman väri',
+      editNote: 'Muokkaa muistiinpanoa',
     },
     controls: {
       settings: 'Asetukset',
@@ -79,6 +84,7 @@ const languages = {
       created: 'luotu',
       empty: 'Ei kokoelmia, aloita luomalla uusi.',
       shareFail: 'Näytä paikallinen versio',
+      shareTryAgain: 'Kokeile uudelleen',
       selectType: 'Valitse tyyppi',
       todo: 'Tehtävälista',
       note: 'Muistiinpano',
@@ -107,7 +113,9 @@ const languages = {
     },
     errors: {
       localStorage: 'Sovellus tarvitsee paikallisen tallennuksen päälle toimiakseen.',
-      apiGetCollection: 'Jaetun listan haku epäonnistui.',
+      apiGetCollection: 'Noudettaessa jaettua kokoelmaa tapahtui virhe. Yritä uudelleen.',
+      apiUpdateCollection: 'Jaettua kokoelmaa ei voitu päivittää. Yritä uudelleen.',
+      apiShareCollection: 'Kokoelman jakaminen epäonnistui. Yritä uudelleen.',
       default: 'Jotain meni pieleen.',
     },
   },

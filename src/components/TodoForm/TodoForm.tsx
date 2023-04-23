@@ -4,6 +4,7 @@ import { faPlus, faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 import useSelectedStore from '../../context/useSelectedStore';
 import useTodoStore from '../../context/useTodoStore';
+import useStatusStore from '../../context/useStatusStore';
 import useLanguage from '../../hooks/useLanguage';
 import Button from '../UI/Button';
 import ColorChooser from './ColorChooser';
@@ -27,6 +28,7 @@ const TodoForm: FC = () => {
   const selected = useSelectedStore((state) => state.selected);
   const { createCollectionItem, editCollection, createCollection } = useTodoStore((state) => state.actions);
   const { setSelectedCollection, resetSelection } = useSelectedStore((state) => state.actions);
+  const { setError } = useStatusStore((state) => state.actions);
   const { text } = useLanguage();
   const trimmedInput = todoInput.trim().replace(/\s+/g, ' ');
   const [isLoading, setIsLoading] = useState(false);
@@ -52,17 +54,25 @@ const TodoForm: FC = () => {
         shared,
         type,
       };
-      await editCollection(editedCollection);
+      try {
+        await editCollection(editedCollection);
+      } catch (error) {
+        setError(text.errors.apiUpdateCollection);
+      }
       setSelectedCollection({ ...editedCollection, edit: false });
       setIsLoading(false);
       return;
     }
 
     if (selected) {
-      await createCollectionItem({
-        id,
-        itemEntry: { text: trimmedInput },
-      });
+      try {
+        await createCollectionItem({
+          id,
+          itemEntry: { text: trimmedInput },
+        });
+      } catch (error) {
+        setError(text.errors.apiUpdateCollection);
+      }
 
       setTodoInput('');
       setIsLoading(false);

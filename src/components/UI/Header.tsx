@@ -3,6 +3,7 @@ import autoAnimate from '@formkit/auto-animate';
 
 import useTodoStore from '../../context/useTodoStore';
 import useSelectedStore from '../../context/useSelectedStore';
+import useStatusStore from '../../context/useStatusStore';
 import { createSharedCollection } from '../../services/todo';
 import useLanguage from '../../hooks/useLanguage';
 import { copyToClipboard } from '../../utils/utils';
@@ -30,6 +31,7 @@ const Header: FC = () => {
   const id = useSelectedStore((state) => state.id);
   const shared = useSelectedStore((state) => state.shared);
   const collections = useTodoStore((state) => state.collections);
+  const { setError } = useStatusStore((state) => state.actions);
   const { setSelectedCollection, resetSelection } = useSelectedStore((state) => state.actions);
   const { editCollection, deleteCollection } = useTodoStore((state) => state.actions);
   const { text } = useLanguage();
@@ -63,7 +65,7 @@ const Header: FC = () => {
       await editCollection(editedCollection);
       setSelectedCollection(editedCollection);
     } catch (error) {
-      // TODO: error handling
+      setError(text.errors.apiShareCollection);
     }
 
     setConfirm(null);

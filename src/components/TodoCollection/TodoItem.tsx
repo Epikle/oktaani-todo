@@ -3,9 +3,10 @@ import { FC, useState } from 'react';
 import useTodoStore, { type Item as TItem } from '../../context/useTodoStore';
 import useLanguage from '../../hooks/useLanguage';
 import { formatDate } from '../../utils/utils';
+import useSettingsStore from '../../context/useSettingsStore';
+import useStatusStore from '../../context/useStatusStore';
 
 import styles from './TodoItem.module.scss';
-import useSettingsStore from '../../context/useSettingsStore';
 
 type Props = {
   todo: TItem;
@@ -17,11 +18,16 @@ const TodoItem: FC<Props> = ({ todo, colId }) => {
   const [isDone, setIsDone] = useState(done);
   const { toggleItemDone } = useTodoStore((state) => state.actions);
   const languageName = useSettingsStore((state) => state.languageName);
+  const { setError } = useStatusStore((state) => state.actions);
   const { text } = useLanguage();
 
   const todoDoneHandler = async () => {
     setIsDone((prevS) => !prevS);
-    await toggleItemDone({ id, colId });
+    try {
+      await toggleItemDone({ id, colId });
+    } catch (error) {
+      setError(text.errors.apiUpdateCollection);
+    }
   };
 
   return (

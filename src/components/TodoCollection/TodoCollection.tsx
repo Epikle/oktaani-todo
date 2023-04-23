@@ -1,7 +1,7 @@
-import { FC, CSSProperties, useEffect, useRef, useState } from 'react';
+import { FC, CSSProperties, useEffect, useRef, useState, useCallback } from 'react';
 import autoAnimate from '@formkit/auto-animate';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faCheck, faCopy, faShareNodes } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faCheck, faCopy, faShareNodes, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { useDrag, useDrop } from 'react-dnd';
 import type { Identifier, XYCoord } from 'dnd-core';
 
@@ -13,6 +13,7 @@ import { copyToClipboard, formatDate } from '../../utils/utils';
 import TodoItem from './TodoItem';
 import Button from '../UI/Button';
 import TodoNote from './TodoNote';
+import useTabActive from '../../hooks/useTabActive';
 
 import styles from './TodoCollection.module.scss';
 
@@ -41,26 +42,26 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
   const { setSelectedCollection, resetSelection } = useSelectedStore((state) => state.actions);
   const { updateSharedCollection, editCollection } = useTodoStore((state) => state.actions);
   const { text } = useLanguage();
+  const isTabActive = useTabActive();
   const isSelected = selectedColId === id;
 
-  useEffect(() => {
-    const getSharedCollectionData = async () => {
-      setIsLoading(true);
-      try {
-        await updateSharedCollection(id);
-      } catch (error) {
-        setIsError(true);
-      }
-      setIsLoading(false);
-    };
-
-    if (shared) {
-      getSharedCollectionData();
+  const getSharedCollectionData = useCallback(async () => {
+    setIsError(false);
+    setIsLoading(true);
+    try {
+      await updateSharedCollection(id);
+    } catch (error) {
+      setIsError(true);
     }
-  }, [shared, id, updateSharedCollection]);
+    setIsLoading(false);
+  }, [id, updateSharedCollection]);
+
+  useEffect(() => {
+    if (shared && isTabActive) getSharedCollectionData();
+  }, [shared, getSharedCollectionData, isTabActive]);
 
   const disableShareBtnHandler = async () => {
-    await editCollection({ id, title, color, type, shared: false });
+    await editCollection({ id, title, color, type, shared: false, noShare: true });
     setIsError(false);
   };
 
@@ -135,7 +136,7 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
   }, [parent]);
 
   const totalTodos = collection.todos.length;
-  const showDone = totalTodos > 0 && !sort ? `${doneTodos}/${totalTodos}` : '';
+  const showDone = totalTodos > 0 && !sort && TodoTypeEnum.Enum.todo === type ? `${doneTodos}/${totalTodos}` : '';
   const articleStyles = isSelected ? [styles.collection, styles.selected].join(' ') : styles.collection;
 
   const showCreated =
@@ -157,8 +158,9 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
 
   if (isLoading) {
     return (
-      <article className={articleStyles}>
+      <article className={articleStyles} style={{ textAlign: 'center' }}>
         <h2>{text.common.loading}</h2>
+        <FontAwesomeIcon icon={faSpinner} size="2xl" spinPulse />
       </article>
     );
   }
@@ -169,7 +171,10 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
         <h2>🚨 {text.common.error} 🚨</h2>
         <div>
           <p>{text.errors.apiGetCollection}</p>
-          <Button onClick={disableShareBtnHandler}>{text.collection.shareFail}</Button>
+          <div>
+            <Button onClick={getSharedCollectionData}>{text.collection.shareTryAgain}</Button>
+            <Button onClick={disableShareBtnHandler}>{text.collection.shareFail}</Button>
+          </div>
         </div>
       </article>
     );

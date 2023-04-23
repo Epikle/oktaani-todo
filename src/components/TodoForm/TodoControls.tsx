@@ -6,6 +6,7 @@ import useTodoStore from '../../context/useTodoStore';
 import useSelectedStore from '../../context/useSelectedStore';
 import type { TConfirm } from '../UI/Header';
 import useLanguage from '../../hooks/useLanguage';
+import useStatusStore from '../../context/useStatusStore';
 import Button from '../UI/Button';
 
 import styles from './TodoControls.module.scss';
@@ -25,12 +26,16 @@ const TodoControls: FC<Props> = ({ onConfirm }) => {
   const hasDone = useSelectedStore((state) => state.hasDone);
   const { setSelectedCollection } = useSelectedStore((state) => state.actions);
   const { editCollection, removeDoneItems } = useTodoStore((state) => state.actions);
-
+  const { setError } = useStatusStore((state) => state.actions);
   const { text } = useLanguage();
 
   const removeDoneBtnHandler = async () => {
     setIsLoading(true);
-    await removeDoneItems(id);
+    try {
+      await removeDoneItems(id);
+    } catch (error) {
+      setError(text.errors.apiUpdateCollection);
+    }
     setIsLoading(false);
   };
 
@@ -47,7 +52,11 @@ const TodoControls: FC<Props> = ({ onConfirm }) => {
       shared: false,
     };
     setSelectedCollection({ id, title, color, shared: false });
-    await editCollection(editedCollection);
+    try {
+      await editCollection(editedCollection);
+    } catch (error) {
+      await editCollection({ ...editedCollection, noShare: true });
+    }
   };
 
   return (

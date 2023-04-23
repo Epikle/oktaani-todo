@@ -22,7 +22,8 @@ const TodoInput: FC<Props> = ({ todoInput, setTodoInput, maxLength, isLoading })
   const edit = useSelectedStore((state) => state.edit);
   const sort = useSettingsStore((state) => state.sort);
   const { text } = useLanguage();
-  const placeholderText = selected ? `${text.header.newTodo} ${title}` : text.header.newCollection;
+  const inputTextByType = type === TodoTypeEnum.Enum.todo ? `${text.header.newTodo} ${title}` : text.header.editNote;
+  const placeholderText = selected ? inputTextByType : text.header.newCollection;
   const styleClasses = selected ? [styles.todo, styles.selected].join(' ') : styles.todo;
 
   useEffect(() => {
