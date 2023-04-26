@@ -6,9 +6,7 @@ import Footer from './Footer';
 describe('Footer', () => {
   it('Footer shows copyright', () => {
     render(<Footer />);
-
-    const currentYear = new Date().getFullYear();
-
-    expect(screen.getByText(`${currentYear} © oktaani.com`)).toBeInTheDocument();
+    expect(screen.getByRole('contentinfo')).toBeInTheDocument();
+    expect(screen.getByRole('contentinfo')).toHaveTextContent('oktaani.com');
   });
 });

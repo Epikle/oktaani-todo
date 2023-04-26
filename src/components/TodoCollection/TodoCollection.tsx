@@ -29,6 +29,8 @@ type DragItem = {
   type: string;
 };
 
+const DELAY_MS = 5000;
+
 const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
   const { id, title, color, shared, created, type, note } = collection;
   const parent = useRef<HTMLUListElement>(null);
@@ -36,6 +38,7 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [isCopy, setIsCopy] = useState(false);
+  const [lastUpdatedTime, setLastUpdatedTime] = useState(0);
   const selectedColId = useSelectedStore((state) => state.id);
   const sort = useSettingsStore((state) => state.sort);
   const languageName = useSettingsStore((state) => state.languageName);
@@ -57,8 +60,18 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
   }, [id, updateSharedCollection]);
 
   useEffect(() => {
-    if (shared && isTabActive) getSharedCollectionData();
-  }, [shared, getSharedCollectionData, isTabActive]);
+    const timer = setTimeout(() => {
+      setLastUpdatedTime(0);
+      return () => clearTimeout(timer);
+    }, DELAY_MS);
+  }, []);
+
+  useEffect(() => {
+    if (shared && isTabActive && Date.now() - lastUpdatedTime > DELAY_MS) {
+      getSharedCollectionData();
+      setLastUpdatedTime(Date.now());
+    }
+  }, [shared, getSharedCollectionData, isTabActive, lastUpdatedTime]);
 
   const disableShareBtnHandler = async () => {
     await editCollection({ id, title, color, type, shared: false, noShare: true });

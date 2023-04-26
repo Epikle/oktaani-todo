@@ -6,22 +6,4 @@
   user-select: none;
   font-size: 0.75rem;
   color: var(--color-text-n);
-
-  .question {
-    all: unset;
-    display: block;
-    margin-inline: auto;
-    aspect-ratio: 1 / 1;
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
-
-    svg {
-      @include transition;
-    }
-
-    svg:is(:hover, :focus-visible) {
-      color: var(--color-bg-focus);
-      cursor: pointer;
-    }
-  }
 }
