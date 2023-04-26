@@ -8,6 +8,11 @@ const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
 });
 
+export const getSharedCollectionLogData = async (id: string) => {
+  const { data } = await api.get(`/log/${id}`);
+  return data;
+};
+
 export const getSharedCollectionData = async (id: string) => {
   const { data } = await api.get<Collection>(`/share/${id}`);
   return data;

@@ -5,7 +5,12 @@ export const formatDate = (date: string, locale: Languages, options?: Intl.DateT
 
   if (!date || !(dateObj instanceof Date)) return null;
 
-  return dateObj.toLocaleDateString(locale, options);
+  return dateObj.toLocaleString(locale, {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    ...options,
+  });
 };
 
 export const isStorageAvailable = () => {

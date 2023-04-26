@@ -8,8 +8,8 @@ const currentYear = new Date().getFullYear();
 
 const Footer: FC = () => (
   <footer className={styles.footer}>
-    Made with <FontAwesomeIcon icon={faHeart} style={{ color: '#ff0000', paddingInline: '0.125rem' }} /> by oktaani.com
-    &copy; {currentYear}
+    Made with <FontAwesomeIcon icon={faHeart} style={{ color: 'var(--color-p-red)', paddingInline: '0.125rem' }} /> by
+    oktaani.com &copy; {currentYear}
   </footer>
 );
 

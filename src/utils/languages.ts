@@ -29,6 +29,7 @@ const languages = {
       todo: 'Todo',
       note: 'Note',
       copyLink: 'Copy Share Link',
+      showLog: 'Show Log',
     },
     todo: {
       markDone: 'Mark [] as done',
@@ -89,6 +90,7 @@ const languages = {
       todo: 'Tehtävälista',
       note: 'Muistiinpano',
       copyLink: 'Kopioi jakolinkki',
+      showLog: 'Näytä muutosloki',
     },
     todo: {
       markDone: 'Merkkaa [] tehdyksi',

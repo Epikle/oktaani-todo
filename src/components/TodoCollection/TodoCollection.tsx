@@ -1,7 +1,7 @@
 import { FC, CSSProperties, useEffect, useRef, useState, useCallback } from 'react';
 import autoAnimate from '@formkit/auto-animate';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faCheck, faCopy, faShareNodes, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faCheck, faCopy, faFileLines, faShareNodes, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { useDrag, useDrop } from 'react-dnd';
 import type { Identifier, XYCoord } from 'dnd-core';
 
@@ -16,6 +16,7 @@ import TodoNote from './TodoNote';
 import useTabActive from '../../hooks/useTabActive';
 
 import styles from './TodoCollection.module.scss';
+import TodoLog from './TodoLog';
 
 type Props = {
   collection: Collection;
@@ -38,6 +39,7 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [isCopy, setIsCopy] = useState(false);
+  const [showLog, setShowLog] = useState(false);
   const [lastUpdatedTime, setLastUpdatedTime] = useState(0);
   const selectedColId = useSelectedStore((state) => state.id);
   const sort = useSettingsStore((state) => state.sort);
@@ -144,6 +146,10 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
     }, 2000);
   };
 
+  const toggleLogBtnHandler = () => {
+    setShowLog((prevS) => !prevS);
+  };
+
   useEffect(() => {
     if (parent.current) autoAnimate(parent.current);
   }, [parent]);
@@ -232,16 +238,30 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
           <FontAwesomeIcon icon={faBars} size="2x" />
         </button>
       )}
+      {showLog && <TodoLog id={id} languageName={languageName} />}
       {shared && !sort && (
         <div className={styles.shared}>
           {isSelected && (
-            <Button title={text.collection.copyLink} onClick={copyShareBtnHandler} disabled={isCopy}>
-              {isCopy ? <FontAwesomeIcon icon={faCheck} /> : <FontAwesomeIcon icon={faCopy} />}
+            <Button
+              title={text.collection.showLog}
+              onClick={toggleLogBtnHandler}
+              disabled={isCopy}
+              style={{ border: showLog ? '1px solid var(--color-p-red)' : 'none' }}
+            >
+              <FontAwesomeIcon icon={faFileLines} />
             </Button>
           )}
-          <span>
-            <FontAwesomeIcon icon={faShareNodes} />
-          </span>
+
+          <div>
+            {isSelected && (
+              <Button title={text.collection.copyLink} onClick={copyShareBtnHandler} disabled={isCopy}>
+                {isCopy ? <FontAwesomeIcon icon={faCheck} /> : <FontAwesomeIcon icon={faCopy} />}
+              </Button>
+            )}
+            <span>
+              <FontAwesomeIcon icon={faShareNodes} />
+            </span>
+          </div>
         </div>
       )}
     </article>
