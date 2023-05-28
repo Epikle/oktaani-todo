@@ -29,7 +29,10 @@ const languages = {
       todo: 'Todo',
       note: 'Note',
       copyLink: 'Copy Share Link',
-      showLog: 'Show Log',
+      showLog: 'Show Changelog',
+      log: 'Changelog',
+      logLatest: '5 LATEST',
+      noLogs: 'No logs!',
     },
     todo: {
       markDone: 'Mark [] as done',
@@ -91,6 +94,9 @@ const languages = {
       note: 'Muistiinpano',
       copyLink: 'Kopioi jakolinkki',
       showLog: 'Näytä muutosloki',
+      log: 'Muutosloki',
+      logLatest: '5 VIIMEISINTÄ',
+      noLogs: 'Ei logeja!',
     },
     todo: {
       markDone: 'Merkkaa [] tehdyksi',

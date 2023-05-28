@@ -204,7 +204,7 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
       ref={ref}
       data-handler-id={handlerId}
       className={isSelected ? [articleStyles, 'print'].join(' ') : articleStyles}
-      style={{ ...listStyles, opacity }}
+      style={{ ...listStyles, opacity, minHeight: showLog ? '14rem' : 'auto' }}
       data-done={showDone}
       data-created={showCreated}
     >
@@ -238,15 +238,14 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
           <FontAwesomeIcon icon={faBars} size="2x" />
         </button>
       )}
-      {showLog && <TodoLog id={id} languageName={languageName} />}
+      {shared && showLog && <TodoLog id={id} languageName={languageName} />}
       {shared && !sort && (
         <div className={styles.shared}>
           {isSelected && (
             <Button
               title={text.collection.showLog}
               onClick={toggleLogBtnHandler}
-              disabled={isCopy}
-              style={{ border: showLog ? '1px solid var(--color-p-red)' : 'none' }}
+              style={{ boxShadow: showLog ? 'inset 0 -2px var(--color-p-red)' : 'none' }}
             >
               <FontAwesomeIcon icon={faFileLines} />
             </Button>
