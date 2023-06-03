@@ -2,7 +2,7 @@ const languages = {
   'en-us': {
     header: {
       newCollection: 'Add a new collection',
-      newTodo: 'Add a new todo to',
+      newTodo: 'Add a new todo',
       setColorTitle: 'Choose Collection Color',
       editNote: 'Edit note',
     },
