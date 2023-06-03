@@ -37,6 +37,10 @@ const languages = {
     todo: {
       markDone: 'Mark [] as done',
     },
+    note: {
+      placeholder: 'Enter your note here',
+      saved: '✓ Saved...',
+    },
     welcome: {
       header: 'Welcome to oktaaniTODO!',
       bodyText:
@@ -100,6 +104,10 @@ const languages = {
     },
     todo: {
       markDone: 'Merkkaa [] tehdyksi',
+    },
+    note: {
+      placeholder: 'Syötä muistiinpano tähän',
+      saved: '✓ Tallennettu...',
     },
     welcome: {
       header: 'Tervetuloa OktaaniTODO:on!',

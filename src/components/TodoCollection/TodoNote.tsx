@@ -1,8 +1,10 @@
 import { FC, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 
-import styles from './TodoNote.module.scss';
+import useLanguage from '../../hooks/useLanguage';
 import useTodoStore from '../../context/useTodoStore';
+
+import styles from './TodoNote.module.scss';
 
 type Props = {
   id: string;
@@ -16,6 +18,7 @@ let timeoutId2: ReturnType<typeof setTimeout> | null = null;
 const TodoNote: FC<Props> = ({ id, isSelected, note }) => {
   const { editNote } = useTodoStore((state) => state.actions);
   const [saving, setSaving] = useState('');
+  const { text } = useLanguage();
 
   const textareaChangeHandler: React.ChangeEventHandler<HTMLTextAreaElement> = (event) => {
     if (timeoutId) clearTimeout(timeoutId);
@@ -23,7 +26,7 @@ const TodoNote: FC<Props> = ({ id, isSelected, note }) => {
 
     timeoutId = setTimeout(async () => {
       await editNote({ id, note: event.target.value });
-      setSaving('✓ Saved...');
+      setSaving(text.note.saved);
     }, 2000);
 
     timeoutId2 = setTimeout(() => {
@@ -41,7 +44,7 @@ const TodoNote: FC<Props> = ({ id, isSelected, note }) => {
 
   return (
     <div className={styles.note} data-saved={saving}>
-      <textarea rows={16} placeholder="Enter your text here..." onChange={textareaChangeHandler} defaultValue={note} />
+      <textarea rows={16} placeholder={text.note.placeholder} onChange={textareaChangeHandler} defaultValue={note} />
     </div>
   );
 };
