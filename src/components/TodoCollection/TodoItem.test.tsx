@@ -6,11 +6,20 @@ import '@testing-library/jest-dom/extend-expect';
 
 import TodoItem from './TodoItem';
 import type { Languages } from '../../utils/languages';
+import { TodoItemPriorityEnum } from '../../context/useTodoStore';
 
 describe('TodoItem', () => {
   const itemSetup = {
-    todo: { id: 'todo123', text: 'Test item', done: false, created: Date(), language: 'en-us' as Languages },
+    todo: {
+      id: 'todo123',
+      text: 'Test item',
+      done: false,
+      created: Date(),
+      language: 'en-us' as Languages,
+      priority: TodoItemPriorityEnum.Values.low,
+    },
     colId: 'id123',
+    selected: true,
   };
 
   it('Item is showing with all attributes', () => {

@@ -68,7 +68,7 @@ const TodoForm: FC = () => {
       try {
         await createCollectionItem({
           id,
-          itemEntry: { text: trimmedInput },
+          itemEntry: { text: trimmedInput, priority: 'low' },
         });
       } catch (error) {
         setError(text.errors.apiUpdateCollection);

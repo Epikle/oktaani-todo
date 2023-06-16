@@ -36,6 +36,8 @@ const languages = {
     },
     todo: {
       markDone: 'Mark [] as done',
+      remove: 'Remove item: []',
+      priority: 'Change priority',
     },
     note: {
       placeholder: 'Enter your note here',
@@ -104,6 +106,8 @@ const languages = {
     },
     todo: {
       markDone: 'Merkkaa [] tehdyksi',
+      remove: 'Poista tehtävä: []',
+      priority: 'Vaihda prioriteetti',
     },
     note: {
       placeholder: 'Syötä muistiinpano tähän',

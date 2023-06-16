@@ -6,11 +6,14 @@ import useSelectedStore, { type SelectedEntry } from './useSelectedStore';
 import * as todoService from '../services/todo';
 
 export const TodoTypeEnum = z.enum(['todo', 'note', 'unset']);
+export const TodoItemPriorityEnum = z.enum(['low', 'medium', 'high']);
+export type TodoItemPriority = z.infer<typeof TodoItemPriorityEnum>;
 export const ItemZ = z.object({
   id: z.string(),
   text: z.string(),
-  done: z.boolean(),
+  done: z.boolean().default(false),
   created: z.string(),
+  priority: TodoItemPriorityEnum.default('low'),
 });
 export const CollectionZ = z.object({
   id: z.string(),
@@ -36,7 +39,17 @@ export type TodoSlice = TodoState & {
     deleteCollection: ({ id, shared }: { id: string; shared: boolean }) => Promise<void>;
     toggleItemDone: ({ id, colId }: { id: string; colId: string }) => Promise<void>;
     removeDoneItems: (id: string) => Promise<void>;
+    removeTodoItem: ({ id, colId }: { id: string; colId: string }) => Promise<void>;
     editCollection: (entry: SelectedEntry & { noShare?: boolean }) => Promise<void>;
+    editTodoItemPriority: ({
+      id,
+      colId,
+      newPriority,
+    }: {
+      id: string;
+      colId: string;
+      newPriority: TodoItemPriority;
+    }) => Promise<void>;
     toggleHelp: () => void;
   };
 };
@@ -116,7 +129,7 @@ const useTodoStore = create<TodoSlice>()(
 
         if (!selectedCollection) return;
 
-        const createdItem = todoService.createItemEntry(itemEntry);
+        const createdItem = ItemZ.parse(todoService.createItemEntry(itemEntry));
 
         if (selectedCollection && selectedCollection.shared) {
           const sharedCollectionData = await todoService.getSharedCollectionData(id);
@@ -181,6 +194,48 @@ const useTodoStore = create<TodoSlice>()(
         if (!selectedCollection) return;
 
         selectedCollection.todos = [...selectedCollection.todos.filter((item) => !item.done)];
+        if (selectedCollection.shared) await todoService.updateSharedCollection(selectedCollection);
+
+        set(() => {
+          todoService.saveCollectionsToLS(collectionsCopy);
+          return { collections: collectionsCopy };
+        });
+      },
+      removeTodoItem: async ({ id, colId }) => {
+        const { collections } = get();
+        const collectionsCopy = JSON.parse(JSON.stringify(collections)) as TodoState['collections'];
+        const selectedCollection = collectionsCopy.find((col) => col.id === colId);
+
+        const removedItemIndex = collectionsCopy
+          .map((col) => col.todos)
+          .flat()
+          .findIndex((item) => item.id === id);
+
+        if (!selectedCollection) return;
+
+        selectedCollection.todos.splice(removedItemIndex, 1);
+
+        if (selectedCollection.shared) await todoService.updateSharedCollection(selectedCollection);
+
+        set(() => {
+          todoService.saveCollectionsToLS(collectionsCopy);
+          return { collections: collectionsCopy };
+        });
+      },
+      editTodoItemPriority: async ({ id, colId, newPriority }) => {
+        const { collections } = get();
+        const collectionsCopy = JSON.parse(JSON.stringify(collections)) as TodoState['collections'];
+        const selectedCollection = collectionsCopy.find((col) => col.id === colId);
+
+        const itemPriority = collectionsCopy
+          .map((col) => col.todos)
+          .flat()
+          .find((item) => item.id === id);
+
+        if (!itemPriority || !selectedCollection) return;
+
+        itemPriority.priority = newPriority;
+
         if (selectedCollection.shared) await todoService.updateSharedCollection(selectedCollection);
 
         set(() => {
