@@ -26,7 +26,7 @@ const priorityColors: Record<TodoItemPriority, string> = {
 const TodoItem: FC<Props> = ({ todo, colId, selected }) => {
   const { id, text: todoText, done, created } = todo;
   const [isDone, setIsDone] = useState(done);
-  const { toggleItemDone } = useTodoStore((state) => state.actions);
+  const { toggleItemDone, removeTodoItem } = useTodoStore((state) => state.actions);
   const languageName = useSettingsStore((state) => state.languageName);
   const { setError } = useStatusStore((state) => state.actions);
   const { text } = useLanguage();
@@ -38,6 +38,10 @@ const TodoItem: FC<Props> = ({ todo, colId, selected }) => {
     } catch (error) {
       setError(text.errors.apiUpdateCollection);
     }
+  };
+
+  const todoRemoveBtnHandler = async () => {
+    await removeTodoItem({ id, colId });
   };
 
   return (
@@ -56,7 +60,7 @@ const TodoItem: FC<Props> = ({ todo, colId, selected }) => {
         {todoText}
       </label>
       {selected && (
-        <Button>
+        <Button onClick={todoRemoveBtnHandler}>
           <FontAwesomeIcon icon={faTrash} />
         </Button>
       )}
