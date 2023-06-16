@@ -1,19 +1,29 @@
 import { FC, useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
-import useTodoStore, { type Item as TItem } from '../../context/useTodoStore';
+import useTodoStore, { type Item as TItem, type TodoItemPriority } from '../../context/useTodoStore';
 import useLanguage from '../../hooks/useLanguage';
 import { formatDate } from '../../utils/utils';
 import useSettingsStore from '../../context/useSettingsStore';
 import useStatusStore from '../../context/useStatusStore';
+import Button from '../UI/Button';
 
 import styles from './TodoItem.module.scss';
 
 type Props = {
   todo: TItem;
   colId: string;
+  selected: boolean;
 };
 
-const TodoItem: FC<Props> = ({ todo, colId }) => {
+const priorityColors: Record<TodoItemPriority, string> = {
+  low: 'hsl(0, 0%, 50%)',
+  medium: 'hsl(104, 13%, 36%)',
+  high: 'hsl(6, 92%, 36%)',
+};
+
+const TodoItem: FC<Props> = ({ todo, colId, selected }) => {
   const { id, text: todoText, done, created } = todo;
   const [isDone, setIsDone] = useState(done);
   const { toggleItemDone } = useTodoStore((state) => state.actions);
@@ -31,7 +41,10 @@ const TodoItem: FC<Props> = ({ todo, colId }) => {
   };
 
   return (
-    <li className={styles['todo-item']}>
+    <li
+      className={styles['todo-item']}
+      style={{ '--color-priority': priorityColors[todo.priority] } as React.CSSProperties}
+    >
       <input
         type="checkbox"
         id={id}
@@ -42,6 +55,11 @@ const TodoItem: FC<Props> = ({ todo, colId }) => {
       <label htmlFor={id} title={`${text.collection.created} ${formatDate(created, languageName)}`}>
         {todoText}
       </label>
+      {selected && (
+        <Button>
+          <FontAwesomeIcon icon={faTrash} />
+        </Button>
+      )}
     </li>
   );
 };

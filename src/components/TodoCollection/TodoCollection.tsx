@@ -228,7 +228,7 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
       {!sort && TodoTypeEnum.Enum.todo === type && (
         <ul ref={parent} className={styles['item-list']}>
           {collection.todos.map((todo) => (
-            <TodoItem key={todo.id} todo={todo} colId={id} />
+            <TodoItem key={todo.id} todo={todo} colId={id} selected={isSelected} />
           ))}
         </ul>
       )}
