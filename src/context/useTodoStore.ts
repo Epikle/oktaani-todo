@@ -206,12 +206,9 @@ const useTodoStore = create<TodoSlice>()(
         const collectionsCopy = JSON.parse(JSON.stringify(collections)) as TodoState['collections'];
         const selectedCollection = collectionsCopy.find((col) => col.id === colId);
 
-        const removedItemIndex = collectionsCopy
-          .map((col) => col.todos)
-          .flat()
-          .findIndex((item) => item.id === id);
-
         if (!selectedCollection) return;
+
+        const removedItemIndex = selectedCollection.todos.findIndex((item) => item.id === id);
 
         selectedCollection.todos.splice(removedItemIndex, 1);
 
