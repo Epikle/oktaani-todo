@@ -41,6 +41,15 @@ export type TodoSlice = TodoState & {
     removeDoneItems: (id: string) => Promise<void>;
     removeTodoItem: ({ id, colId }: { id: string; colId: string }) => Promise<void>;
     editCollection: (entry: SelectedEntry & { noShare?: boolean }) => Promise<void>;
+    editTodoItemPriority: ({
+      id,
+      colId,
+      newPriority,
+    }: {
+      id: string;
+      colId: string;
+      newPriority: TodoItemPriority;
+    }) => Promise<void>;
     toggleHelp: () => void;
   };
 };
@@ -205,6 +214,27 @@ const useTodoStore = create<TodoSlice>()(
         if (!selectedCollection) return;
 
         selectedCollection.todos.splice(removedItemIndex, 1);
+
+        if (selectedCollection.shared) await todoService.updateSharedCollection(selectedCollection);
+
+        set(() => {
+          todoService.saveCollectionsToLS(collectionsCopy);
+          return { collections: collectionsCopy };
+        });
+      },
+      editTodoItemPriority: async ({ id, colId, newPriority }) => {
+        const { collections } = get();
+        const collectionsCopy = JSON.parse(JSON.stringify(collections)) as TodoState['collections'];
+        const selectedCollection = collectionsCopy.find((col) => col.id === colId);
+
+        const itemPriority = collectionsCopy
+          .map((col) => col.todos)
+          .flat()
+          .find((item) => item.id === id);
+
+        if (!itemPriority || !selectedCollection) return;
+
+        itemPriority.priority = newPriority;
 
         if (selectedCollection.shared) await todoService.updateSharedCollection(selectedCollection);
 
