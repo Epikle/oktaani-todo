@@ -31,5 +31,10 @@ export const isStorageAvailable = () => {
 };
 
 export const copyToClipboard = async (id: string) => {
-  await navigator.clipboard.writeText(`${import.meta.env.VITE_BASE_URL}?share=${id}`);
+  try {
+    await navigator.clipboard.writeText(`${import.meta.env.VITE_BASE_URL}?share=${id}`);
+    return true;
+  } catch (error) {
+    return false;
+  }
 };
