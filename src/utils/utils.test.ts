@@ -19,7 +19,7 @@ describe('Utils', () => {
   });
 
   it('should handle clipboard write error', async () => {
-    (navigator.clipboard.writeText as Mock).mockRejectedValue(new Error('Clipboard write error'));
+    (navigator.clipboard.writeText as Mock).mockRejectedValue('Error');
 
     const result = await copyToClipboard('test-id');
 
