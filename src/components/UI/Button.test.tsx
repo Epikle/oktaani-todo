@@ -1,5 +1,4 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import { vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 
