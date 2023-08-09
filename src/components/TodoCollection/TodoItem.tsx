@@ -2,7 +2,8 @@ import { FC, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
-import useTodoStore, { type Item as TItem } from '../../context/useTodoStore';
+import { type Item as TItem } from '../../context/useTodoStore';
+import useTodoStore from '../../context/useTodoStore';
 import useLanguage from '../../hooks/useLanguage';
 import { formatDate } from '../../utils/utils';
 import useSettingsStore from '../../context/useSettingsStore';
@@ -47,7 +48,12 @@ const TodoItem: FC<Props> = ({ todo, colId, selected }) => {
   return (
     <li className={styles['todo-item']} style={{ '--color-priority': priorityColor } as React.CSSProperties}>
       <div className={styles.priority}>
-        <Button aria-label={text.todo.priority} title={text.todo.priority} onClick={changePriorityBtnHandler} />
+        <Button
+          aria-label={text.todo.priority}
+          title={text.todo.priority}
+          onClick={changePriorityBtnHandler}
+          testId="item-btn-priority"
+        />
         <input
           type="checkbox"
           id={id}
@@ -65,6 +71,7 @@ const TodoItem: FC<Props> = ({ todo, colId, selected }) => {
           onClick={todoRemoveBtnHandler}
           aria-label={text.todo.remove.replace('[]', todoText)}
           title={text.todo.remove.replace('[]', todoText)}
+          testId="item-btn-remove"
         >
           <FontAwesomeIcon icon={faTrash} />
         </Button>

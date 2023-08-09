@@ -1,5 +1,4 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import { vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 import '@testing-library/jest-dom/extend-expect';
@@ -35,6 +34,7 @@ describe('TodoItem', () => {
 
     const checkbox = screen.getByRole('checkbox');
     const item = screen.getByLabelText(itemSetup.todo.text);
+
     act(() => {
       item.click();
     });
@@ -50,6 +50,18 @@ describe('TodoItem', () => {
     const checkbox = screen.getByRole('checkbox');
 
     expect(checkbox).toBeChecked();
+  });
+
+  it('Should change priority of item', async () => {
+    const { getByTestId } = render(<TodoItem {...itemSetup} />);
+
+    const priorityBtn = getByTestId('item-btn-priority');
+
+    act(() => {
+      priorityBtn.click();
+    });
+
+    // do something
   });
 
   afterEach(() => {
