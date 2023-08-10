@@ -1,6 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import { render } from '@testing-library/react';
-import { act } from 'react-dom/test-utils';
+import { fireEvent, render, waitFor } from '@testing-library/react';
 
 import TodoControls from './TodoControls';
 import useTodoStore from '../../context/useTodoStore';
@@ -25,14 +24,14 @@ describe('TodoControls', () => {
     expect(deleteBtnElem).toBeDisabled();
   });
 
-  it('Delete btn should call handler fn', () => {
+  it('Delete btn should call handler fn', async () => {
     spySelectedDone.mockReturnValue(true);
     const { getByTestId } = render(<TodoControls onConfirm={mockConfirm} />);
     const deleteBtnElem = getByTestId('remove-done-btn');
-    act(() => {
-      deleteBtnElem.click();
+    fireEvent.click(deleteBtnElem);
+    await waitFor(() => {
+      expect(spyRemoveDoneItems).toBeCalledTimes(1);
     });
-    expect(spyRemoveDoneItems).toBeCalledTimes(1);
   });
 
   it('Delete btn should call handler fn and fail', () => {
@@ -42,9 +41,7 @@ describe('TodoControls', () => {
     });
     const { getByTestId } = render(<TodoControls onConfirm={mockConfirm} />);
     const deleteBtnElem = getByTestId('remove-done-btn');
-    act(() => {
-      deleteBtnElem.click();
-    });
+    fireEvent.click(deleteBtnElem);
     expect(spyRemoveDoneItems).toBeCalledTimes(1);
     expect(spySetError).toBeCalledTimes(1);
   });
