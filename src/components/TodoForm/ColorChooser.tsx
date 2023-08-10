@@ -15,10 +15,7 @@ type Props = {
 
 const ColorChooser: FC<Props> = ({ defaultColor, color, setColor }) => {
   const colorInputRef = useRef<HTMLInputElement>(null);
-  const title = useSelectedStore((state) => state.title);
   const storeColor = useSelectedStore((state) => state.color);
-  const shared = useSelectedStore((state) => state.shared);
-  const type = useSelectedStore((state) => state.type);
   const id = useSelectedStore((state) => state.id);
   const { setSelectedCollection } = useSelectedStore((state) => state.actions);
   const { editCollection } = useTodoStore((state) => state.actions);
@@ -32,15 +29,11 @@ const ColorChooser: FC<Props> = ({ defaultColor, color, setColor }) => {
       return;
     }
 
-    const editedCollection = {
-      id,
-      title,
-      color: colorInputRef.current.value,
-      shared,
-      type,
-    };
     try {
-      await editCollection(editedCollection);
+      await editCollection({
+        id,
+        color: colorInputRef.current.value,
+      });
     } catch (error) {
       setError(text.errors.apiUpdateCollection);
     }
@@ -68,6 +61,7 @@ const ColorChooser: FC<Props> = ({ defaultColor, color, setColor }) => {
       ref={colorInputRef}
       defaultValue={defaultColor}
       onBlur={colorInputHandler}
+      data-testid="input-color"
     />
   );
 };
