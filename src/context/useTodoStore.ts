@@ -40,7 +40,7 @@ export type TodoSlice = TodoState & {
     toggleItemDone: ({ id, colId }: { id: string; colId: string }) => Promise<void>;
     removeDoneItems: (id: string) => Promise<void>;
     removeTodoItem: ({ id, colId }: { id: string; colId: string }) => Promise<void>;
-    editCollection: (entry: SelectedEntry & { noShare?: boolean }) => Promise<void>;
+    editCollection: (entry: Partial<SelectedEntry> & { noShare?: boolean }) => Promise<void>;
     editTodoItemPriority: ({
       id,
       colId,
