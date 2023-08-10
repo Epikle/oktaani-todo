@@ -69,3 +69,7 @@ describe('Sort', () => {
     expect(btn.getAttribute('class')).toContain('sort-active');
   });
 });
+
+afterEach(() => {
+  vi.resetAllMocks();
+});

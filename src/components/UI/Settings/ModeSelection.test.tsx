@@ -5,10 +5,10 @@ import { act } from 'react-dom/test-utils';
 import useSettingsStore from '../../../context/useSettingsStore';
 import ModeSelection from './ModeSelection';
 
+const spy = vi.spyOn(useSettingsStore.getState().actions, 'setSettings');
+
 describe('ModeSelection', () => {
   it('Button click should activate handlerfn', () => {
-    const spy = vi.spyOn(useSettingsStore.getState().actions, 'setSettings');
-
     const { getByRole } = render(<ModeSelection disabled={false} />);
 
     const btn = getByRole('button');
@@ -22,8 +22,6 @@ describe('ModeSelection', () => {
   });
 
   it('Disabled button, click should not activate handlerfn', () => {
-    const spy = vi.spyOn(useSettingsStore.getState().actions, 'setSettings');
-
     const { getByRole } = render(<ModeSelection disabled />);
 
     const btn = getByRole('button');
@@ -36,4 +34,8 @@ describe('ModeSelection', () => {
     expect(btn).toBeDisabled();
     expect(spy).toBeCalledTimes(0);
   });
+});
+
+afterEach(() => {
+  vi.resetAllMocks();
 });

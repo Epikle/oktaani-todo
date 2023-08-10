@@ -72,3 +72,7 @@ describe('HelpSelection', () => {
     expect(btn.getAttribute('class')).toContain('help-active');
   });
 });
+
+afterEach(() => {
+  vi.resetAllMocks();
+});
