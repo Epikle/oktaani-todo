@@ -20,6 +20,7 @@ const HelpSelection: FC = () => {
       title={text.controls.help}
       onClick={toggleHelp}
       disabled={collections.length === 0}
+      testId="help-btn"
     >
       <FontAwesomeIcon icon={faCircleQuestion} />
     </Button>
