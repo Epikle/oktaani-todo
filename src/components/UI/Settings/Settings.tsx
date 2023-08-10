@@ -20,7 +20,6 @@ const Settings: FC = () => {
   };
 
   const hiddenBtnsStyles = showSettings ? [styles['hidden-btns'], styles.selected].join(' ') : styles['hidden-btns'];
-
   const settingsBtnStyles = showSettings ? [styles.gear, styles.selected].join(' ') : styles.gear;
 
   return (
@@ -40,7 +39,12 @@ const Settings: FC = () => {
           </ul>
         </li>
         <li>
-          <Button className={settingsBtnStyles} onClick={settingsBtnHandler} title={text.controls.settings}>
+          <Button
+            className={settingsBtnStyles}
+            onClick={settingsBtnHandler}
+            title={text.controls.settings}
+            testId="btn-settings"
+          >
             <FontAwesomeIcon icon={faGear} />
           </Button>
         </li>
