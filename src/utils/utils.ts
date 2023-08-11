@@ -3,14 +3,16 @@ import type { Languages } from './languages';
 export const formatDate = (date: string, locale: Languages, options?: Intl.DateTimeFormatOptions): string | null => {
   const dateObj = new Date(date);
 
-  if (!date || !(dateObj instanceof Date)) return null;
+  if (!date || Number.isNaN(dateObj.getTime())) return null;
 
-  return dateObj.toLocaleString(locale, {
+  const formatOptions: Intl.DateTimeFormatOptions = {
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',
     ...options,
-  });
+  };
+
+  return dateObj.toLocaleString(locale, formatOptions);
 };
 
 export const isStorageAvailable = () => {
