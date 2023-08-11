@@ -4,7 +4,6 @@ export type StatusSlice = typeof initialStatusState & {
   actions: {
     setError: (message: string) => void;
     resetError: () => void;
-    resetStatus: () => void;
   };
 };
 
@@ -19,7 +18,6 @@ const useStatusStore = create<StatusSlice>((set) => ({
   actions: {
     setError: (message) => set((state) => ({ ...state, isError: true, errorMessage: message })),
     resetError: () => set((state) => ({ ...state, isError: false })),
-    resetStatus: () => set(initialStatusState),
   },
 }));
 
