@@ -13,3 +13,7 @@ describe('useLanguage', () => {
     expect(spySetSettings).toBeCalledTimes(1);
   });
 });
+
+afterEach(() => {
+  vi.resetAllMocks();
+});
