@@ -1,7 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
-import { act } from 'react-dom/test-utils';
 
 import ColorChooser from './ColorChooser';
 import useSelectedStore from '../../context/useSelectedStore';
@@ -17,21 +15,14 @@ const spySetError = vi.spyOn(useStatusStore.getState().actions, 'setError');
 describe('ColorChooser', () => {
   it('Should have default color set', () => {
     const { getByTestId } = render(<ColorChooser defaultColor="#FF0000" color="#FF0000" setColor={vi.fn()} />);
-
     const input = getByTestId('input-color');
-
     expect(input.getAttribute('value')).toContain('#FF0000');
   });
 
   it('Click color input should fire handlerfn with setColor prop fn', () => {
     const { getByTestId } = render(<ColorChooser defaultColor="#FF0000" color="#FF0000" setColor={setColorFnMock} />);
-
     const input = getByTestId('input-color') as HTMLInputElement;
-
-    act(() => {
-      fireEvent.blur(input, { target: { value: '#00ff00' } });
-    });
-
+    fireEvent.blur(input, { target: { value: '#00ff00' } });
     expect(input.value).toContain('#00ff00');
     expect(setColorFnMock).toBeCalledTimes(1);
     expect(spySelectedCollection).toBeCalledTimes(0);
@@ -39,15 +30,9 @@ describe('ColorChooser', () => {
 
   it('Click color input should fire handlerfn with editCollection fn', () => {
     spySelectedColor.mockImplementation(() => 'true');
-
     const { getByTestId } = render(<ColorChooser defaultColor="#FF0000" color="#FF0000" setColor={setColorFnMock} />);
-
     const input = getByTestId('input-color') as HTMLInputElement;
-
-    act(() => {
-      fireEvent.blur(input, { target: { value: '#00ff00' } });
-    });
-
+    fireEvent.blur(input, { target: { value: '#00ff00' } });
     expect(input.value).toContain('#00ff00');
     expect(setColorFnMock).toBeCalledTimes(0);
   });
@@ -59,11 +44,7 @@ describe('ColorChooser', () => {
     });
     const { getByTestId } = render(<ColorChooser defaultColor="#FF0000" color="#FF0000" setColor={setColorFnMock} />);
     const input = getByTestId('input-color') as HTMLInputElement;
-
-    act(() => {
-      fireEvent.blur(input, { target: { value: '#00ff00' } });
-    });
-
+    fireEvent.blur(input, { target: { value: '#00ff00' } });
     expect(input.value).toContain('#00ff00');
     expect(setColorFnMock).toBeCalledTimes(0);
     expect(spySetError).toBeCalledTimes(1);
