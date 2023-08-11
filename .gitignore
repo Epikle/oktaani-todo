@@ -15,6 +15,9 @@ cypress/videos
 cypress/screenshots
 cypress/downloads
 coverage/
+.nyc_output/
+instrumented/
+cypress-coverage/
 
 # Editor directories and files
 .vscode/*

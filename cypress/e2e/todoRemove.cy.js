@@ -2,7 +2,7 @@
 
 describe('oktaniTODO', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:4173/todo-demo/');
+    cy.visit('/');
     cy.get('[data-testid="todo-input"]').type('✨ First Collection ✨');
     cy.get('[data-testid="submit-btn"]').click();
     cy.get('[data-testid="submit-btn"]').should('not.be.visible');

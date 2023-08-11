@@ -2,7 +2,7 @@
 
 describe('oktaniTODO', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:4173/todo-demo/');
+    cy.visit('http://localhost:5173/todo-demo/');
   });
 
   it('display welcome/help page', () => {
