@@ -1,4 +1,4 @@
-import { renderHook, waitFor } from '@testing-library/react';
+import { renderHook } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 
 import useStatusStore from './useStatusStore';
@@ -17,13 +17,11 @@ describe('useStatusStore', () => {
     expect(result.current.errorMessage).toBe('error-message');
   });
 
-  it('Should reset error state', async () => {
+  it('Should reset error state', () => {
     const { result } = renderHook(() => useStatusStore((state) => state));
     act(() => {
       result.current.actions.resetError();
     });
-    await waitFor(() => {
-      expect(result.current.isError).toBe(false);
-    });
+    expect(result.current.isError).toBe(false);
   });
 });
