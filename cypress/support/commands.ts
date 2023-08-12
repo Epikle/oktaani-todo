@@ -27,14 +27,18 @@ import '@testing-library/cypress/add-commands';
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
-//
-// declare global {
-//   namespace Cypress {
-//     interface Chainable {
-//       login(email: string, password: string): Chainable<void>
-//       drag(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       dismiss(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       visit(originalFn: CommandOriginalFn, url: string, options: Partial<VisitOptions>): Chainable<Element>
-//     }
-//   }
-// }
+
+Cypress.Commands.add('createCollectionItems', () => {
+  cy.get('[data-testid="todo-input"]').type('ITEM1');
+  cy.get('[data-testid="submit-btn"]').click();
+  cy.get('[data-testid="todo-input"]').type('ITEM2');
+  cy.get('[data-testid="submit-btn"]').click();
+});
+
+declare global {
+  namespace Cypress {
+    interface Chainable {
+      createCollectionItems(): Chainable<void>;
+    }
+  }
+}
