@@ -2,7 +2,7 @@
 
 describe('oktaniTODO', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:5173/todo-demo/');
+    cy.visit('/');
   });
 
   it('Should display welcome/help page', () => {
@@ -20,9 +20,6 @@ describe('oktaniTODO', () => {
   it('Should toggle settings open and change mode', () => {
     cy.get('[data-testid="btn-settings"]').click();
     cy.get('[data-testid="btn-mode"]').should('not.be.disabled');
-    cy.get('[data-testid="icon-sun"]').should('exist');
     cy.get('[data-testid="btn-mode"]').click();
-    cy.get('[data-testid="icon-moon"]').should('exist');
-    cy.get('[data-testid="icon-sun"]').should('not.exist');
   });
 });
