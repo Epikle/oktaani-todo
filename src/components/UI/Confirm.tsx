@@ -18,7 +18,7 @@ const Confirm: FC<Props> = ({ confirmText, onConfirm, onCancel, isLoading }) => 
   const { text } = useLanguage();
 
   return (
-    <div className={styles.confirm}>
+    <div className={styles.confirm} data-testid="confirm-container">
       <div className={styles.text}>
         <FontAwesomeIcon icon={faCircleQuestion} size="xl" />
         {confirmText}
