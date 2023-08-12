@@ -23,6 +23,7 @@ const LanguageSelection: FC<Props> = ({ disabled }) => {
       title={text.controls.language}
       onClick={nextLang}
       disabled={disabled}
+      testId="btn-language"
     >
       <FontAwesomeIcon icon={faEarthAmericas} />
     </Button>
