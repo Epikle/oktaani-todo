@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-describe('oktaniTODO', () => {
+describe('Todo remove', () => {
   beforeEach(() => {
     cy.visit('/');
     cy.get('[data-testid="todo-input"]').type('✨ First Collection ✨');

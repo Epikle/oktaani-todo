@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-describe('oktaniTODO', () => {
+describe('Note', () => {
   beforeEach(() => {
     cy.visit('/');
   });
