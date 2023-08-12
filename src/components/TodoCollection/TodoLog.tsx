@@ -28,7 +28,7 @@ const TodoLog: FC<{ id: string; languageName: Languages }> = ({ id, languageName
 
   return (
     <div className={styles.bg}>
-      <div className={styles.log}>
+      <div className={styles.log} data-testid="log-container">
         {text.collection.log} <span>{text.collection.logLatest}</span>
         {isLoading && <p>{text.common.loading}</p>}
         {!isLoading && logs.length === 0 && <p>{text.collection.noLogs}</p>}
