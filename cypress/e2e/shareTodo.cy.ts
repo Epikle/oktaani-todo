@@ -33,10 +33,10 @@ describe('Share todo', () => {
   });
 
   it('Should share created collection successfully and then cancel it', () => {
-    cy.intercept('GET', 'http://localhost:5000/api/v2/**', []);
-    cy.intercept('PUT', 'http://localhost:5000/api/v2/**', []);
-    cy.intercept('POST', 'http://localhost:5000/api/v2/**', []);
-    cy.intercept('DELETE', 'http://localhost:5000/api/v2/**', []);
+    cy.intercept('GET', '/api/v2/**', []);
+    cy.intercept('PUT', '/api/v2/**', []);
+    cy.intercept('POST', '/api/v2/**', []);
+    cy.intercept('DELETE', '/api/v2/**', []);
 
     cy.get('[data-testid="share-col-btn"]').click();
     cy.get('[data-testid="confirm-container"]').should('have.text', 'Share collection?');
