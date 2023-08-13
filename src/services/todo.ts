@@ -2,10 +2,11 @@ import axios from 'axios';
 import { nanoid } from 'nanoid';
 
 import type { Collection, Item, ItemEntry, NewCollectionEntry, TodoTypes } from '../context/useTodoStore';
+import env from '../utils/env';
 
-const LS_NAME = import.meta.env.VITE_LS_NAME_TODOS;
+const LS_NAME = env.LS_NAME_TODOS;
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: env.API_URL,
 });
 
 export const getSharedCollectionLogData = async (id: string) => {
