@@ -7,6 +7,7 @@ export default defineConfig({
       exclude: 'cypress/**/*.*',
     },
   },
+  chromeWebSecurity: false,
   e2e: {
     baseUrl: 'http://localhost:5173/todo-demo',
     setupNodeEvents(on, config) {
