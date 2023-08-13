@@ -26,6 +26,11 @@ export default defineConfig({
     coverage: {
       provider: 'istanbul',
     },
+    env: {
+      VITE_API_URL: 'test',
+      VITE_LS_NAME_TODOS: 'test-todos',
+      VITE_LS_NAME_SETTINGS: 'test-settings',
+    },
   },
   preview: {
     port: 5173,
