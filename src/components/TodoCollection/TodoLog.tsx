@@ -8,9 +8,21 @@ import useLanguage from '../../hooks/useLanguage';
 
 import styles from './TodoLog.module.scss';
 
-const TodoLog: FC<{ id: string; languageName: Languages }> = ({ id, languageName }) => {
+type Props = {
+  id: string;
+  languageName: Languages;
+};
+
+export type Log = {
+  id: string;
+  shareId: string;
+  message: string;
+  createdAt: string;
+};
+
+const TodoLog: FC<Props> = ({ id, languageName }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [logs, setLogs] = useState<{ id: string; shareId: string; message: string; createdAt: string }[]>([]);
+  const [logs, setLogs] = useState<Log[] | []>([]);
   const selectedColId = useSelectedStore((state) => state.id);
   const isSelected = selectedColId === id;
   const { text } = useLanguage();
