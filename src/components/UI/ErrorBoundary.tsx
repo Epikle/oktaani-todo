@@ -1,3 +1,4 @@
+/* eslint-disable react/destructuring-assignment */
 import { Component, ErrorInfo, ReactNode } from 'react';
 
 interface ErrorBoundaryProps {
@@ -6,27 +7,31 @@ interface ErrorBoundaryProps {
 
 interface ErrorBoundaryState {
   hasError: boolean;
+  error: Error | null;
 }
 
 class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   constructor(props: ErrorBoundaryProps) {
     super(props);
-    this.state = { hasError: false };
+    this.state = { hasError: false, error: null };
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     // You can log the error or perform any necessary actions here
+    // eslint-disable-next-line no-console
     console.error(error, errorInfo);
-    this.setState({ hasError: true });
+    this.setState({ hasError: true, error });
   }
 
   render() {
-    // eslint-disable-next-line react/destructuring-assignment
     if (this.state.hasError) {
-      return <div>Something went wrong.</div>;
+      return (
+        <div>
+          Something went wrong. <p>{this.state.error?.toString()}</p>
+        </div>
+      );
     }
 
-    // eslint-disable-next-line react/destructuring-assignment
     return this.props.children;
   }
 }
