@@ -29,7 +29,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
       return (
         <div>
           Something went wrong. <p>{this.state.error?.toString()}</p>
-          <p>{this.state.errorInfo?.toString()}</p>
+          <p>{JSON.stringify(this.state.errorInfo)}</p>
         </div>
       );
     }
