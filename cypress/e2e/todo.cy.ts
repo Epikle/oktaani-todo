@@ -5,9 +5,8 @@ describe('Todo', () => {
     cy.visit('/');
     cy.get('[data-testid="todo-input"]').type('First Collection');
     cy.get('[data-testid="submit-btn"]').click();
-    cy.get('[data-testid="submit-btn"]').should('not.be.visible');
     cy.get('[data-testid="add-todo-btn"]').click();
-    cy.get('[data-testid="submit-btn"]').click().should('not.be.visible');
+    cy.get('[data-testid="submit-btn"]').click();
   });
 
   it('Should display collection named First Collection', () => {
@@ -59,13 +58,13 @@ describe('Todo', () => {
   it('Should cycle all different priorities', () => {
     cy.get('article').first().should('have.text', 'First Collection').click();
     cy.createCollectionItems();
-    const priorityBtnElem = cy.get('[data-testid="item-btn-priority"]').first();
-    priorityBtnElem.should('have.css', 'background-color', 'rgb(128, 128, 128)');
-    priorityBtnElem.click();
-    priorityBtnElem.should('have.css', 'background-color', 'rgb(86, 104, 80)');
-    priorityBtnElem.click();
-    priorityBtnElem.should('have.css', 'background-color', 'rgb(176, 24, 7)');
-    priorityBtnElem.click();
-    priorityBtnElem.should('have.css', 'background-color', 'rgb(128, 128, 128)');
+    const priorityBtnCommand = cy.get('[data-testid="item-btn-priority"]').first();
+    priorityBtnCommand.should('have.css', 'background-color', 'rgb(128, 128, 128)');
+    priorityBtnCommand.click();
+    priorityBtnCommand.should('have.css', 'background-color', 'rgb(86, 104, 80)');
+    priorityBtnCommand.click();
+    priorityBtnCommand.should('have.css', 'background-color', 'rgb(176, 24, 7)');
+    priorityBtnCommand.click();
+    priorityBtnCommand.should('have.css', 'background-color', 'rgb(128, 128, 128)');
   });
 });

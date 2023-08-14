@@ -9,7 +9,9 @@ describe('Welcome page and settings', () => {
   });
 
   it('Should share collection and open log and close', () => {
-    cy.intercept('GET', '/api/v2/**', []).as('getLogs');
+    cy.intercept('GET', '/api/v2/**', [
+      { id: 'test-id', shareId: 'test-share-id', message: 'test-message', createdAt: Date.now() },
+    ]).as('getLogs');
     cy.intercept('PUT', '/api/v2/**', []);
     cy.intercept('POST', '/api/v2/**', []);
 
