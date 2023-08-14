@@ -43,7 +43,7 @@ jobs:
         if: failure()
         with:
           name: cypress-snapshots
-          path: cypress/snapshots
+          path: /home/runner/work/oktaani-todo/oktaani-todo/cypress/snapshots
 
       - name: Discord Test Success
         uses: rjstone/discord-webhook-notify@v1
