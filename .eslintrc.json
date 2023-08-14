@@ -39,7 +39,8 @@
       {
         "devDependencies": true
       }
-    ]
+    ],
+    "@typescript-eslint/no-explicit-any": "error"
   },
   "ignorePatterns": ["cypress/**/*"],
   "parserOptions": {
