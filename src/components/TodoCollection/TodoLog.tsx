@@ -30,8 +30,12 @@ const TodoLog: FC<Props> = ({ id, languageName }) => {
   useEffect(() => {
     (async () => {
       setIsLoading(true);
-      const logsData = await getSharedCollectionLogData(id);
-      setLogs(logsData);
+      try {
+        const logsData = await getSharedCollectionLogData(id);
+        setLogs(logsData);
+      } catch (error) {
+        setLogs([]);
+      }
       setIsLoading(false);
     })();
   }, [id]);
