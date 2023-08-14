@@ -1,3 +1,4 @@
+import env from './env';
 import type { Languages } from './languages';
 
 export const formatDate = (date: string, locale: Languages, options?: Intl.DateTimeFormatOptions): string | null => {
@@ -34,7 +35,7 @@ export const isStorageAvailable = () => {
 
 export const copyToClipboard = async (id: string) => {
   try {
-    await navigator.clipboard.writeText(`${import.meta.env.VITE_BASE_URL}?share=${id}`);
+    await navigator.clipboard.writeText(`${env.BASE_URL}?share=${id}`);
     return true;
   } catch (error) {
     return false;

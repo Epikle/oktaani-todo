@@ -11,6 +11,7 @@ import useSelectedStore from './context/useSelectedStore';
 import useSettingsStore from './context/useSettingsStore';
 import useTodoStore from './context/useTodoStore';
 import useStatusStore from './context/useStatusStore';
+import env from './utils/env';
 
 const shareParam = new URLSearchParams(document.location.search).get('share');
 
@@ -31,11 +32,11 @@ const App: FC = () => {
       (async () => {
         try {
           await createSharedCollection(shareParam);
-          window.location.replace(import.meta.env.VITE_BASE_URL);
+          window.location.replace(env.BASE_URL);
         } catch (error) {
           setError(text.errors.apiGetCollection);
           setTimeout(() => {
-            window.location.replace(import.meta.env.VITE_BASE_URL);
+            window.location.replace(env.BASE_URL);
           }, 5000);
         }
       })();

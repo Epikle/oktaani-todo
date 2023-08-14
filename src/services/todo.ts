@@ -2,6 +2,7 @@ import axios from 'axios';
 import { nanoid } from 'nanoid';
 
 import type { Collection, Item, ItemEntry, NewCollectionEntry, TodoTypes } from '../context/useTodoStore';
+import type { Log } from '../components/TodoCollection/TodoLog';
 import env from '../utils/env';
 
 const LS_NAME = env.LS_NAME_TODOS;
@@ -10,7 +11,7 @@ const api = axios.create({
 });
 
 export const getSharedCollectionLogData = async (id: string) => {
-  const { data } = await api.get(`/log/${id}`);
+  const { data } = await api.get<Log[] | []>(`/log/${id}`);
   return data;
 };
 

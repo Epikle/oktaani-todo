@@ -1,12 +1,11 @@
 import type { SettingsLS } from '../context/useSettingsStore';
-
-const LS_NAME = import.meta.env.VITE_LS_NAME_SETTINGS;
+import env from '../utils/env';
 
 export const getSettingsFromLS = () => {
-  const settings = localStorage.getItem(LS_NAME);
+  const settings = localStorage.getItem(env.LS_NAME_SETTINGS);
   return JSON.parse(settings || '{}') as unknown;
 };
 
 export const saveSettingsToLS = (settings: SettingsLS) => {
-  localStorage.setItem(LS_NAME, JSON.stringify(settings));
+  localStorage.setItem(env.LS_NAME_SETTINGS, JSON.stringify(settings));
 };
