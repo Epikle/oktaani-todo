@@ -9,9 +9,10 @@ describe('Welcome page and settings', () => {
   });
 
   it('Should share collection and open log and close', () => {
-    cy.intercept('GET', '/api/v2/**', [
+    cy.intercept('GET', '/api/v2/oktaani-todo-v2/log/**', [
       { id: 'test-id', shareId: 'test-share-id', message: 'test-message', createdAt: Date.now() },
     ]).as('getLogs');
+    cy.intercept('GET', '/api/v2/oktaani-todo-v2/share/**', []);
     cy.intercept('PUT', '/api/v2/**', []);
     cy.intercept('POST', '/api/v2/**', []);
 
