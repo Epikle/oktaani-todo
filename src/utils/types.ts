@@ -40,6 +40,7 @@ export const arrayOfCollectionsSchema = z.array(collectionSchema);
 export const arrayOfLogsSchema = z.array(logSchema);
 
 export type Item = z.infer<typeof itemSchema>;
+export type ItemEntry = Omit<Item, 'colId' | 'id'>;
 export type Note = z.infer<typeof noteSchema>;
 export type Collection = z.infer<typeof collectionSchema>;
 export type ItemPriority = z.infer<typeof prioritySchema>;
