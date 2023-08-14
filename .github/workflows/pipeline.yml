@@ -42,8 +42,8 @@ jobs:
         uses: actions/upload-artifact@v3
         if: failure()
         with:
-          name: cypress-snapshots
-          path: /home/runner/work/oktaani-todo/oktaani-todo/cypress/snapshots
+          name: cypress-screenshots
+          path: /home/runner/work/oktaani-todo/oktaani-todo/cypress/screenshots
 
       - name: Discord Test Success
         uses: rjstone/discord-webhook-notify@v1
