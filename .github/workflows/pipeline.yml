@@ -38,6 +38,13 @@ jobs:
         with:
           start: npm run preview
 
+      - name: Upload screenshots
+        uses: actions/upload-artifact@latest
+        if: failure()
+        with:
+          name: cypress-snapshots
+          path: cypress/snapshots
+
       - name: Discord Test Success
         uses: rjstone/discord-webhook-notify@v1
         if: ${{ success() && !env.ACT }}
