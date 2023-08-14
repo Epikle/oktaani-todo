@@ -12,6 +12,7 @@ import useSettingsStore from './context/useSettingsStore';
 import useTodoStore from './context/useTodoStore';
 import useStatusStore from './context/useStatusStore';
 import env from './utils/env';
+import ErrorBoundary from './components/UI/ErrorBoundary';
 
 const shareParam = new URLSearchParams(document.location.search).get('share');
 
@@ -53,7 +54,11 @@ const App: FC = () => {
           <p>Loading...</p>
         </main>
       )}
-      {!shareParam && <TodoList />}
+      {!shareParam && (
+        <ErrorBoundary>
+          <TodoList />
+        </ErrorBoundary>
+      )}
     </div>
   );
 };
