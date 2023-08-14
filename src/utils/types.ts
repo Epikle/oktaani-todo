@@ -40,8 +40,9 @@ export const arrayOfCollectionsSchema = z.array(collectionSchema);
 export const arrayOfLogsSchema = z.array(logSchema);
 
 export type Item = z.infer<typeof itemSchema>;
-export type ItemEntry = Omit<Item, 'colId' | 'id'>;
+export type ItemEntry = Pick<Item, 'colId' | 'message'>;
 export type Note = z.infer<typeof noteSchema>;
 export type Collection = z.infer<typeof collectionSchema>;
+export type CollectionEntry = Pick<Collection, 'title' | 'color'>;
 export type ItemPriority = z.infer<typeof prioritySchema>;
 export type Log = z.infer<typeof logSchema>;

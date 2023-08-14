@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { nanoid } from 'nanoid';
+import { ZodTypeAny } from 'zod';
 
 import env from '../utils/env';
 import {
@@ -8,7 +9,6 @@ import {
   Item,
   ItemEntry,
   Log,
-  arrayOfCollectionsSchema,
   arrayOfLogsSchema,
   collectionSchema,
   itemSchema,
@@ -42,14 +42,15 @@ export const deleteSharedCollection = async (colId: string): Promise<void> => {
   await api.delete(`/share/${colId}`);
 };
 
-export const saveCollectionsToLS = (collections: Collection[]): void => {
-  localStorage.setItem(env.LS_NAME_TODOS, JSON.stringify(collections));
+export const saveToLocalStorage = <T>(key: string, data: T): void => {
+  localStorage.setItem(key, JSON.stringify(data));
 };
 
-export const getTodosFromLS = (): Collection[] => {
-  const data = localStorage.getItem(env.LS_NAME_TODOS) || '';
-  const validCollections = arrayOfCollectionsSchema.parse(JSON.parse(data));
-  return validCollections;
+export const getFromLocalStorage = <T>(key: string, schema: ZodTypeAny): T => {
+  const data = localStorage.getItem(key) || '';
+  const parsedData = JSON.parse(data) as unknown;
+  const validData = schema.parse(parsedData);
+  return validData;
 };
 
 export const createCollectionEntry = (entry: CollectionEntry): Collection => {
@@ -61,10 +62,9 @@ export const createCollectionEntry = (entry: CollectionEntry): Collection => {
   return validCollection;
 };
 
-export const createItemEntry = (colId: string, entry: ItemEntry): Item => {
+export const createItemEntry = (entry: ItemEntry): Item => {
   const newItem = {
     id: nanoid(),
-    colId,
     ...entry,
   };
   const validItem = itemSchema.parse(newItem);
