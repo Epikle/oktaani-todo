@@ -25,8 +25,9 @@ describe('Welcome page and settings', () => {
     cy.get('[data-testid="confirm-container"]').should('have.text', 'Share collection?');
     cy.get('[data-testid="confirm-delete-btn"]').click();
     cy.get('[aria-label="Show Changelog"]').click();
-    cy.wait('@getLogs');
-    cy.get('[data-testid="log-container"]').contains('Changelog');
+    cy.get('[data-testid="log-container"]').should((element) => {
+      expect(element.text()).to.match(/Changelog/);
+    });
     cy.get('[aria-label="Show Changelog"]').click();
     cy.get('[data-testid="log-container"]').should('not.exist');
   });
