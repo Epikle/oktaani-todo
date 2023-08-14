@@ -30,7 +30,7 @@ const TodoList: FC = () => {
     <main className={styles.main}>
       <div className={styles.container}>
         <div className={styles.collections} ref={parent} style={sortStyles}>
-          {collections.length > 0 && !help ? (
+          {collections && collections.length > 0 && !help ? (
             collections.map((collection, index) => (
               <TodoCollection
                 key={collection.id}

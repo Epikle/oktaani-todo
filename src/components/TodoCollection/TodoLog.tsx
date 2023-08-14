@@ -49,6 +49,7 @@ const TodoLog: FC<Props> = ({ id, languageName }) => {
         {isLoading && <p>{text.common.loading}</p>}
         {!isLoading && logs.length === 0 && <p>{text.collection.noLogs}</p>}
         {!isLoading &&
+          logs &&
           logs.length > 0 &&
           logs.map((log) => (
             <p key={log.id}>

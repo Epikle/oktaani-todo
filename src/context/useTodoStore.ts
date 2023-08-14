@@ -169,7 +169,7 @@ const useTodoStore = create<TodoSlice>()(
         const { collections } = get();
         const collectionsCopy = JSON.parse(JSON.stringify(collections)) as TodoState['collections'];
         const selectedCollection = collectionsCopy.find((col) => col.id === colId);
-
+        if (!collectionsCopy) return;
         const toggleItem = collectionsCopy
           .map((col) => col.todos)
           .flat()
@@ -223,7 +223,7 @@ const useTodoStore = create<TodoSlice>()(
         const { collections } = get();
         const collectionsCopy = JSON.parse(JSON.stringify(collections)) as TodoState['collections'];
         const selectedCollection = collectionsCopy.find((col) => col.id === colId);
-
+        if (!collectionsCopy) return;
         const itemPriority = collectionsCopy
           .map((col) => col.todos)
           .flat()

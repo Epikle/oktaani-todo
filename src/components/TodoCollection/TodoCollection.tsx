@@ -69,10 +69,16 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
   }, []);
 
   useEffect(() => {
-    if (shared && isTabActive && Date.now() - lastUpdatedTime > DELAY_MS) {
-      getSharedCollectionData();
-      setLastUpdatedTime(Date.now());
-    }
+    (async () => {
+      if (shared && isTabActive && Date.now() - lastUpdatedTime > DELAY_MS) {
+        try {
+          await getSharedCollectionData();
+        } catch (error) {
+          setIsError(true);
+        }
+        setLastUpdatedTime(Date.now());
+      }
+    })();
   }, [shared, getSharedCollectionData, isTabActive, lastUpdatedTime]);
 
   const disableShareBtnHandler = async () => {
@@ -227,7 +233,8 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
       {!sort && TodoTypeEnum.Enum.note === type && <TodoNote id={id} isSelected={isSelected} note={note} />}
       {!sort && TodoTypeEnum.Enum.todo === type && (
         <ul ref={parent} className={styles['item-list']}>
-          {collection.todos.length > 0 &&
+          {collection.todos &&
+            collection.todos.length > 0 &&
             collection.todos.map((todo) => <TodoItem key={todo.id} todo={todo} colId={id} selected={isSelected} />)}
         </ul>
       )}
