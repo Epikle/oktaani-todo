@@ -1,47 +1,48 @@
 import axios from 'axios';
 import { nanoid } from 'nanoid';
 
-import type { Collection, Item, ItemEntry, NewCollectionEntry, TodoTypes } from '../context/useTodoStore';
-import type { Log } from '../components/TodoCollection/TodoLog';
 import env from '../utils/env';
+import { Collection, Item, Log, arrayOfCollectionsSchema, arrayOfLogsSchema, collectionSchema } from '../utils/types';
 
-const LS_NAME = env.LS_NAME_TODOS;
 const api = axios.create({
   baseURL: env.API_URL,
 });
 
-export const getSharedCollectionLogData = async (id: string) => {
-  const { data } = await api.get<Log[] | []>(`/log/${id}`);
-  return data;
+export const getSharedCollectionLogData = async (colId: string): Promise<Log[]> => {
+  const { data } = await api.get<unknown>(`/log/${colId}`);
+  const validLogs = arrayOfLogsSchema.parse(data);
+  return validLogs;
 };
 
-export const getSharedCollectionData = async (id: string) => {
-  const { data } = await api.get<Collection>(`/share/${id}`);
-  return data;
+export const getSharedCollectionData = async (colId: string): Promise<Collection> => {
+  const { data } = await api.get<unknown>(`/share/${colId}`);
+  const validCollection = collectionSchema.parse(data);
+  return validCollection;
 };
 
 export const createSharedCollection = async (collection: Collection) => {
-  await api.post('/share', { ...collection, shared: true });
+  await api.post<Collection>('/share', { ...collection, shared: true });
 };
 
 export const updateSharedCollection = async (collection: Collection) => {
-  await api.put(`/share/${collection.id}`, collection);
+  await api.put<Collection>(`/share/${collection.id}`, collection);
 };
 
-export const deleteSharedCollection = async (id: string) => {
-  await api.delete(`/share/${id}`);
+export const deleteSharedCollection = async (colId: string) => {
+  await api.delete(`/share/${colId}`);
 };
 
 export const saveCollectionsToLS = (collections: Collection[]) => {
-  localStorage.setItem(LS_NAME, JSON.stringify(collections));
+  localStorage.setItem(env.LS_NAME_TODOS, JSON.stringify(collections));
 };
 
-export const getTodosFromLS = () => {
-  const collections = localStorage.getItem(LS_NAME);
-  return JSON.parse(collections || '[]') as unknown;
+export const getTodosFromLS = (): Collection[] => {
+  const data = localStorage.getItem(env.LS_NAME_TODOS) || '';
+  const validCollections = arrayOfCollectionsSchema.parse(JSON.parse(data));
+  return validCollections;
 };
 
-export const createCollectionEntry = (entry: NewCollectionEntry, type: TodoTypes): Collection => ({
+export const createCollectionEntry = (entry, type): Collection => ({
   shared: false,
   todos: [],
   note: '',
@@ -51,7 +52,7 @@ export const createCollectionEntry = (entry: NewCollectionEntry, type: TodoTypes
   ...entry,
 });
 
-export const createItemEntry = (entry: ItemEntry): Item => ({
+export const createItemEntry = (entry): Item => ({
   id: nanoid(),
   done: false,
   created: Date(),
