@@ -233,7 +233,8 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
       {!sort && TodoTypeEnum.Enum.note === type && <TodoNote id={id} isSelected={isSelected} note={note} />}
       {!sort && TodoTypeEnum.Enum.todo === type && (
         <ul ref={parent} className={styles['item-list']}>
-          {collection.todos &&
+          {collection &&
+            collection.todos &&
             collection.todos.length > 0 &&
             collection.todos.map((todo) => <TodoItem key={todo.id} todo={todo} colId={id} selected={isSelected} />)}
         </ul>
