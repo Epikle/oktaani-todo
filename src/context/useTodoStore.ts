@@ -34,7 +34,7 @@ export type TodoSlice = {
     deleteDoneItems: (id: string) => void;
     initNotes: () => void;
     updateNote: (entry: NoteEntry) => void;
-    changeOrder: ({ dragIndex, hoverIndex }: { dragIndex: number; hoverIndex: number }) => void;
+    changeOrder: ({ dragIdx, hoverIdx }: { dragIdx: number; hoverIdx: number }) => void;
   };
 };
 
@@ -189,12 +189,12 @@ const useTodoStore = create<TodoSlice>()(
         });
       },
 
-      changeOrder: ({ dragIndex, hoverIndex }) =>
+      changeOrder: ({ dragIdx, hoverIdx }) =>
         set((state) => {
           if (!state.collections) return;
-          const movingCollection = state.collections[dragIndex];
-          state.collections.splice(dragIndex, 1);
-          state.collections.splice(hoverIndex, 0, movingCollection);
+          const movingCollection = state.collections[dragIdx];
+          state.collections.splice(dragIdx, 1);
+          state.collections.splice(hoverIdx, 0, movingCollection);
           todoService.saveToLocalStorage<Collection[]>(env.LS_NAME_COLLECTIONS, state.collections);
         }),
     },

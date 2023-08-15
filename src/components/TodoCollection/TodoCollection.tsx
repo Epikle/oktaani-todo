@@ -1,26 +1,26 @@
 import { FC, CSSProperties, useEffect, useRef, useState } from 'react';
-import autoAnimate from '@formkit/auto-animate';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faCheck, faCopy, faFileLines, faShareNodes } from '@fortawesome/free-solid-svg-icons';
-import { useDrag, useDrop } from 'react-dnd';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { Identifier, XYCoord } from 'dnd-core';
+import autoAnimate from '@formkit/auto-animate';
+import { useDrag, useDrop } from 'react-dnd';
 
+import { Collection, TypeEnum } from '../../utils/types';
 import useSelectedStore from '../../context/useSelectedStore';
 import useSettingsStore from '../../context/useSettingsStore';
+import useTodoStore from '../../context/useTodoStore';
 import useLanguage from '../../hooks/useLanguage';
 import { cn, copyToClipboard, formatDate } from '../../utils/utils';
 import Button from '../UI/Button';
-import styles from './TodoCollection.module.scss';
 import TodoLog from './TodoLog';
-import { Collection, CollectionType, TypeEnum } from '../../utils/types';
-import useTodoStore from '../../context/useTodoStore';
 import TodoItem from './TodoItem';
 import TodoNote from './TodoNote';
+
+import styles from './TodoCollection.module.scss';
 
 type Props = {
   collection: Collection;
   index: number;
-  moveCollection: (dragIndex: number, hoverIndex: number) => void;
 };
 
 type DragItem = {
@@ -29,7 +29,7 @@ type DragItem = {
   type: string;
 };
 
-const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
+const TodoCollection: FC<Props> = ({ collection, index }) => {
   const { id, title, color, shared, createdAt, type } = collection;
   const parent = useRef<HTMLUListElement>(null);
   const ref = useRef<HTMLElement>(null);
@@ -40,7 +40,7 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
   const sort = useSettingsStore((state) => state.sort);
   const languageName = useSettingsStore((state) => state.languageName);
   const { setSelectedCollection, resetSelection } = useSelectedStore((state) => state.actions);
-  const { updateCollection } = useTodoStore((state) => state.actions);
+  const { updateCollection, changeOrder } = useTodoStore((state) => state.actions);
   const { text } = useLanguage();
   const isSelected = selectedCollection?.id === id;
   // TODO
@@ -55,28 +55,28 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
     hover: (item: DragItem, monitor) => {
       if (!ref.current) return;
 
-      const dragIndex = item.index;
-      const hoverIndex = index;
+      const dragIdx = item.index;
+      const hoverIdx = index;
 
-      if (dragIndex === hoverIndex) return;
+      if (dragIdx === hoverIdx) return;
 
       const hoverBoundingRect = ref.current?.getBoundingClientRect();
       const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
       const clientOffset = monitor.getClientOffset();
       const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top;
 
-      if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
+      if (dragIdx < hoverIdx && hoverClientY < hoverMiddleY) {
         return;
       }
 
-      if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
+      if (dragIdx > hoverIdx && hoverClientY > hoverMiddleY) {
         return;
       }
 
-      moveCollection(dragIndex, hoverIndex);
+      changeOrder({ dragIdx, hoverIdx });
 
       // eslint-disable-next-line
-      item.index = hoverIndex;
+      item.index = hoverIdx;
     },
   });
 
@@ -89,6 +89,7 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
   });
 
   const disableShareBtnHandler = async () => {
+    // TODO
     // await editCollection({ id, title, color, type, shared: false, noShare: true });
     setIsError(false);
   };
@@ -108,14 +109,6 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
     setTimeout(() => {
       setIsCopy(false);
     }, 2000);
-  };
-
-  const toggleLogBtnHandler = () => {
-    setShowLog((prevS) => !prevS);
-  };
-
-  const todoTypeBtnHandler = async (typeEntry: CollectionType) => {
-    updateCollection({ id, type: typeEntry });
   };
 
   useEffect(() => {
@@ -179,10 +172,10 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
       {!type && !sort && (
         <div className={styles.unset}>
           <span>{text.collection.selectType}</span>
-          <Button onClick={() => todoTypeBtnHandler(TypeEnum.enum.todo)} testId="add-todo-btn">
+          <Button onClick={() => updateCollection({ id, type: TypeEnum.enum.todo })} testId="add-todo-btn">
             {text.collection.todo}
           </Button>
-          <Button onClick={() => todoTypeBtnHandler(TypeEnum.enum.note)} testId="add-note-btn">
+          <Button onClick={() => updateCollection({ id, type: TypeEnum.enum.note })} testId="add-note-btn">
             {text.collection.note}
           </Button>
         </div>
@@ -190,7 +183,7 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
       {!sort && TypeEnum.enum.note === type && <TodoNote id={id} isSelected={isSelected} note={note?.message || ''} />}
       {!sort && TypeEnum.enum.todo === type && (
         <ul ref={parent} className={styles['item-list']}>
-          {items && items.map((item) => <TodoItem key={item.id} item={item} colId={id} selected={isSelected} />)}
+          {items && items.map((item) => <TodoItem key={item.id} item={item} selected={isSelected} />)}
         </ul>
       )}
 
@@ -205,7 +198,7 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
           {isSelected && (
             <Button
               title={text.collection.showLog}
-              onClick={toggleLogBtnHandler}
+              onClick={() => setShowLog((prevS) => !prevS)}
               style={{ boxShadow: showLog ? 'inset 0 -2px var(--color-p-red)' : 'none' }}
             >
               <FontAwesomeIcon icon={faFileLines} />

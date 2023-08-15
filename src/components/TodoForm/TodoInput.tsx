@@ -3,10 +3,10 @@ import { Dispatch, FC, SetStateAction, useEffect, useRef } from 'react';
 import useSelectedStore from '../../context/useSelectedStore';
 import useSettingsStore from '../../context/useSettingsStore';
 import useLanguage from '../../hooks/useLanguage';
-
-import styles from './TodoInput.module.scss';
 import { TypeEnum } from '../../utils/types';
 import { cn } from '../../utils/utils';
+
+import styles from './TodoInput.module.scss';
 
 type Props = {
   todoInput: string;
@@ -22,6 +22,8 @@ const TodoInput: FC<Props> = ({ todoInput, setTodoInput, maxLength, isLoading })
   const { text } = useLanguage();
   const inputTextByType = selectedCollection?.type === TypeEnum.enum.todo ? text.header.newTodo : text.header.editNote;
   const placeholderText = selectedCollection ? inputTextByType : text.header.newCollection;
+  const finalInputText = sort ? text.controls.sort : placeholderText;
+  const disabled = sort || isLoading || (selectedCollection?.type === TypeEnum.enum.note && !selectedCollection.edit);
 
   useEffect(() => {
     if (selectedCollection && ref.current && selectedCollection.type === TypeEnum.enum.todo) {
@@ -34,12 +36,12 @@ const TodoInput: FC<Props> = ({ todoInput, setTodoInput, maxLength, isLoading })
       ref={ref}
       type="text"
       className={cn(styles.todo, { [styles.selected]: selectedCollection })}
-      placeholder={sort ? text.controls.sort : placeholderText}
-      title={placeholderText}
+      placeholder={finalInputText}
+      title={finalInputText}
       value={todoInput}
       onChange={(e) => setTodoInput(e.target.value)}
       maxLength={maxLength}
-      disabled={sort || isLoading || (selectedCollection?.type === TypeEnum.enum.note && !selectedCollection.edit)}
+      disabled={disabled}
       data-testid="todo-input"
     />
   );

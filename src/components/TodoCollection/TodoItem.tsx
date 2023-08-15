@@ -14,29 +14,20 @@ import useTodoStore from '../../context/useTodoStore';
 
 type Props = {
   item: Item;
-  colId: string;
   selected: boolean;
 };
 
-const TodoItem: FC<Props> = ({ item, colId, selected }) => {
-  const { id, message, status, createdAt } = item;
+const TodoItem: FC<Props> = ({ item, selected }) => {
+  const { id, message, status, createdAt, priority } = item;
   const [done, setDone] = useState(status);
   const { toggleItemStatus, updateItemPriority, deleteItem } = useTodoStore((state) => state.actions);
   const languageName = useSettingsStore((state) => state.languageName);
   const { text } = useLanguage();
-  const { priorityColor, nextPriority } = usePriority(item.priority);
+  const { priorityColor, nextPriority } = usePriority(priority);
 
   const todoDoneHandler = () => {
     setDone((prevS) => !prevS);
     toggleItemStatus(id);
-  };
-
-  const changePriorityBtnHandler = () => {
-    updateItemPriority({ id, priorityEntry: nextPriority() });
-  };
-
-  const todoRemoveBtnHandler = () => {
-    deleteItem(item.id);
   };
 
   return (
@@ -45,7 +36,7 @@ const TodoItem: FC<Props> = ({ item, colId, selected }) => {
         <Button
           aria-label={text.todo.priority}
           title={text.todo.priority}
-          onClick={changePriorityBtnHandler}
+          onClick={() => updateItemPriority({ id, priorityEntry: nextPriority() })}
           testId="item-btn-priority"
         />
         <input
@@ -62,7 +53,7 @@ const TodoItem: FC<Props> = ({ item, colId, selected }) => {
       </label>
       {selected && (
         <Button
-          onClick={todoRemoveBtnHandler}
+          onClick={() => deleteItem(id)}
           aria-label={text.todo.remove.replace('[]', message)}
           title={text.todo.remove.replace('[]', message)}
           testId="item-btn-remove"

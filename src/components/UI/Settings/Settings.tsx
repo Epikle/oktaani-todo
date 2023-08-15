@@ -3,11 +3,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGear } from '@fortawesome/free-solid-svg-icons';
 
 import useLanguage from '../../../hooks/useLanguage';
+import { cn } from '../../../utils/utils';
 import HelpSelection from './HelpSelection';
 import LanguageSelection from './LanguageSelection';
 import ModeSelection from './ModeSelection';
-import Sort from './Sort';
 import Button from '../Button';
+import Sort from './Sort';
 
 import styles from './Settings.module.scss';
 
@@ -15,17 +16,10 @@ const Settings: FC = () => {
   const [showSettings, setShowSettings] = useState(false);
   const { text } = useLanguage();
 
-  const settingsBtnHandler = () => {
-    setShowSettings((prevS) => !prevS);
-  };
-
-  const hiddenBtnsStyles = showSettings ? [styles['hidden-btns'], styles.selected].join(' ') : styles['hidden-btns'];
-  const settingsBtnStyles = showSettings ? [styles.gear, styles.selected].join(' ') : styles.gear;
-
   return (
     <div className={styles.group}>
       <ul className={styles.settings} data-testid="todo-settings">
-        <li className={hiddenBtnsStyles}>
+        <li className={cn(styles['hidden-btns'], { [styles.selected]: showSettings })}>
           <ul>
             <li>
               <Sort disabled={!showSettings} />
@@ -40,8 +34,8 @@ const Settings: FC = () => {
         </li>
         <li>
           <Button
-            className={settingsBtnStyles}
-            onClick={settingsBtnHandler}
+            className={cn(styles.gear, { [styles.selected]: showSettings })}
+            onClick={() => setShowSettings((prevS) => !prevS)}
             title={text.controls.settings}
             testId="btn-settings"
           >

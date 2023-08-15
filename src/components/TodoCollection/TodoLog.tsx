@@ -31,6 +31,7 @@ const TodoLog: FC<Props> = ({ id, languageName }) => {
     (async () => {
       setIsLoading(true);
       try {
+        // TODO
         // const logsData = await getSharedCollectionLogData(id);
         setLogs(logsData);
       } catch (error) {

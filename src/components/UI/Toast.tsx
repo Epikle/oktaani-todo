@@ -4,9 +4,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleExclamation, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 
 import useStatusStore from '../../context/useStatusStore';
+import Button from './Button';
 
 import styles from './Toast.module.scss';
-import Button from './Button';
+import { cn } from '../../utils/utils';
 
 type Props = {
   darkMode: boolean;
@@ -31,9 +32,8 @@ const Toast: FC<Props> = ({ darkMode }) => {
     };
   }, [isError, resetError]);
 
-  const toastStyles = isError ? [styles.toast, styles.show] : [styles.toast];
   const element = (
-    <div className={darkMode ? ['dark-mode', ...toastStyles].join(' ') : toastStyles.join(' ')} hidden={!isError}>
+    <div className={cn(styles.toast, { [styles.show]: isError, 'dark-mode': darkMode })} hidden={!isError}>
       <FontAwesomeIcon icon={faCircleExclamation} size="2xl" />
       {errorMessage}
       <Button onClick={resetError} disabled={!isError}>

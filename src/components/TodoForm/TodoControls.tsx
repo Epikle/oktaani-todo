@@ -22,19 +22,16 @@ const TodoControls: FC<Props> = ({ onConfirm }) => {
   const { deleteDoneItems } = useTodoStore((state) => state.actions);
   const { text } = useLanguage();
 
+  if (!selectedCollection) return null;
+
   const deleteDoneBtnHandler = () => {
-    if (!selectedCollection) return;
     setIsLoading(true);
     deleteDoneItems(selectedCollection.id);
     setIsLoading(false);
   };
 
-  const editBtnHandler = () => {
-    if (!selectedCollection) return;
-    setSelectedCollection({ id: selectedCollection.id, edit: !selectedCollection.edit });
-  };
-
   const stopShareBtnHandler = async () => {
+    // TODO
     // await editCollection(editedCollection);
   };
 
@@ -54,9 +51,9 @@ const TodoControls: FC<Props> = ({ onConfirm }) => {
       </li>
       <li>
         <Button
-          className={selectedCollection?.shared ? styles.shared : ''}
-          title={selectedCollection?.shared ? text.controls.stopShareCol : text.controls.shareCol}
-          onClick={() => (selectedCollection?.shared ? stopShareBtnHandler() : onConfirm('share'))}
+          className={selectedCollection.shared ? styles.shared : ''}
+          title={selectedCollection.shared ? text.controls.stopShareCol : text.controls.shareCol}
+          onClick={() => (selectedCollection.shared ? stopShareBtnHandler() : onConfirm('share'))}
           testId="share-col-btn"
         >
           <FontAwesomeIcon icon={faShareNodes} />
@@ -65,8 +62,8 @@ const TodoControls: FC<Props> = ({ onConfirm }) => {
       <li>
         <Button
           title={text.controls.editCol}
-          onClick={editBtnHandler}
-          className={selectedCollection?.edit ? styles['edit-active'] : ''}
+          onClick={() => setSelectedCollection({ id: selectedCollection.id, edit: !selectedCollection.edit })}
+          className={selectedCollection.edit ? styles['edit-active'] : ''}
           testId="edit-collection-title-btn"
         >
           <FontAwesomeIcon icon={faPen} />

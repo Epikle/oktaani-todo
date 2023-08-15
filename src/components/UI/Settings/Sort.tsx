@@ -5,6 +5,7 @@ import { faArrowDownShortWide } from '@fortawesome/free-solid-svg-icons';
 import useTodoStore from '../../../context/useTodoStore';
 import useSettingsStore from '../../../context/useSettingsStore';
 import useLanguage from '../../../hooks/useLanguage';
+import { cn } from '../../../utils/utils';
 import Button from '../Button';
 
 import styles from './Sort.module.scss';
@@ -21,7 +22,7 @@ const Sort: FC<Props> = ({ disabled }) => {
 
   return (
     <Button
-      className={sort ? [styles.sort, styles['sort-active']].join(' ') : styles.sort}
+      className={cn(styles.sort, { [styles['sort-active']]: sort })}
       onClick={toggleSort}
       title={text.controls.sort}
       disabled={disabled || !collections}

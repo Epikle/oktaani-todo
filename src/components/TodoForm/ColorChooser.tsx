@@ -10,7 +10,7 @@ type Props = {
   defaultColor: string;
   setColor: Dispatch<SetStateAction<string>>;
 };
-
+// TODO color bug
 const ColorChooser: FC<Props> = ({ defaultColor, setColor }) => {
   const colorInputRef = useRef<HTMLInputElement>(null);
   const selectedCollection = useSelectedStore((state) => state.selectedCollection);

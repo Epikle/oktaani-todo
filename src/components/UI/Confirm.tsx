@@ -26,7 +26,8 @@ const Confirm: FC<Props> = ({ confirmText, onConfirm, onCancel, isLoading }) => 
       <ul className={styles.controls}>
         <li>
           <Button title={text.common.confirm} onClick={onConfirm} testId="confirm-delete-btn" disabled={isLoading}>
-            {isLoading ? <FontAwesomeIcon icon={faSpinner} spinPulse /> : <FontAwesomeIcon icon={faCheck} />}
+            {isLoading && <FontAwesomeIcon icon={faSpinner} spinPulse />}
+            {!isLoading && <FontAwesomeIcon icon={faCheck} />}
           </Button>
         </li>
         <li>

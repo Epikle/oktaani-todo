@@ -60,26 +60,29 @@ const TodoForm: FC = () => {
   const maxLength = !selectedCollection || selectedCollection.edit ? COLLECTION_LENGTH : ITEM_LENGTH;
   const inputLengthText = `${todoInput.length}/${maxLength}`;
   const showInputLength = isAddBtn ? inputLengthText : '';
+  const btnTitleText = isAddBtn ? text.common.add : text.common.cancel;
+  const inputTitleText = selectedCollection?.edit
+    ? `${text.common.editing}: ${selectedCollection.title}`
+    : selectedCollection?.title;
 
   return (
     <form
       className={cn(styles.form, { [styles.selected]: selectedCollection })}
       onSubmit={submitHandler}
-      data-collection={
-        selectedCollection?.edit ? `${text.common.editing}: ${selectedCollection.title}` : selectedCollection?.title
-      }
+      data-collection={inputTitleText}
       data-length={showInputLength}
     >
       <ColorChooser setColor={setColor} defaultColor={DEFAULT_COLOR} />
       <TodoInput todoInput={todoInput} setTodoInput={setTodoInput} maxLength={maxLength} isLoading={isLoading} />
       <Button
         className={cn(styles.add, { [styles.blur]: selectedCollection && trimmedInput.length === 0 })}
-        title={isAddBtn ? text.common.add : text.common.cancel}
+        title={btnTitleText}
         onClick={addBtnHandler}
         disabled={isBtnDisabled}
         testId="submit-btn"
       >
-        {isLoading ? <FontAwesomeIcon icon={faSpinner} spinPulse /> : <FontAwesomeIcon icon={faPlus} />}
+        {isLoading && <FontAwesomeIcon icon={faSpinner} spinPulse />}
+        {!isLoading && <FontAwesomeIcon icon={faPlus} />}
       </Button>
     </form>
   );

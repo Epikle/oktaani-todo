@@ -1,21 +1,17 @@
-import { FC, ComponentPropsWithoutRef } from 'react';
+import { ButtonHTMLAttributes, forwardRef } from 'react';
 
-type Props = ComponentPropsWithoutRef<'button'> & {
+type Props = {
   testId?: string;
 };
 
-const Button: FC<Props> = ({ className, title, testId, onClick, content, children, ...rest }) => (
-  <button
-    type="button"
-    className={className}
-    aria-label={title}
-    title={title}
-    onClick={onClick}
-    data-testid={testId}
-    {...rest}
-  >
-    {children}
-  </button>
+const Button = forwardRef<HTMLButtonElement, ButtonHTMLAttributes<HTMLButtonElement> & Props>(
+  ({ onClick, testId, children, ...props }, ref) => (
+    <button type="button" ref={ref} data-testid={testId} {...props}>
+      {children}
+    </button>
+  ),
 );
+
+Button.displayName = 'Button';
 
 export default Button;
