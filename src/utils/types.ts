@@ -22,7 +22,7 @@ const types = ['todo', 'note'] as const;
 export const collectionSchema = z.object({
   id: z.string().min(1),
   title: z.string().min(1),
-  color: z.string().min(7),
+  color: z.string().length(7),
   shared: z.boolean().default(false),
   type: z.optional(z.enum(types)),
   createdAt: z.string().datetime().default(new Date().toISOString()),
@@ -45,14 +45,15 @@ export const settingsSchema = z.object({
 export const PriorityEnum = z.enum(priorities);
 export const TypeEnum = z.enum(types);
 
-export const arrayOfItemsSchema = z.array(itemSchema);
-export const arrayOfNotesSchema = z.array(noteSchema);
-export const arrayOfCollectionsSchema = z.array(collectionSchema);
+export const arrayOfItemsSchema = itemSchema.array().min(1);
+export const arrayOfNotesSchema = noteSchema.array().min(1);
+export const arrayOfCollectionsSchema = collectionSchema.array().min(1);
 export const arrayOfLogsSchema = z.array(logSchema);
 
 export type Item = z.infer<typeof itemSchema>;
 export type ItemEntry = Pick<Item, 'colId' | 'message'>;
 export type Note = z.infer<typeof noteSchema>;
+export type NoteEntry = Pick<Note, 'colId' | 'message'>;
 export type Collection = z.infer<typeof collectionSchema>;
 export type CollectionEntry = Pick<Collection, 'title' | 'color'>;
 export type CollectionType = z.infer<typeof TypeEnum>;

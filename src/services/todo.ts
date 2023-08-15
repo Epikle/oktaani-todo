@@ -9,9 +9,12 @@ import {
   Item,
   ItemEntry,
   Log,
+  Note,
+  NoteEntry,
   arrayOfLogsSchema,
   collectionSchema,
   itemSchema,
+  noteSchema,
 } from '../utils/types';
 
 const api = axios.create({
@@ -69,4 +72,13 @@ export const createItemEntry = (entry: ItemEntry): Item => {
   };
   const validItem = itemSchema.parse(newItem);
   return validItem;
+};
+
+export const createNoteEntry = (entry: NoteEntry): Note => {
+  const newNote = {
+    id: nanoid(),
+    ...entry,
+  };
+  const validNote = noteSchema.parse(newNote);
+  return validNote;
 };

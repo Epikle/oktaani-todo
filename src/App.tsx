@@ -19,7 +19,7 @@ const App: FC = () => {
   const selectedCollection = useSelectedStore((state) => state.selectedCollection);
   const darkMode = useSettingsStore((state) => state.darkMode);
   const { initSettings } = useSettingsStore((state) => state.actions);
-  const { initCollections, initItems } = useTodoStore((state) => state.actions);
+  const { initCollections, initItems, initNotes } = useTodoStore((state) => state.actions);
   const { setError } = useStatusStore((state) => state.actions);
   const { text } = useLanguage();
 
@@ -28,6 +28,7 @@ const App: FC = () => {
   useEffect(() => {
     initCollections();
     initItems();
+    initNotes();
     initSettings();
     if (shareParam) {
       (async () => {
@@ -42,7 +43,7 @@ const App: FC = () => {
         }
       })();
     }
-  }, [initSettings, initCollections, initItems, setError, text]);
+  }, [initSettings, initCollections, initItems, setError, initNotes, text]);
 
   return (
     <div className={darkMode ? 'content dark-mode' : 'content'}>

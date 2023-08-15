@@ -9,8 +9,10 @@ import {
   ItemEntry,
   ItemPriority,
   Note,
+  NoteEntry,
   arrayOfCollectionsSchema,
   arrayOfItemsSchema,
+  arrayOfNotesSchema,
 } from '../utils/types';
 import env from '../utils/env';
 
@@ -29,6 +31,8 @@ export type TodoSlice = {
     updateItemPriority: ({ id, priorityEntry }: { id: string; priorityEntry: ItemPriority }) => void;
     deleteItem: (id: string) => void;
     deleteDoneItems: (id: string) => void;
+    initNotes: () => void;
+    updateNote: (entry: NoteEntry) => void;
     changeOrder: ({ dragIndex, hoverIndex }: { dragIndex: number; hoverIndex: number }) => void;
   };
 };
@@ -48,8 +52,10 @@ const useTodoStore = create<TodoSlice>()(
           set({ collections });
         } catch (error) {
           // TODO: Error toast
+          set({ collections: null });
         }
       },
+
       createCollection: (entry) => {
         try {
           const collectionEntry = todoService.createCollectionEntry(entry);
@@ -62,6 +68,7 @@ const useTodoStore = create<TodoSlice>()(
           // TODO: Error toast
         }
       },
+
       updateCollection: (entry) => {
         set((state) => {
           const collection = state.collections?.find((c) => c.id === entry.id);
@@ -71,18 +78,24 @@ const useTodoStore = create<TodoSlice>()(
           }
         });
       },
+
       deleteCollection: (id) => {
         set((state) => {
-          const newCollections = state.collections?.filter((c) => c.id !== id);
-          const newItems = state.items?.filter((i) => i.colId !== id);
-          if (newCollections && newItems) {
-            todoService.saveToLocalStorage<Collection[]>(env.LS_NAME_COLLECTIONS, newCollections);
-            todoService.saveToLocalStorage<Item[]>(env.LS_NAME_ITEMS, newItems);
-            return { collections: newCollections, items: newItems };
-          }
-          return state;
+          const filteredCollections = state.collections?.filter((c) => c.id !== id);
+          const newCollections = filteredCollections && filteredCollections?.length > 0 ? filteredCollections : null;
+          const filteredItems = state.items?.filter((i) => i.colId !== id);
+          const newItems = filteredItems && filteredItems?.length > 0 ? filteredItems : null;
+          const filteredNotes = state.notes?.filter((i) => i.colId !== id);
+          const newNotes = filteredNotes && filteredNotes?.length > 0 ? filteredNotes : null;
+
+          todoService.saveToLocalStorage<Collection[] | null>(env.LS_NAME_COLLECTIONS, newCollections);
+          todoService.saveToLocalStorage<Item[] | null>(env.LS_NAME_ITEMS, newItems);
+          todoService.saveToLocalStorage<Note[] | null>(env.LS_NAME_NOTES, newNotes);
+
+          return { collections: newCollections, items: newItems, notes: newNotes };
         });
       },
+
       initItems: () => {
         try {
           const items = todoService.getFromLocalStorage<Item[]>(env.LS_NAME_ITEMS, arrayOfItemsSchema);
@@ -91,6 +104,7 @@ const useTodoStore = create<TodoSlice>()(
           // TODO: Error toast
         }
       },
+
       createItem: (entry) => {
         try {
           const validItem = todoService.createItemEntry(entry);
@@ -103,6 +117,7 @@ const useTodoStore = create<TodoSlice>()(
           // TODO: Error toast
         }
       },
+
       toggleItemStatus: (id) => {
         set((state) => {
           const item = state.items?.find((i) => i.id === id);
@@ -112,6 +127,7 @@ const useTodoStore = create<TodoSlice>()(
           }
         });
       },
+
       updateItemPriority: ({ id, priorityEntry }) => {
         set((state) => {
           const item = state.items?.find((i) => i.id === id);
@@ -121,11 +137,13 @@ const useTodoStore = create<TodoSlice>()(
           }
         });
       },
+
       deleteItem: (id) =>
         set((state) => {
-          const newItems = state.items?.filter((i) => i.id !== id);
-          if (newItems) {
-            todoService.saveToLocalStorage<Item[]>(env.LS_NAME_ITEMS, newItems);
+          const filteredItems = state.items?.filter((i) => i.id !== id);
+          if (filteredItems) {
+            const newItems = filteredItems && filteredItems?.length > 0 ? filteredItems : null;
+            todoService.saveToLocalStorage<Item[] | null>(env.LS_NAME_ITEMS, newItems);
             return { items: newItems };
           }
           return state;
@@ -133,13 +151,43 @@ const useTodoStore = create<TodoSlice>()(
 
       deleteDoneItems: (id) =>
         set((state) => {
-          const newItems = state.items?.filter((i) => i.colId !== id || !i.status);
-          if (newItems) {
-            todoService.saveToLocalStorage<Item[]>(env.LS_NAME_ITEMS, newItems);
+          const filteredItems = state.items?.filter((i) => i.colId !== id || !i.status);
+          if (filteredItems) {
+            const newItems = filteredItems && filteredItems?.length > 0 ? filteredItems : null;
+            todoService.saveToLocalStorage<Item[] | null>(env.LS_NAME_ITEMS, newItems);
             return { items: newItems };
           }
           return state;
         }),
+
+      initNotes: () => {
+        try {
+          const notes = todoService.getFromLocalStorage<Note[]>(env.LS_NAME_NOTES, arrayOfNotesSchema);
+          set({ notes });
+        } catch (error) {
+          // TODO: Error toast
+        }
+      },
+
+      updateNote: (entry) => {
+        set((state) => {
+          const note = state.notes?.find((n) => n.colId === entry.colId);
+
+          try {
+            if (!note || !state.notes) {
+              const validNote = todoService.createNoteEntry(entry);
+              const newNotes = state.notes ? state.notes.concat(validNote) : [validNote];
+              todoService.saveToLocalStorage<Note[]>(env.LS_NAME_NOTES, newNotes);
+              state.notes = newNotes;
+            } else {
+              note.message = entry.message;
+              todoService.saveToLocalStorage<Note[]>(env.LS_NAME_NOTES, state.notes);
+            }
+          } catch (error) {
+            // TODO: Error toast
+          }
+        });
+      },
 
       changeOrder: ({ dragIndex, hoverIndex }) =>
         set((state) => {

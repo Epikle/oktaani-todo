@@ -8,9 +8,9 @@ import useLanguage from '../../hooks/useLanguage';
 import Button from '../UI/Button';
 import ColorChooser from './ColorChooser';
 import TodoInput from './TodoInput';
+import { cn } from '../../utils/utils';
 
 import styles from './TodoForm.module.scss';
-import { cn } from '../../utils/utils';
 
 export const DEFAULT_COLOR = '#7b68ee';
 const COLLECTION_LENGTH = 100;
@@ -21,7 +21,7 @@ const TodoForm: FC = () => {
   const [todoInput, setTodoInput] = useState('');
   const selectedCollection = useSelectedStore((state) => state.selectedCollection);
   const { setSelectedCollection, resetSelection } = useSelectedStore((state) => state.actions);
-  const { createCollection, createItem } = useTodoStore((state) => state.actions);
+  const { createCollection, createItem, updateCollection } = useTodoStore((state) => state.actions);
   const { text } = useLanguage();
   const trimmedInput = todoInput.trim().replace(/\s+/g, ' ');
   const [isLoading, setIsLoading] = useState(false);
@@ -34,14 +34,14 @@ const TodoForm: FC = () => {
     setTodoInput('');
   }, [selectedCollection?.edit, selectedCollection?.title]);
 
-  const submitHandler = async (event: FormEvent) => {
+  const submitHandler = (event: FormEvent) => {
     event.preventDefault();
     if (trimmedInput.length === 0) return;
     setIsLoading(true);
 
     if (selectedCollection) {
       if (selectedCollection?.edit) {
-        // await editCollection(editedCollection);
+        updateCollection({ id: selectedCollection.id, title: trimmedInput });
         setSelectedCollection({ id: selectedCollection.id, edit: false });
       } else {
         createItem({ colId: selectedCollection.id, message: trimmedInput });
