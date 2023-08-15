@@ -15,6 +15,7 @@ import {
   arrayOfNotesSchema,
 } from '../utils/types';
 import env from '../utils/env';
+import useStatusStore from './useStatusStore';
 
 export type TodoSlice = {
   collections: Collection[] | null;
@@ -51,7 +52,6 @@ const useTodoStore = create<TodoSlice>()(
           );
           set({ collections });
         } catch (error) {
-          // TODO: Error toast
           set({ collections: null });
         }
       },
@@ -65,7 +65,7 @@ const useTodoStore = create<TodoSlice>()(
             todoService.saveToLocalStorage<Collection[]>(env.LS_NAME_COLLECTIONS, newCollections);
           });
         } catch (error) {
-          // TODO: Error toast
+          useStatusStore.setState({ errorMessage: 'Collection creation failed. Please try again.', isError: true });
         }
       },
 
@@ -101,7 +101,7 @@ const useTodoStore = create<TodoSlice>()(
           const items = todoService.getFromLocalStorage<Item[]>(env.LS_NAME_ITEMS, arrayOfItemsSchema);
           set({ items });
         } catch (error) {
-          // TODO: Error toast
+          set({ items: null });
         }
       },
 
@@ -114,7 +114,7 @@ const useTodoStore = create<TodoSlice>()(
             todoService.saveToLocalStorage<Item[]>(env.LS_NAME_ITEMS, newItems);
           });
         } catch (error) {
-          // TODO: Error toast
+          useStatusStore.setState({ errorMessage: 'Item creation failed. Please try again.', isError: true });
         }
       },
 
@@ -165,7 +165,7 @@ const useTodoStore = create<TodoSlice>()(
           const notes = todoService.getFromLocalStorage<Note[]>(env.LS_NAME_NOTES, arrayOfNotesSchema);
           set({ notes });
         } catch (error) {
-          // TODO: Error toast
+          set({ notes: null });
         }
       },
 
@@ -184,7 +184,7 @@ const useTodoStore = create<TodoSlice>()(
               todoService.saveToLocalStorage<Note[]>(env.LS_NAME_NOTES, state.notes);
             }
           } catch (error) {
-            // TODO: Error toast
+            useStatusStore.setState({ errorMessage: 'Updating the note failed. Please try again.', isError: true });
           }
         });
       },
