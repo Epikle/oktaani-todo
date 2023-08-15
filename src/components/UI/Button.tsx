@@ -5,7 +5,7 @@ type Props = {
 };
 
 const Button = forwardRef<HTMLButtonElement, ButtonHTMLAttributes<HTMLButtonElement> & Props>(
-  ({ onClick, testId, children, ...props }, ref) => (
+  ({ testId, children, ...props }, ref) => (
     <button type="button" ref={ref} data-testid={testId} {...props}>
       {children}
     </button>
