@@ -38,6 +38,7 @@ const TodoItem: FC<Props> = ({ item, selected }) => {
           title={text.todo.priority}
           onClick={() => updateItemPriority({ id, priorityEntry: nextPriority() })}
           testId="item-btn-priority"
+          data-priority={priority}
         />
         <input
           type="checkbox"

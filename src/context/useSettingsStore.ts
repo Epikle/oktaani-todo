@@ -3,6 +3,7 @@ import { immer } from 'zustand/middleware/immer';
 
 import { Settings, settingsSchema } from '../utils/types';
 import { getFromLocalStorage, saveToLocalStorage } from '../services/todo';
+import useStatusStore from './useStatusStore';
 import env from '../utils/env';
 
 export type SettingsSlice = Settings & {
@@ -31,7 +32,7 @@ const useSettingsStore = create<SettingsSlice>()(
           );
           set({ ...validatedSettings });
         } catch (error) {
-          // TODO: Error toast
+          set({ darkMode: isDarkMode, languageName: 'en-us' });
         }
       },
       setSettings: (settings) => {
@@ -40,7 +41,7 @@ const useSettingsStore = create<SettingsSlice>()(
           saveToLocalStorage<Pick<Settings, 'languageName' | 'darkMode'>>(env.LS_NAME_SETTINGS, validatedSettings);
           set({ ...validatedSettings });
         } catch (error) {
-          // TODO: Error toast
+          useStatusStore.setState({ errorMessage: 'Failed to update settings. Please try again.', isError: true });
         }
       },
       toggleSort: () => set((state) => ({ sort: !state.sort })),
