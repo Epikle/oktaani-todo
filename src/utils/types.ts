@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { allowedLanguages } from './languages';
 
 const priorities = ['low', 'medium', 'high'] as const;
 export const itemSchema = z.object({
@@ -34,6 +35,13 @@ export const logSchema = z.object({
   createdAt: z.string().datetime().default(new Date().toISOString()),
 });
 
+export const settingsSchema = z.object({
+  languageName: z.enum(allowedLanguages).default('en-us'),
+  darkMode: z.boolean().default(false),
+  sort: z.boolean().default(false),
+  help: z.boolean().default(false),
+});
+
 export const PriorityEnum = z.enum(priorities);
 export const TypeEnum = z.enum(types);
 
@@ -50,3 +58,4 @@ export type CollectionEntry = Pick<Collection, 'title' | 'color'>;
 export type CollectionType = z.infer<typeof TypeEnum>;
 export type ItemPriority = z.infer<typeof PriorityEnum>;
 export type Log = z.infer<typeof logSchema>;
+export type Settings = z.infer<typeof settingsSchema>;

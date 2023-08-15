@@ -1,20 +1,11 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
-import { z } from 'zod';
 
-import { saveSettingsToLS } from '../services/settings';
-import { allowedLanguages } from '../utils/languages';
+import { Settings, settingsSchema } from '../utils/types';
+import { saveToLocalStorage } from '../services/todo';
+import env from '../utils/env';
 
-const SettingsZ = z.object({
-  languageName: z.enum(allowedLanguages).default('en-us'),
-  darkMode: z.boolean().default(false),
-  sort: z.boolean().default(false),
-  help: z.boolean().default(false),
-});
-
-type SettingsState = z.infer<typeof SettingsZ>;
-export type SettingsLS = Omit<SettingsState, 'sort'>;
-export type SettingsSlice = SettingsState & {
+export type SettingsSlice = Settings & {
   actions: {
     setSettings: (settings: unknown) => void;
     toggleSort: () => void;
@@ -31,25 +22,17 @@ const useSettingsStore = create<SettingsSlice>()(
     sort: false,
     help: false,
     actions: {
-      setSettings: (settings) =>
-        set((state) => {
-          try {
-            const validatedSettings = SettingsZ.omit({ sort: true }).parse(settings);
-            saveSettingsToLS(validatedSettings);
-            return { ...state, ...validatedSettings };
-          } catch (error) {
-            // saveSettingsToLS();
-            return state;
-          }
-        }),
-      toggleSort: () =>
-        set((state) => {
-          state.sort = !state.sort;
-        }),
-      toggleHelp: () =>
-        set((state) => {
-          state.help = !state.help;
-        }),
+      setSettings: (settings) => {
+        try {
+          const validatedSettings = settingsSchema.omit({ sort: true, help: true }).parse(settings);
+          saveToLocalStorage<Pick<Settings, 'languageName' | 'darkMode'>>(env.LS_NAME_SETTINGS, validatedSettings);
+          set({ ...validatedSettings });
+        } catch (error) {
+          // TODO: Error toast
+        }
+      },
+      toggleSort: () => set((state) => ({ sort: !state.sort })),
+      toggleHelp: () => set((state) => ({ help: !state.help })),
     },
   })),
 );
