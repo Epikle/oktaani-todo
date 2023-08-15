@@ -3,11 +3,11 @@
 describe('Todo remove', () => {
   beforeEach(() => {
     cy.visit('/');
-    cy.get('[data-testid="todo-input"]').type('Firs collection');
+    cy.get('[data-testid="todo-input"]').type('collection');
     cy.get('[data-testid="submit-btn"]').click();
     cy.get('[data-testid="add-todo-btn"]').click();
     cy.get('[data-testid="submit-btn"]').click();
-    cy.get('article').first().should('have.text', 'Firs collection').click();
+    cy.get('article').first().should('have.text', 'collection').click();
     cy.get('[data-testid="todo-input"]').type('ITEM1');
     cy.get('[data-testid="submit-btn"]').click();
     cy.get('[data-testid="todo-input"]').type('ITEM2');
@@ -28,7 +28,7 @@ describe('Todo remove', () => {
   it('should not delete collection when not confirming delete', () => {
     cy.get('[data-testid="delete-collection-btn"]').click();
     cy.get('[data-testid="cancel-delete-btn"]').click();
-    cy.get('article').first().contains('Firs collection');
+    cy.get('article').first().contains('collection');
   });
 
   it('should delete collection when confirming delete', () => {

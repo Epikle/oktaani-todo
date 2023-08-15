@@ -15,7 +15,10 @@ describe('Todo', () => {
 
   it('Should selects first collection and deselects it', () => {
     cy.get('article').first().should('have.text', 'First Collection').click();
-    cy.get('[data-testid="submit-btn"]').click().should('not.be.visible');
+    cy.get('[data-testid="submit-btn"]').click();
+    cy.get('[data-testid="submit-btn"]').should((element) => {
+      expect(element.attr('class')).not.to.match(/blur/);
+    });
   });
 
   it('Should select collection and add item to it', () => {

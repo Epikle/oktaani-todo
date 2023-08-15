@@ -109,7 +109,7 @@ const useTodoStore = create<TodoSlice>()(
         try {
           const validItem = todoService.createItemEntry(entry);
           set((state) => {
-            const newItems = state.items ? state.items.concat(validItem) : [validItem];
+            const newItems = state.items ? [validItem, ...state.items] : [validItem];
             state.items = newItems;
             todoService.saveToLocalStorage<Item[]>(env.LS_NAME_ITEMS, newItems);
           });
