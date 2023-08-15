@@ -4,10 +4,11 @@ import '@testing-library/jest-dom/extend-expect';
 import Header from './Header';
 import useSelectedStore from '../../context/useSelectedStore';
 import useTodoStore from '../../context/useTodoStore';
+import { testCollections } from '../../setupTests';
 
 vi.mock('@formkit/auto-animate');
-const spySelected = vi.spyOn(useSelectedStore.getState(), 'selected', 'get');
-const spyDeleteCol = vi.spyOn(useTodoStore.getState().actions, 'deleteCollection').mockImplementation(async () => {});
+const spySelected = vi.spyOn(useSelectedStore.getState(), 'selectedCollection', 'get');
+const spyDeleteCol = vi.spyOn(useTodoStore.getState().actions, 'deleteCollection');
 
 describe('Header', () => {
   it('Should show logo', () => {
@@ -30,7 +31,7 @@ describe('Header', () => {
   });
 
   it('Should show todo controls', () => {
-    spySelected.mockReturnValue(true);
+    spySelected.mockReturnValue({ ...testCollections[0], edit: false });
     const { queryByTestId, getByTestId } = render(<Header />);
     const todoControlsElem = getByTestId('todo-controls');
     const settingsBtnElem = queryByTestId('btn-settings');
@@ -39,7 +40,7 @@ describe('Header', () => {
   });
 
   it('Should show delete confirm and cancel it', () => {
-    spySelected.mockReturnValue(true);
+    spySelected.mockReturnValue({ ...testCollections[0], edit: false });
     const { getByTestId } = render(<Header />);
     const deleteBtnElem = getByTestId('delete-collection-btn');
     fireEvent.click(deleteBtnElem);
@@ -49,7 +50,7 @@ describe('Header', () => {
   });
 
   it('Should show delete confirm and accept it', async () => {
-    spySelected.mockReturnValue(true);
+    spySelected.mockReturnValue({ ...testCollections[0], edit: false });
     const { getByTestId } = render(<Header />);
     const deleteBtnElem = getByTestId('delete-collection-btn');
     fireEvent.click(deleteBtnElem);

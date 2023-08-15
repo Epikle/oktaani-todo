@@ -7,9 +7,9 @@ describe('useSettingsStore', () => {
   it('Should save valid settings to LS', async () => {
     const { result } = renderHook(() => useSettingsStore((state) => state));
     act(() => {
-      result.current.actions.setSettings({ languageName: 'fi', darkMode: true });
+      result.current.actions.setSettings({ languageName: 'en-us', darkMode: true });
     });
-    expect(result.current.languageName).toBe('fi');
+    expect(result.current.languageName).toBe('en-us');
     expect(result.current.darkMode).toBe(true);
   });
 

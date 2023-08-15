@@ -3,31 +3,8 @@ import { act } from 'react-dom/test-utils';
 
 import useTodoStore from './useTodoStore';
 import * as todoService from '../services/todo';
-import { Collection, ItemEntry } from '../utils/types';
-
-const testCollections: Collection[] = [
-  {
-    id: 'test-cid-1',
-    title: 'test-1-title',
-    color: '#7b68ee',
-    shared: false,
-    type: 'todo',
-    createdAt: '2023-08-15T13:45:14.412Z',
-  },
-  {
-    id: 'test-cid-2',
-    title: 'test-2-title',
-    color: '#ff0000',
-    shared: true,
-    type: 'todo',
-    createdAt: '2023-08-15T13:45:14.412Z',
-  },
-];
-
-const testItem: ItemEntry = {
-  message: 'test-item',
-  colId: 'test-cid-1',
-};
+import { Collection } from '../utils/types';
+import { testCollections, testItem } from '../setupTests';
 
 const spyGetTodosFromLS = vi.spyOn(todoService, 'getFromLocalStorage');
 const spySaveCollectionsToLS = vi.spyOn(todoService, 'saveToLocalStorage');
