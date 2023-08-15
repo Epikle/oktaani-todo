@@ -2,11 +2,12 @@ import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 
 import { Settings, settingsSchema } from '../utils/types';
-import { saveToLocalStorage } from '../services/todo';
+import { getFromLocalStorage, saveToLocalStorage } from '../services/todo';
 import env from '../utils/env';
 
 export type SettingsSlice = Settings & {
   actions: {
+    initSettings: () => void;
     setSettings: (settings: unknown) => void;
     toggleSort: () => void;
     toggleHelp: () => void;
@@ -22,6 +23,17 @@ const useSettingsStore = create<SettingsSlice>()(
     sort: false,
     help: false,
     actions: {
+      initSettings: () => {
+        try {
+          const validatedSettings = getFromLocalStorage<Omit<Settings, 'sort' | 'help'>>(
+            env.LS_NAME_SETTINGS,
+            settingsSchema.omit({ sort: true, help: true }),
+          );
+          set({ ...validatedSettings });
+        } catch (error) {
+          // TODO: Error toast
+        }
+      },
       setSettings: (settings) => {
         try {
           const validatedSettings = settingsSchema.omit({ sort: true, help: true }).parse(settings);

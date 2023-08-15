@@ -18,8 +18,8 @@ const shareParam = new URLSearchParams(document.location.search).get('share');
 const App: FC = () => {
   const selectedCollection = useSelectedStore((state) => state.selectedCollection);
   const darkMode = useSettingsStore((state) => state.darkMode);
-  const { setSettings } = useSettingsStore((state) => state.actions);
-  const { initCollections } = useTodoStore((state) => state.actions);
+  const { initSettings } = useSettingsStore((state) => state.actions);
+  const { initCollections, initItems } = useTodoStore((state) => state.actions);
   const { setError } = useStatusStore((state) => state.actions);
   const { text } = useLanguage();
 
@@ -27,7 +27,8 @@ const App: FC = () => {
 
   useEffect(() => {
     initCollections();
-    // setSettings(getSettingsFromLS());
+    initItems();
+    initSettings();
     if (shareParam) {
       (async () => {
         try {
@@ -41,7 +42,7 @@ const App: FC = () => {
         }
       })();
     }
-  }, [setSettings, initCollections, setError, text]);
+  }, [initSettings, initCollections, initItems, setError, text]);
 
   return (
     <div className={darkMode ? 'content dark-mode' : 'content'}>

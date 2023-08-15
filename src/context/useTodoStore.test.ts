@@ -1,8 +1,9 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 
-import useTodoStore, { Collection, ItemEntry } from './useTodoStore';
+import useTodoStore from './useTodoStore';
 import * as todoService from '../services/todo';
+import { Collection } from '../utils/types';
 
 const testCollections: Collection[] = [
   {
@@ -10,7 +11,7 @@ const testCollections: Collection[] = [
     title: 'test-1-title',
     color: '#7b68ee',
     shared: false,
-    created: 'Fri Jun 16 2023 13:56:42 GMT+0300 (Itä-Euroopan kesäaika)',
+    createdAt: 'Fri Jun 16 2023 13:56:42 GMT+0300 (Itä-Euroopan kesäaika)',
     todos: [
       {
         id: 'PChjiHE-Wr3PZ2KNBN0-z',

@@ -2,13 +2,13 @@ import { FC, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faListCheck, faPen, faShareNodes, faSpinner, faTrash } from '@fortawesome/free-solid-svg-icons';
 
-import useSelectedStore from '../../context/useSelectedStore';
 import type { TConfirm } from '../UI/Header';
+import useSelectedStore from '../../context/useSelectedStore';
+import useTodoStore from '../../context/useTodoStore';
 import useLanguage from '../../hooks/useLanguage';
 import Button from '../UI/Button';
 
 import styles from './TodoControls.module.scss';
-import useTodoStore from '../../context/useTodoStore';
 
 type Props = {
   onConfirm: (type: TConfirm['type']) => void;
@@ -19,36 +19,23 @@ const TodoControls: FC<Props> = ({ onConfirm }) => {
   const selectedCollection = useSelectedStore((state) => state.selectedCollection);
   const { setSelectedCollection } = useSelectedStore((state) => state.actions);
   const items = useTodoStore((state) => state.items);
-  // const { editCollection, removeDoneItems } = useTodoStore((state) => state.actions);
+  const { deleteDoneItems } = useTodoStore((state) => state.actions);
   const { text } = useLanguage();
 
-  const removeDoneBtnHandler = async () => {
+  const deleteDoneBtnHandler = () => {
+    if (!selectedCollection) return;
     setIsLoading(true);
-    // await removeDoneItems(id);
+    deleteDoneItems(selectedCollection.id);
     setIsLoading(false);
   };
 
   const editBtnHandler = () => {
-    if (selectedCollection) {
-      setSelectedCollection({ id: selectedCollection.id, edit: !selectedCollection.edit });
-    }
+    if (!selectedCollection) return;
+    setSelectedCollection({ id: selectedCollection.id, edit: !selectedCollection.edit });
   };
 
   const stopShareBtnHandler = async () => {
-    // const editedCollection = {
-    //   id,
-    //   title,
-    //   color,
-    //   shared: false,
-    // };
-    if (selectedCollection) {
-      setSelectedCollection({ id: selectedCollection?.id, edit: false });
-    }
-    try {
-      // await editCollection(editedCollection);
-    } catch (error) {
-      // await editCollection({ ...editedCollection, noShare: true });
-    }
+    // await editCollection(editedCollection);
   };
 
   const doneItems = items && items.filter((i) => i.colId === selectedCollection?.id && i.status).length > 0;
@@ -58,7 +45,7 @@ const TodoControls: FC<Props> = ({ onConfirm }) => {
       <li>
         <Button
           title={text.controls.removeDone}
-          onClick={removeDoneBtnHandler}
+          onClick={deleteDoneBtnHandler}
           disabled={isLoading || !doneItems}
           testId="remove-done-btn"
         >

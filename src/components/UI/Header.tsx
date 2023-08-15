@@ -2,11 +2,11 @@ import { FC, useEffect, useRef, useState } from 'react';
 import autoAnimate from '@formkit/auto-animate';
 
 import useSelectedStore from '../../context/useSelectedStore';
-import useStatusStore from '../../context/useStatusStore';
 import { createSharedCollection } from '../../services/todo';
-import useLanguage from '../../hooks/useLanguage';
+import useTodoStore from '../../context/useTodoStore';
 import { copyToClipboard } from '../../utils/utils';
 import TodoControls from '../TodoForm/TodoControls';
+import useLanguage from '../../hooks/useLanguage';
 import TodoForm from '../TodoForm/TodoForm';
 import Settings from './Settings/Settings';
 import Confirm from './Confirm';
@@ -24,17 +24,18 @@ const Header: FC = () => {
   const [confirm, setConfirm] = useState<Omit<TConfirm, 'type'> | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const selectedCollection = useSelectedStore((state) => state.selectedCollection);
-  const { setError } = useStatusStore((state) => state.actions);
   const { resetSelection } = useSelectedStore((state) => state.actions);
+  const { deleteCollection } = useTodoStore((state) => state.actions);
   const { text } = useLanguage();
 
   useEffect(() => {
     if (parent.current) autoAnimate(parent.current);
   }, [parent]);
 
-  const deleteConfirmBtnHandler = async () => {
+  const deleteConfirmBtnHandler = () => {
+    if (!selectedCollection) return;
     setIsLoading(true);
-    // await deleteCollection({ id, shared });
+    deleteCollection(selectedCollection.id);
     resetSelection();
     setConfirm(null);
     setIsLoading(false);
@@ -43,13 +44,11 @@ const Header: FC = () => {
   const shareConfirmBtnHandler = async () => {
     if (!selectedCollection) return;
     setIsLoading(true);
-    try {
-      await createSharedCollection(selectedCollection);
-      await copyToClipboard(selectedCollection.id);
-      // await editCollection(editedCollection);
-    } catch (error) {
-      setError(text.errors.apiShareCollection);
-    }
+
+    // TODO: useTodoStore
+    await createSharedCollection(selectedCollection);
+    await copyToClipboard(selectedCollection.id);
+    // await editCollection(editedCollection);
 
     setConfirm(null);
     setIsLoading(false);
@@ -83,17 +82,17 @@ const Header: FC = () => {
               oktaani<strong>TODO</strong>
             </h1>
           </div>
-          {selectedCollection ? <TodoControls onConfirm={confirmBtnHandler} /> : <Settings />}
+          {!selectedCollection && <Settings />}
+          {selectedCollection && <TodoControls onConfirm={confirmBtnHandler} />}
         </div>
-        {confirm ? (
+        {!confirm && <TodoForm />}
+        {confirm && (
           <Confirm
             confirmText={confirm.confirmText}
             onConfirm={confirm.handler}
             onCancel={confirmBtnHandler}
             isLoading={isLoading}
           />
-        ) : (
-          <TodoForm />
         )}
       </div>
     </header>

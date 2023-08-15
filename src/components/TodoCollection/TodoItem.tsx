@@ -21,7 +21,7 @@ type Props = {
 const TodoItem: FC<Props> = ({ item, colId, selected }) => {
   const { id, message, status, createdAt } = item;
   const [done, setDone] = useState(status);
-  const { toggleItemStatus } = useTodoStore((state) => state.actions);
+  const { toggleItemStatus, updateItemPriority, deleteItem } = useTodoStore((state) => state.actions);
   const languageName = useSettingsStore((state) => state.languageName);
   const { text } = useLanguage();
   const { priorityColor, nextPriority } = usePriority(item.priority);
@@ -32,11 +32,11 @@ const TodoItem: FC<Props> = ({ item, colId, selected }) => {
   };
 
   const changePriorityBtnHandler = () => {
-    // editTodoItemPriority({ id, colId, newPriority: nextPriority() });
+    updateItemPriority({ id, priorityEntry: nextPriority() });
   };
 
-  const todoRemoveBtnHandler = async () => {
-    // await removeTodoItem({ id, colId });
+  const todoRemoveBtnHandler = () => {
+    deleteItem(item.id);
   };
 
   return (
