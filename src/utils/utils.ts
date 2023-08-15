@@ -1,7 +1,12 @@
+import { type ClassValue, clsx } from 'clsx';
 import env from './env';
 import type { Languages } from './languages';
 
-export const formatDate = (date: string, locale: Languages, options?: Intl.DateTimeFormatOptions): string | null => {
+export const formatDate = (
+  date: string | Date,
+  locale: Languages,
+  options?: Intl.DateTimeFormatOptions,
+): string | null => {
   const dateObj = new Date(date);
 
   if (!date || Number.isNaN(dateObj.getTime())) return null;
@@ -41,3 +46,5 @@ export const copyToClipboard = async (id: string) => {
     return false;
   }
 };
+
+export const cn = (...inputs: ClassValue[]) => clsx(inputs);

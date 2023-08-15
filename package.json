@@ -21,6 +21,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.4.2",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "axios": "^1.4.0",
+    "clsx": "^2.0.0",
     "immer": "^10.0.2",
     "nanoid": "^4.0.2",
     "rdndmb-html5-to-touch": "^8.0.1",
