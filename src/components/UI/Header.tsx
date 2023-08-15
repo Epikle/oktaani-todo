@@ -1,7 +1,6 @@
 import { FC, useEffect, useRef, useState } from 'react';
 import autoAnimate from '@formkit/auto-animate';
 
-import useTodoStore from '../../context/useTodoStore';
 import useSelectedStore from '../../context/useSelectedStore';
 import useStatusStore from '../../context/useStatusStore';
 import { createSharedCollection } from '../../services/todo';
@@ -24,16 +23,9 @@ const Header: FC = () => {
   const parent = useRef(null);
   const [confirm, setConfirm] = useState<Omit<TConfirm, 'type'> | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const title = useSelectedStore((state) => state.title);
-  const color = useSelectedStore((state) => state.color);
-  const selected = useSelectedStore((state) => state.selected);
-  const type = useSelectedStore((state) => state.type);
-  const id = useSelectedStore((state) => state.id);
-  // const shared = useSelectedStore((state) => state.shared);
-  const collections = useTodoStore((state) => state.collections);
+  const selectedCollection = useSelectedStore((state) => state.selectedCollection);
   const { setError } = useStatusStore((state) => state.actions);
-  const { setSelectedCollection, resetSelection } = useSelectedStore((state) => state.actions);
-  // const { editCollection, deleteCollection } = useTodoStore((state) => state.actions);
+  const { resetSelection } = useSelectedStore((state) => state.actions);
   const { text } = useLanguage();
 
   useEffect(() => {
@@ -49,21 +41,12 @@ const Header: FC = () => {
   };
 
   const shareConfirmBtnHandler = async () => {
-    const selectedCollection = collections.find((collection) => collection.id === id);
     if (!selectedCollection) return;
     setIsLoading(true);
     try {
       await createSharedCollection(selectedCollection);
-      await copyToClipboard(id);
-      const editedCollection = {
-        id,
-        title,
-        color,
-        type,
-        shared: true,
-      };
+      await copyToClipboard(selectedCollection.id);
       // await editCollection(editedCollection);
-      setSelectedCollection(editedCollection);
     } catch (error) {
       setError(text.errors.apiShareCollection);
     }
@@ -100,7 +83,7 @@ const Header: FC = () => {
               oktaani<strong>TODO</strong>
             </h1>
           </div>
-          {selected ? <TodoControls onConfirm={confirmBtnHandler} /> : <Settings />}
+          {selectedCollection ? <TodoControls onConfirm={confirmBtnHandler} /> : <Settings />}
         </div>
         {confirm ? (
           <Confirm

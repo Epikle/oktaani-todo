@@ -5,12 +5,12 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import useLanguage from '../../hooks/useLanguage';
 import { formatDate } from '../../utils/utils';
 import useSettingsStore from '../../context/useSettingsStore';
-import useStatusStore from '../../context/useStatusStore';
 import usePriority from '../../hooks/usePriority';
 import Button from '../UI/Button';
 
 import styles from './TodoItem.module.scss';
 import { Item } from '../../utils/types';
+import useTodoStore from '../../context/useTodoStore';
 
 type Props = {
   item: Item;
@@ -21,19 +21,14 @@ type Props = {
 const TodoItem: FC<Props> = ({ item, colId, selected }) => {
   const { id, message, status, createdAt } = item;
   const [done, setDone] = useState(status);
-  // const { toggleItemDone, removeTodoItem, editTodoItemPriority } = useTodoStore((state) => state.actions);
+  const { toggleItemStatus } = useTodoStore((state) => state.actions);
   const languageName = useSettingsStore((state) => state.languageName);
-  const { setError } = useStatusStore((state) => state.actions);
   const { text } = useLanguage();
   const { priorityColor, nextPriority } = usePriority(item.priority);
 
-  const todoDoneHandler = async () => {
+  const todoDoneHandler = () => {
     setDone((prevS) => !prevS);
-    try {
-      // await toggleItemDone({ id, colId });
-    } catch (error) {
-      setError(text.errors.apiUpdateCollection);
-    }
+    toggleItemStatus(id);
   };
 
   const changePriorityBtnHandler = () => {

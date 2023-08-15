@@ -1,23 +1,20 @@
 import { create } from 'zustand';
 
-export type StatusSlice = typeof initialStatusState & {
+export type StatusSlice = {
+  isError: boolean;
+  errorMessage: string | null;
   actions: {
     setError: (message: string) => void;
     resetError: () => void;
   };
 };
 
-const initialStatusState = {
-  isLoading: false,
-  isError: false,
-  errorMessage: '',
-};
-
 const useStatusStore = create<StatusSlice>((set) => ({
-  ...initialStatusState,
+  isError: false,
+  errorMessage: null,
   actions: {
-    setError: (message) => set((state) => ({ ...state, isError: true, errorMessage: message })),
-    resetError: () => set((state) => ({ ...state, isError: false })),
+    setError: (message) => set({ isError: true, errorMessage: message }),
+    resetError: () => set({ isError: false, errorMessage: null }),
   },
 }));
 

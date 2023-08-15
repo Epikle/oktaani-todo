@@ -67,12 +67,6 @@
       }
     }
 
-    &.hide {
-      transform: translateX(3rem);
-      width: 0rem;
-      color: transparent;
-    }
-
     &:disabled {
       cursor: not-allowed;
     }

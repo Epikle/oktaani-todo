@@ -12,8 +12,10 @@ export type TodoSlice = {
   actions: {
     initCollections: () => void;
     createCollection: (entry: CollectionEntry) => void;
-    createItem: (entry: ItemEntry) => Promise<void>;
-    // changeOrder: ({ dragIndex, hoverIndex }: { dragIndex: number; hoverIndex: number }) => void;
+    updateCollection: (entry: Partial<Collection> & { id: string }) => void;
+    createItem: (entry: ItemEntry) => void;
+    toggleItemStatus: (id: string) => void;
+    changeOrder: ({ dragIndex, hoverIndex }: { dragIndex: number; hoverIndex: number }) => void;
     // deleteCollection: ({ id, shared }: { id: string; shared: boolean }) => Promise<void>;
     // toggleItemDone: ({ id, colId }: { id: string; colId: string }) => Promise<void>;
     // removeDoneItems: (id: string) => Promise<void>;
@@ -34,7 +36,7 @@ const useTodoStore = create<TodoSlice>()(
             env.LS_NAME_COLLECTIONS,
             arrayOfCollectionsSchema,
           );
-          set(() => ({ collections }));
+          set({ collections });
         } catch (error) {
           // TODO: Error toast
         }
@@ -44,35 +46,51 @@ const useTodoStore = create<TodoSlice>()(
           const collectionEntry = todoService.createCollectionEntry(entry);
           set((state) => {
             const newCollections = state.collections ? [collectionEntry, ...state.collections] : [collectionEntry];
-            todoService.saveToLocalStorage<Collection[]>(env.LS_NAME_COLLECTIONS, newCollections);
             state.collections = newCollections;
+            todoService.saveToLocalStorage<Collection[]>(env.LS_NAME_COLLECTIONS, newCollections);
           });
         } catch (error) {
           // TODO: Error toast
         }
       },
-
-      createItem: async (entry) => {
-        const validItem = todoService.createItemEntry(entry);
-
-        // shared logic
-
+      updateCollection: (entry) => {
         set((state) => {
-          if (!state.items) {
-            state.items = [validItem];
-          } else {
-            state.items.push(validItem);
+          const collection = state.collections?.find((c) => c.id === entry.id);
+          if (state.collections && collection) {
+            Object.assign(collection, entry);
+            todoService.saveToLocalStorage<Collection[]>(env.LS_NAME_COLLECTIONS, state.collections);
           }
         });
       },
-      // changeOrder: ({ dragIndex, hoverIndex }) =>
-      //   set((state) => {
-      //     const movingCollection = state.collections[dragIndex];
-      //     state.collections.splice(dragIndex, 1);
-      //     state.collections.splice(hoverIndex, 0, movingCollection);
+      createItem: (entry) => {
+        try {
+          const validItem = todoService.createItemEntry(entry);
+          set((state) => {
+            const newItems = state.items ? state.items.concat(validItem) : [validItem];
+            state.items = newItems;
+            todoService.saveToLocalStorage<Item[]>(env.LS_NAME_ITEMS, newItems);
+          });
+        } catch (error) {
+          // TODO: Error toast
+        }
+      },
+      toggleItemStatus: (id) => {
+        set((state) => {
+          const item = state.items?.find((i) => i.id === id);
+          if (item) {
+            item.status = !item.status;
+          }
+        });
+      },
 
-      //     todoService.saveCollectionsToLS(state.collections);
-      //   }),
+      changeOrder: ({ dragIndex, hoverIndex }) =>
+        set((state) => {
+          if (!state.collections) return;
+          const movingCollection = state.collections[dragIndex];
+          state.collections.splice(dragIndex, 1);
+          state.collections.splice(hoverIndex, 0, movingCollection);
+          todoService.saveToLocalStorage<Collection[]>(env.LS_NAME_COLLECTIONS, state.collections);
+        }),
       // deleteCollection: async ({ id, shared }) => {
       //   if (shared) await todoService.deleteSharedCollection(id);
       //   set((state) => {

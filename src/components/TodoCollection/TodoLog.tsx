@@ -23,8 +23,8 @@ export type Log = {
 const TodoLog: FC<Props> = ({ id, languageName }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [logs, setLogs] = useState<Log[] | []>([]);
-  const selectedColId = useSelectedStore((state) => state.id);
-  const isSelected = selectedColId === id;
+  const selectedCollection = useSelectedStore((state) => state.selectedCollection);
+  const isSelected = selectedCollection?.id === id;
   const { text } = useLanguage();
 
   useEffect(() => {

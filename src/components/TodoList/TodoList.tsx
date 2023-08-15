@@ -13,14 +13,14 @@ const TodoList: FC = () => {
   const collections = useTodoStore((state) => state.collections);
   const help = useSettingsStore((state) => state.help);
   const sort = useSettingsStore((state) => state.sort);
-  // const { changeOrder } = useTodoStore((state) => state.actions);
+  const { changeOrder } = useTodoStore((state) => state.actions);
 
   useEffect(() => {
     if (parent.current) autoAnimate(parent.current);
   }, [parent]);
 
   const moveCollection = (dragIndex: number, hoverIndex: number) => {
-    // changeOrder({ dragIndex, hoverIndex });
+    changeOrder({ dragIndex, hoverIndex });
   };
 
   const sortStyles: CSSProperties = sort ? { gridTemplateColumns: '1fr' } : {};

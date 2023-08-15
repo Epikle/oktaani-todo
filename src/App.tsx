@@ -16,14 +16,14 @@ import Footer from './components/UI/Footer';
 const shareParam = new URLSearchParams(document.location.search).get('share');
 
 const App: FC = () => {
-  const title = useSelectedStore((state) => state.title);
+  const selectedCollection = useSelectedStore((state) => state.selectedCollection);
   const darkMode = useSettingsStore((state) => state.darkMode);
   const { setSettings } = useSettingsStore((state) => state.actions);
   const { initCollections } = useTodoStore((state) => state.actions);
   const { setError } = useStatusStore((state) => state.actions);
   const { text } = useLanguage();
 
-  document.title = title ? `${title} | oktaaniTODO` : 'oktaaniTODO';
+  document.title = selectedCollection?.title ? `${selectedCollection.title} | oktaaniTODO` : 'oktaaniTODO';
 
   useEffect(() => {
     initCollections();

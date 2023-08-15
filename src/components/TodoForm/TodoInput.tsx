@@ -6,6 +6,7 @@ import useLanguage from '../../hooks/useLanguage';
 
 import styles from './TodoInput.module.scss';
 import { TypeEnum } from '../../utils/types';
+import { cn } from '../../utils/utils';
 
 type Props = {
   todoInput: string;
@@ -16,33 +17,29 @@ type Props = {
 
 const TodoInput: FC<Props> = ({ todoInput, setTodoInput, maxLength, isLoading }) => {
   const ref = useRef<HTMLInputElement>(null);
-  const title = useSelectedStore((state) => state.title);
-  const selected = useSelectedStore((state) => state.selected);
-  const type = useSelectedStore((state) => state.type);
-  const edit = useSelectedStore((state) => state.edit);
+  const selectedCollection = useSelectedStore((state) => state.selectedCollection);
   const sort = useSettingsStore((state) => state.sort);
   const { text } = useLanguage();
-  const inputTextByType = type === TypeEnum.enum.todo ? text.header.newTodo : text.header.editNote;
-  const placeholderText = selected ? inputTextByType : text.header.newCollection;
-  const styleClasses = selected ? [styles.todo, styles.selected].join(' ') : styles.todo;
+  const inputTextByType = selectedCollection?.type === TypeEnum.enum.todo ? text.header.newTodo : text.header.editNote;
+  const placeholderText = selectedCollection ? inputTextByType : text.header.newCollection;
 
   useEffect(() => {
-    if (selected && ref.current && TypeEnum.enum.todo === type) {
+    if (selectedCollection && ref.current && selectedCollection.type === TypeEnum.enum.todo) {
       ref.current.focus();
     }
-  }, [selected, isLoading, title, type]);
+  }, [selectedCollection, isLoading, selectedCollection?.title, selectedCollection?.type]);
 
   return (
     <input
       ref={ref}
       type="text"
-      className={styleClasses}
+      className={cn(styles.todo, { [styles.selected]: selectedCollection })}
       placeholder={sort ? text.controls.sort : placeholderText}
       title={placeholderText}
       value={todoInput}
       onChange={(e) => setTodoInput(e.target.value)}
       maxLength={maxLength}
-      disabled={sort || isLoading || (TypeEnum.enum.note === type && !edit)}
+      disabled={sort || isLoading || (selectedCollection?.type === TypeEnum.enum.note && !selectedCollection.edit)}
       data-testid="todo-input"
     />
   );

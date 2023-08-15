@@ -8,12 +8,14 @@ import type { Identifier, XYCoord } from 'dnd-core';
 import useSelectedStore from '../../context/useSelectedStore';
 import useSettingsStore from '../../context/useSettingsStore';
 import useLanguage from '../../hooks/useLanguage';
-import { copyToClipboard, formatDate } from '../../utils/utils';
+import { cn, copyToClipboard, formatDate } from '../../utils/utils';
 import Button from '../UI/Button';
 import useTabActive from '../../hooks/useTabActive';
 import styles from './TodoCollection.module.scss';
 import TodoLog from './TodoLog';
 import { Collection, CollectionType, TypeEnum } from '../../utils/types';
+import useTodoStore from '../../context/useTodoStore';
+import TodoItem from './TodoItem';
 
 type Props = {
   collection: Collection;
@@ -38,14 +40,15 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
   const [isCopy, setIsCopy] = useState(false);
   const [showLog, setShowLog] = useState(false);
   const [lastUpdatedTime, setLastUpdatedTime] = useState(0);
-  const selectedColId = useSelectedStore((state) => state.id);
+  const selectedCollection = useSelectedStore((state) => state.selectedCollection);
   const sort = useSettingsStore((state) => state.sort);
   const languageName = useSettingsStore((state) => state.languageName);
   const { setSelectedCollection, resetSelection } = useSelectedStore((state) => state.actions);
-  // const { updateSharedCollection, editCollection } = useTodoStore((state) => state.actions);
+  const { updateCollection } = useTodoStore((state) => state.actions);
   const { text } = useLanguage();
   const isTabActive = useTabActive();
-  const isSelected = selectedColId === id;
+  const isSelected = selectedCollection?.id === id;
+  const items = useTodoStore((state) => state.items?.filter((i) => i.colId === id));
 
   const getSharedCollectionData = useCallback(async () => {
     setIsError(false);
@@ -128,7 +131,7 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
     borderColor: color,
   };
 
-  const doneTodos = type === TypeEnum.enum.todo ? collection.todos.filter((todo) => todo.done).length : '';
+  const doneTodos = type === TypeEnum.enum.todo ? items?.filter((todo) => todo.status).length : '';
 
   const selectedCollectionHandler = () => {
     if (!type) return;
@@ -137,7 +140,7 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
       return;
     }
 
-    setSelectedCollection({ id, title, color, shared, type, hasDone: !!doneTodos });
+    setSelectedCollection({ id, edit: false });
   };
 
   const copyShareBtnHandler = async () => {
@@ -153,35 +156,29 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
     setShowLog((prevS) => !prevS);
   };
 
+  const todoTypeBtnHandler = async (typeEntry: CollectionType) => {
+    updateCollection({ id, type: typeEntry });
+  };
+
   useEffect(() => {
     if (parent.current) autoAnimate(parent.current);
   }, [parent]);
 
-  const totalTodos = 1;
+  const totalTodos = items?.length || 0;
   const showDone = totalTodos > 0 && !sort && TypeEnum.enum.todo === type ? `${doneTodos}/${totalTodos}` : '';
-  const articleStyles = isSelected ? [styles.collection, styles.selected].join(' ') : styles.collection;
-
   const showCreated =
     isSelected && formatDate(createdAt, languageName) && !sort
       ? `${text.collection.created} ${formatDate(createdAt, languageName)}`
       : '';
 
-  useEffect(() => {
-    if (isSelected) {
-      setSelectedCollection({ hasDone: !!doneTodos });
-    }
-  }, [doneTodos, isSelected, setSelectedCollection]);
-
   preview(drop(ref));
-
-  const todoTypeBtnHandler = async (typeEntry: CollectionType) => {
-    console.log({ id, type: typeEntry });
-    // await editCollection({ id, title, color, shared, type });
-  };
 
   if (isLoading) {
     return (
-      <article className={articleStyles} style={{ textAlign: 'center' }}>
+      <article
+        className={cn(styles.collection, { [styles.selected]: isSelected, print: isSelected })}
+        style={{ textAlign: 'center' }}
+      >
         <h2>{text.common.loading}</h2>
         <FontAwesomeIcon icon={faSpinner} size="2xl" spinPulse />
       </article>
@@ -190,7 +187,7 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
 
   if (isError) {
     return (
-      <article className={[articleStyles, styles.error].join(' ')}>
+      <article className={cn(styles.collection, styles.error, { [styles.selected]: isSelected, print: isSelected })}>
         <h2>🚨 {text.common.error} 🚨</h2>
         <div>
           <p>{text.errors.apiGetCollection}</p>
@@ -207,7 +204,7 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
     <article
       ref={ref}
       data-handler-id={handlerId}
-      className={isSelected ? [articleStyles, 'print'].join(' ') : articleStyles}
+      className={cn(styles.collection, { [styles.selected]: isSelected, print: isSelected })}
       style={{ ...listStyles, opacity, minHeight: showLog ? '14rem' : 'auto' }}
       data-done={showDone}
       data-created={showCreated}
@@ -231,10 +228,7 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
       {/* {!sort && TypeEnum.enum.note === type && <TodoNote id={id} isSelected={isSelected} note={note} />} */}
       {!sort && TypeEnum.enum.todo === type && (
         <ul ref={parent} className={styles['item-list']}>
-          {/* {collection &&
-            collection.todos &&
-            collection.todos.length > 0 &&
-            collection.todos.map((todo) => <TodoItem key={todo.id} todo={todo} colId={id} selected={isSelected} />)} */}
+          {items && items.map((item) => <TodoItem key={item.id} item={item} colId={id} selected={isSelected} />)}
         </ul>
       )}
 

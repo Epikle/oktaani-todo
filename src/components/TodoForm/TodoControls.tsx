@@ -5,10 +5,10 @@ import { faListCheck, faPen, faShareNodes, faSpinner, faTrash } from '@fortaweso
 import useSelectedStore from '../../context/useSelectedStore';
 import type { TConfirm } from '../UI/Header';
 import useLanguage from '../../hooks/useLanguage';
-import useStatusStore from '../../context/useStatusStore';
 import Button from '../UI/Button';
 
 import styles from './TodoControls.module.scss';
+import useTodoStore from '../../context/useTodoStore';
 
 type Props = {
   onConfirm: (type: TConfirm['type']) => void;
@@ -16,29 +16,22 @@ type Props = {
 
 const TodoControls: FC<Props> = ({ onConfirm }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const title = useSelectedStore((state) => state.title);
-  const color = useSelectedStore((state) => state.color);
-  const edit = useSelectedStore((state) => state.edit);
-  const shared = useSelectedStore((state) => state.shared);
-  const id = useSelectedStore((state) => state.id);
-  const hasDone = useSelectedStore((state) => state.hasDone);
+  const selectedCollection = useSelectedStore((state) => state.selectedCollection);
   const { setSelectedCollection } = useSelectedStore((state) => state.actions);
+  const items = useTodoStore((state) => state.items);
   // const { editCollection, removeDoneItems } = useTodoStore((state) => state.actions);
-  const { setError } = useStatusStore((state) => state.actions);
   const { text } = useLanguage();
 
   const removeDoneBtnHandler = async () => {
     setIsLoading(true);
-    try {
-      // await removeDoneItems(id);
-    } catch (error) {
-      setError(text.errors.apiUpdateCollection);
-    }
+    // await removeDoneItems(id);
     setIsLoading(false);
   };
 
   const editBtnHandler = () => {
-    setSelectedCollection({ edit: !edit });
+    if (selectedCollection) {
+      setSelectedCollection({ id: selectedCollection.id, edit: !selectedCollection.edit });
+    }
   };
 
   const stopShareBtnHandler = async () => {
@@ -48,7 +41,9 @@ const TodoControls: FC<Props> = ({ onConfirm }) => {
     //   color,
     //   shared: false,
     // };
-    setSelectedCollection({ id, title, color, shared: false });
+    if (selectedCollection) {
+      setSelectedCollection({ id: selectedCollection?.id, edit: false });
+    }
     try {
       // await editCollection(editedCollection);
     } catch (error) {
@@ -56,13 +51,15 @@ const TodoControls: FC<Props> = ({ onConfirm }) => {
     }
   };
 
+  const doneItems = items && items.filter((i) => i.colId === selectedCollection?.id && i.status).length > 0;
+
   return (
     <ul className={styles.controls} data-testid="todo-controls">
       <li>
         <Button
           title={text.controls.removeDone}
           onClick={removeDoneBtnHandler}
-          disabled={!hasDone || isLoading}
+          disabled={isLoading || !doneItems}
           testId="remove-done-btn"
         >
           {isLoading ? <FontAwesomeIcon icon={faSpinner} spinPulse /> : <FontAwesomeIcon icon={faListCheck} />}
@@ -70,9 +67,9 @@ const TodoControls: FC<Props> = ({ onConfirm }) => {
       </li>
       <li>
         <Button
-          className={shared ? styles.shared : ''}
-          title={shared ? text.controls.stopShareCol : text.controls.shareCol}
-          onClick={() => (shared ? stopShareBtnHandler() : onConfirm('share'))}
+          className={selectedCollection?.shared ? styles.shared : ''}
+          title={selectedCollection?.shared ? text.controls.stopShareCol : text.controls.shareCol}
+          onClick={() => (selectedCollection?.shared ? stopShareBtnHandler() : onConfirm('share'))}
           testId="share-col-btn"
         >
           <FontAwesomeIcon icon={faShareNodes} />
@@ -82,7 +79,7 @@ const TodoControls: FC<Props> = ({ onConfirm }) => {
         <Button
           title={text.controls.editCol}
           onClick={editBtnHandler}
-          className={edit ? styles['edit-active'] : ''}
+          className={selectedCollection?.edit ? styles['edit-active'] : ''}
           testId="edit-collection-title-btn"
         >
           <FontAwesomeIcon icon={faPen} />
