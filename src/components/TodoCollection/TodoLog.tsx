@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 
-import { getSharedCollectionLogData } from '../../services/todo';
+// import { getSharedCollectionLogData } from '../../services/todo';
 import { formatDate } from '../../utils/utils';
 import { type Languages } from '../../utils/languages';
 import useSelectedStore from '../../context/useSelectedStore';
@@ -31,7 +31,7 @@ const TodoLog: FC<Props> = ({ id, languageName }) => {
     (async () => {
       setIsLoading(true);
       try {
-        const logsData = await getSharedCollectionLogData(id);
+        // const logsData = await getSharedCollectionLogData(id);
         setLogs(logsData);
       } catch (error) {
         setLogs([]);

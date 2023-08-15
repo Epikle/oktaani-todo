@@ -26,7 +26,7 @@ const TodoForm: FC = () => {
   const type = useSelectedStore((state) => state.type);
   const id = useSelectedStore((state) => state.id);
   const selected = useSelectedStore((state) => state.selected);
-  const { createCollectionItem, editCollection, createCollection } = useTodoStore((state) => state.actions);
+  const { createCollection } = useTodoStore((state) => state.actions);
   const { setSelectedCollection, resetSelection } = useSelectedStore((state) => state.actions);
   const { setError } = useStatusStore((state) => state.actions);
   const { text } = useLanguage();
@@ -46,44 +46,40 @@ const TodoForm: FC = () => {
     if (trimmedInput.length === 0) return;
     setIsLoading(true);
 
-    if (edit) {
-      const editedCollection = {
-        id,
-        title: trimmedInput,
-        color: storeColor,
-        shared,
-        type,
-      };
-      try {
-        await editCollection(editedCollection);
-      } catch (error) {
-        setError(text.errors.apiUpdateCollection);
-      }
-      setSelectedCollection({ ...editedCollection, edit: false });
-      setIsLoading(false);
-      return;
-    }
+    // if (edit) {
+    //   const editedCollection = {
+    //     id,
+    //     title: trimmedInput,
+    //     color: storeColor,
+    //     shared,
+    //     type,
+    //   };
+    //   try {
+    //     // await editCollection(editedCollection);
+    //   } catch (error) {
+    //     setError(text.errors.apiUpdateCollection);
+    //   }
+    //   setSelectedCollection({ ...editedCollection, edit: false });
+    //   setIsLoading(false);
+    //   return;
+    // }
 
-    if (selected) {
-      try {
-        await createCollectionItem({
-          id,
-          itemEntry: { text: trimmedInput, priority: 'low' },
-        });
-      } catch (error) {
-        setError(text.errors.apiUpdateCollection);
-      }
+    // if (selected) {
+    //   try {
+    //     // await createCollectionItem({
+    //     //   id,
+    //     //   itemEntry: { text: trimmedInput, priority: 'low' },
+    //     // });
+    //   } catch (error) {
+    //     setError(text.errors.apiUpdateCollection);
+    //   }
 
-      setTodoInput('');
-      setIsLoading(false);
-      return;
-    }
+    //   setTodoInput('');
+    //   setIsLoading(false);
+    //   return;
+    // }
 
-    const newCollectionEntry = {
-      title: trimmedInput,
-      color,
-    };
-    createCollection(newCollectionEntry);
+    createCollection({ title: trimmedInput, color });
 
     setTodoInput('');
     setIsLoading(false);

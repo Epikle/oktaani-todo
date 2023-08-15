@@ -2,7 +2,6 @@ import { FC, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faListCheck, faPen, faShareNodes, faSpinner, faTrash } from '@fortawesome/free-solid-svg-icons';
 
-import useTodoStore from '../../context/useTodoStore';
 import useSelectedStore from '../../context/useSelectedStore';
 import type { TConfirm } from '../UI/Header';
 import useLanguage from '../../hooks/useLanguage';
@@ -24,14 +23,14 @@ const TodoControls: FC<Props> = ({ onConfirm }) => {
   const id = useSelectedStore((state) => state.id);
   const hasDone = useSelectedStore((state) => state.hasDone);
   const { setSelectedCollection } = useSelectedStore((state) => state.actions);
-  const { editCollection, removeDoneItems } = useTodoStore((state) => state.actions);
+  // const { editCollection, removeDoneItems } = useTodoStore((state) => state.actions);
   const { setError } = useStatusStore((state) => state.actions);
   const { text } = useLanguage();
 
   const removeDoneBtnHandler = async () => {
     setIsLoading(true);
     try {
-      await removeDoneItems(id);
+      // await removeDoneItems(id);
     } catch (error) {
       setError(text.errors.apiUpdateCollection);
     }
@@ -43,17 +42,17 @@ const TodoControls: FC<Props> = ({ onConfirm }) => {
   };
 
   const stopShareBtnHandler = async () => {
-    const editedCollection = {
-      id,
-      title,
-      color,
-      shared: false,
-    };
+    // const editedCollection = {
+    //   id,
+    //   title,
+    //   color,
+    //   shared: false,
+    // };
     setSelectedCollection({ id, title, color, shared: false });
     try {
-      await editCollection(editedCollection);
+      // await editCollection(editedCollection);
     } catch (error) {
-      await editCollection({ ...editedCollection, noShare: true });
+      // await editCollection({ ...editedCollection, noShare: true });
     }
   };
 

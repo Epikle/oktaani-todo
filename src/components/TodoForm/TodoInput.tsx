@@ -2,10 +2,10 @@ import { Dispatch, FC, SetStateAction, useEffect, useRef } from 'react';
 
 import useSelectedStore from '../../context/useSelectedStore';
 import useSettingsStore from '../../context/useSettingsStore';
-import { TodoTypeEnum } from '../../context/useTodoStore';
 import useLanguage from '../../hooks/useLanguage';
 
 import styles from './TodoInput.module.scss';
+import { TypeEnum } from '../../utils/types';
 
 type Props = {
   todoInput: string;
@@ -22,12 +22,12 @@ const TodoInput: FC<Props> = ({ todoInput, setTodoInput, maxLength, isLoading })
   const edit = useSelectedStore((state) => state.edit);
   const sort = useSettingsStore((state) => state.sort);
   const { text } = useLanguage();
-  const inputTextByType = type === TodoTypeEnum.Enum.todo ? text.header.newTodo : text.header.editNote;
+  const inputTextByType = type === TypeEnum.enum.todo ? text.header.newTodo : text.header.editNote;
   const placeholderText = selected ? inputTextByType : text.header.newCollection;
   const styleClasses = selected ? [styles.todo, styles.selected].join(' ') : styles.todo;
 
   useEffect(() => {
-    if (selected && ref.current && TodoTypeEnum.enum.todo === type) {
+    if (selected && ref.current && TypeEnum.enum.todo === type) {
       ref.current.focus();
     }
   }, [selected, isLoading, title, type]);
@@ -42,7 +42,7 @@ const TodoInput: FC<Props> = ({ todoInput, setTodoInput, maxLength, isLoading })
       value={todoInput}
       onChange={(e) => setTodoInput(e.target.value)}
       maxLength={maxLength}
-      disabled={sort || isLoading || (TodoTypeEnum.Enum.note === type && !edit)}
+      disabled={sort || isLoading || (TypeEnum.enum.note === type && !edit)}
       data-testid="todo-input"
     />
   );

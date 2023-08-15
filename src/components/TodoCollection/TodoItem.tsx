@@ -2,8 +2,6 @@ import { FC, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
-import { type Item as TItem } from '../../context/useTodoStore';
-import useTodoStore from '../../context/useTodoStore';
 import useLanguage from '../../hooks/useLanguage';
 import { formatDate } from '../../utils/utils';
 import useSettingsStore from '../../context/useSettingsStore';
@@ -12,37 +10,38 @@ import usePriority from '../../hooks/usePriority';
 import Button from '../UI/Button';
 
 import styles from './TodoItem.module.scss';
+import { Item } from '../../utils/types';
 
 type Props = {
-  todo: TItem;
+  item: Item;
   colId: string;
   selected: boolean;
 };
 
-const TodoItem: FC<Props> = ({ todo, colId, selected }) => {
-  const { id, text: todoText, done, created } = todo;
-  const [isDone, setIsDone] = useState(done);
-  const { toggleItemDone, removeTodoItem, editTodoItemPriority } = useTodoStore((state) => state.actions);
+const TodoItem: FC<Props> = ({ item, colId, selected }) => {
+  const { id, message, status, createdAt } = item;
+  const [done, setDone] = useState(status);
+  // const { toggleItemDone, removeTodoItem, editTodoItemPriority } = useTodoStore((state) => state.actions);
   const languageName = useSettingsStore((state) => state.languageName);
   const { setError } = useStatusStore((state) => state.actions);
   const { text } = useLanguage();
-  const { priorityColor, nextPriority } = usePriority(todo.priority);
+  const { priorityColor, nextPriority } = usePriority(item.priority);
 
   const todoDoneHandler = async () => {
-    setIsDone((prevS) => !prevS);
+    setDone((prevS) => !prevS);
     try {
-      await toggleItemDone({ id, colId });
+      // await toggleItemDone({ id, colId });
     } catch (error) {
       setError(text.errors.apiUpdateCollection);
     }
   };
 
   const changePriorityBtnHandler = () => {
-    editTodoItemPriority({ id, colId, newPriority: nextPriority() });
+    // editTodoItemPriority({ id, colId, newPriority: nextPriority() });
   };
 
   const todoRemoveBtnHandler = async () => {
-    await removeTodoItem({ id, colId });
+    // await removeTodoItem({ id, colId });
   };
 
   return (
@@ -57,20 +56,20 @@ const TodoItem: FC<Props> = ({ todo, colId, selected }) => {
         <input
           type="checkbox"
           id={id}
-          checked={isDone}
+          checked={done}
           onChange={todoDoneHandler}
-          title={text.todo.markDone.replace('[]', todoText)}
+          title={text.todo.markDone.replace('[]', message)}
         />
       </div>
 
-      <label htmlFor={id} title={`${text.collection.created} ${formatDate(created, languageName)}`}>
-        {todoText}
+      <label htmlFor={id} title={`${text.collection.created} ${formatDate(createdAt, languageName)}`}>
+        {message}
       </label>
       {selected && (
         <Button
           onClick={todoRemoveBtnHandler}
-          aria-label={text.todo.remove.replace('[]', todoText)}
-          title={text.todo.remove.replace('[]', todoText)}
+          aria-label={text.todo.remove.replace('[]', message)}
+          title={text.todo.remove.replace('[]', message)}
           testId="item-btn-remove"
         >
           <FontAwesomeIcon icon={faTrash} />

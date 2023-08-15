@@ -29,11 +29,11 @@ const Header: FC = () => {
   const selected = useSelectedStore((state) => state.selected);
   const type = useSelectedStore((state) => state.type);
   const id = useSelectedStore((state) => state.id);
-  const shared = useSelectedStore((state) => state.shared);
+  // const shared = useSelectedStore((state) => state.shared);
   const collections = useTodoStore((state) => state.collections);
   const { setError } = useStatusStore((state) => state.actions);
   const { setSelectedCollection, resetSelection } = useSelectedStore((state) => state.actions);
-  const { editCollection, deleteCollection } = useTodoStore((state) => state.actions);
+  // const { editCollection, deleteCollection } = useTodoStore((state) => state.actions);
   const { text } = useLanguage();
 
   useEffect(() => {
@@ -42,7 +42,7 @@ const Header: FC = () => {
 
   const deleteConfirmBtnHandler = async () => {
     setIsLoading(true);
-    await deleteCollection({ id, shared });
+    // await deleteCollection({ id, shared });
     resetSelection();
     setConfirm(null);
     setIsLoading(false);
@@ -62,7 +62,7 @@ const Header: FC = () => {
         type,
         shared: true,
       };
-      await editCollection(editedCollection);
+      // await editCollection(editedCollection);
       setSelectedCollection(editedCollection);
     } catch (error) {
       setError(text.errors.apiShareCollection);

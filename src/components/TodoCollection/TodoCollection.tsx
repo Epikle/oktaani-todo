@@ -7,16 +7,13 @@ import type { Identifier, XYCoord } from 'dnd-core';
 
 import useSelectedStore from '../../context/useSelectedStore';
 import useSettingsStore from '../../context/useSettingsStore';
-import useTodoStore, { TodoTypeEnum, type Collection, type TodoTypes } from '../../context/useTodoStore';
 import useLanguage from '../../hooks/useLanguage';
 import { copyToClipboard, formatDate } from '../../utils/utils';
-import TodoItem from './TodoItem';
 import Button from '../UI/Button';
-import TodoNote from './TodoNote';
 import useTabActive from '../../hooks/useTabActive';
-
 import styles from './TodoCollection.module.scss';
 import TodoLog from './TodoLog';
+import { Collection, CollectionType, TypeEnum } from '../../utils/types';
 
 type Props = {
   collection: Collection;
@@ -33,7 +30,7 @@ type DragItem = {
 const DELAY_MS = 5000;
 
 const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
-  const { id, title, color, shared, created, type, note } = collection;
+  const { id, title, color, shared, createdAt, type } = collection;
   const parent = useRef<HTMLUListElement>(null);
   const ref = useRef<HTMLElement>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -45,7 +42,7 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
   const sort = useSettingsStore((state) => state.sort);
   const languageName = useSettingsStore((state) => state.languageName);
   const { setSelectedCollection, resetSelection } = useSelectedStore((state) => state.actions);
-  const { updateSharedCollection, editCollection } = useTodoStore((state) => state.actions);
+  // const { updateSharedCollection, editCollection } = useTodoStore((state) => state.actions);
   const { text } = useLanguage();
   const isTabActive = useTabActive();
   const isSelected = selectedColId === id;
@@ -54,12 +51,12 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
     setIsError(false);
     setIsLoading(true);
     try {
-      await updateSharedCollection(id);
+      // await updateSharedCollection(id);
     } catch (error) {
       setIsError(true);
     }
     setIsLoading(false);
-  }, [id, updateSharedCollection]);
+  }, [id]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -82,7 +79,7 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
   }, [shared, getSharedCollectionData, isTabActive, lastUpdatedTime]);
 
   const disableShareBtnHandler = async () => {
-    await editCollection({ id, title, color, type, shared: false, noShare: true });
+    // await editCollection({ id, title, color, type, shared: false, noShare: true });
     setIsError(false);
   };
 
@@ -131,10 +128,10 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
     borderColor: color,
   };
 
-  const doneTodos = TodoTypeEnum.Enum.todo === type ? collection.todos.filter((todo) => todo.done).length : '';
+  const doneTodos = type === TypeEnum.enum.todo ? collection.todos.filter((todo) => todo.done).length : '';
 
   const selectedCollectionHandler = () => {
-    if (TodoTypeEnum.Enum.unset === type) return;
+    if (!type) return;
     if (isSelected) {
       resetSelection();
       return;
@@ -160,13 +157,13 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
     if (parent.current) autoAnimate(parent.current);
   }, [parent]);
 
-  const totalTodos = collection.todos.length;
-  const showDone = totalTodos > 0 && !sort && TodoTypeEnum.Enum.todo === type ? `${doneTodos}/${totalTodos}` : '';
+  const totalTodos = 1;
+  const showDone = totalTodos > 0 && !sort && TypeEnum.enum.todo === type ? `${doneTodos}/${totalTodos}` : '';
   const articleStyles = isSelected ? [styles.collection, styles.selected].join(' ') : styles.collection;
 
   const showCreated =
-    isSelected && formatDate(created, languageName) && !sort
-      ? `${text.collection.created} ${formatDate(created, languageName)}`
+    isSelected && formatDate(createdAt, languageName) && !sort
+      ? `${text.collection.created} ${formatDate(createdAt, languageName)}`
       : '';
 
   useEffect(() => {
@@ -177,8 +174,9 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
 
   preview(drop(ref));
 
-  const todoTypeBtnHandler = async (selectedType: TodoTypes) => {
-    await editCollection({ id, title, color, shared, type: selectedType });
+  const todoTypeBtnHandler = async (typeEntry: CollectionType) => {
+    console.log({ id, type: typeEntry });
+    // await editCollection({ id, title, color, shared, type });
   };
 
   if (isLoading) {
@@ -219,24 +217,24 @@ const TodoCollection: FC<Props> = ({ collection, index, moveCollection }) => {
           {title}
         </button>
       </h2>
-      {TodoTypeEnum.Enum.unset === type && !sort && (
+      {!type && !sort && (
         <div className={styles.unset}>
           <span>{text.collection.selectType}</span>
-          <Button onClick={() => todoTypeBtnHandler(TodoTypeEnum.Enum.todo)} testId="add-todo-btn">
+          <Button onClick={() => todoTypeBtnHandler(TypeEnum.enum.todo)} testId="add-todo-btn">
             {text.collection.todo}
           </Button>
-          <Button onClick={() => todoTypeBtnHandler(TodoTypeEnum.Enum.note)} testId="add-note-btn">
+          <Button onClick={() => todoTypeBtnHandler(TypeEnum.enum.note)} testId="add-note-btn">
             {text.collection.note}
           </Button>
         </div>
       )}
-      {!sort && TodoTypeEnum.Enum.note === type && <TodoNote id={id} isSelected={isSelected} note={note} />}
-      {!sort && TodoTypeEnum.Enum.todo === type && (
+      {/* {!sort && TypeEnum.enum.note === type && <TodoNote id={id} isSelected={isSelected} note={note} />} */}
+      {!sort && TypeEnum.enum.todo === type && (
         <ul ref={parent} className={styles['item-list']}>
-          {collection &&
+          {/* {collection &&
             collection.todos &&
             collection.todos.length > 0 &&
-            collection.todos.map((todo) => <TodoItem key={todo.id} todo={todo} colId={id} selected={isSelected} />)}
+            collection.todos.map((todo) => <TodoItem key={todo.id} todo={todo} colId={id} selected={isSelected} />)} */}
         </ul>
       )}
 
