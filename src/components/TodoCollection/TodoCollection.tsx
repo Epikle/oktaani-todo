@@ -172,7 +172,13 @@ const TodoCollection: FC<Props> = ({ collection, index }) => {
       {!type && !sort && (
         <div className={styles.unset}>
           <span>{text.collection.selectType}</span>
-          <Button onClick={() => updateCollection({ id, type: TypeEnum.enum.todo })} testId="add-todo-btn">
+          <Button
+            onClick={() => {
+              updateCollection({ id, type: TypeEnum.enum.todo });
+              selectedCollectionHandler();
+            }}
+            testId="add-todo-btn"
+          >
             {text.collection.todo}
           </Button>
           <Button onClick={() => updateCollection({ id, type: TypeEnum.enum.note })} testId="add-note-btn">

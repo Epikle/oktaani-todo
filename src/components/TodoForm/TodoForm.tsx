@@ -72,7 +72,7 @@ const TodoForm: FC = () => {
       data-collection={inputTitleText}
       data-length={showInputLength}
     >
-      <ColorChooser setColor={setColor} defaultColor={DEFAULT_COLOR} />
+      <ColorChooser setColor={setColor} color={color} defaultColor={DEFAULT_COLOR} />
       <TodoInput todoInput={todoInput} setTodoInput={setTodoInput} maxLength={maxLength} isLoading={isLoading} />
       <Button
         className={cn(styles.add, { [styles.blur]: selectedCollection && trimmedInput.length === 0 })}

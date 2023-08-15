@@ -8,10 +8,11 @@ import styles from './ColorChooser.module.scss';
 
 type Props = {
   defaultColor: string;
+  color: string;
   setColor: Dispatch<SetStateAction<string>>;
 };
 // TODO color bug
-const ColorChooser: FC<Props> = ({ defaultColor, setColor }) => {
+const ColorChooser: FC<Props> = ({ defaultColor, setColor, color }) => {
   const colorInputRef = useRef<HTMLInputElement>(null);
   const selectedCollection = useSelectedStore((state) => state.selectedCollection);
   const { updateCollection } = useTodoStore((state) => state.actions);
@@ -34,7 +35,7 @@ const ColorChooser: FC<Props> = ({ defaultColor, setColor }) => {
     } else {
       colorInputRef.current.value = defaultColor;
     }
-  }, [selectedCollection?.color, defaultColor]);
+  }, [selectedCollection?.color, defaultColor, color]);
 
   return (
     <input
