@@ -1,7 +1,6 @@
 import { FC, useEffect } from 'react';
 
 import useLanguage from './hooks/useLanguage';
-import { getSettingsFromLS } from './services/settings';
 import { isStorageAvailable } from './utils/utils';
 import Header from './components/UI/Header';
 import TodoList from './components/TodoList/TodoList';
@@ -12,6 +11,7 @@ import useSettingsStore from './context/useSettingsStore';
 import useTodoStore from './context/useTodoStore';
 import useStatusStore from './context/useStatusStore';
 import env from './utils/env';
+import Footer from './components/UI/Footer';
 
 const shareParam = new URLSearchParams(document.location.search).get('share');
 
@@ -19,7 +19,7 @@ const App: FC = () => {
   const title = useSelectedStore((state) => state.title);
   const darkMode = useSettingsStore((state) => state.darkMode);
   const { setSettings } = useSettingsStore((state) => state.actions);
-  const { initCollections, createSharedCollection } = useTodoStore((state) => state.actions);
+  const { initCollections } = useTodoStore((state) => state.actions);
   const { setError } = useStatusStore((state) => state.actions);
   const { text } = useLanguage();
 
@@ -27,11 +27,11 @@ const App: FC = () => {
 
   useEffect(() => {
     initCollections();
-    setSettings(getSettingsFromLS());
+    // setSettings(getSettingsFromLS());
     if (shareParam) {
       (async () => {
         try {
-          await createSharedCollection(shareParam);
+          // await createSharedCollection(shareParam);
           window.location.replace(env.BASE_URL);
         } catch (error) {
           setError(text.errors.apiGetCollection);
@@ -41,7 +41,7 @@ const App: FC = () => {
         }
       })();
     }
-  }, [setSettings, initCollections, createSharedCollection, setError, text]);
+  }, [setSettings, initCollections, setError, text]);
 
   return (
     <div className={darkMode ? 'content dark-mode' : 'content'}>
@@ -54,6 +54,7 @@ const App: FC = () => {
         </main>
       )}
       {!shareParam && <TodoList />}
+      <Footer />
     </div>
   );
 };

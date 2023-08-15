@@ -7,19 +7,21 @@ import useLanguage from '../../../hooks/useLanguage';
 import Button from '../Button';
 
 import styles from './HelpSelection.module.scss';
+import useSettingsStore from '../../../context/useSettingsStore';
+import { cn } from '../../../utils/utils';
 
 const HelpSelection: FC = () => {
   const { text } = useLanguage();
   const collections = useTodoStore((state) => state.collections);
-  const help = useTodoStore((state) => state.help);
-  const { toggleHelp } = useTodoStore((state) => state.actions);
+  const help = useSettingsStore((state) => state.help);
+  const { toggleHelp } = useSettingsStore((state) => state.actions);
 
   return (
     <Button
-      className={help ? [styles.help, styles['help-active']].join(' ') : styles.help}
+      className={cn(styles.help, { [styles['help-active']]: help })}
       title={text.controls.help}
       onClick={toggleHelp}
-      disabled={collections.length === 0}
+      disabled={!collections}
       testId="help-btn"
     >
       <FontAwesomeIcon icon={faCircleQuestion} />

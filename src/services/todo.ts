@@ -18,13 +18,13 @@ const api = axios.create({
   baseURL: env.API_URL,
 });
 
-export const getSharedCollectionLogData = async (colId: string): Promise<Log[]> => {
+export const getSharedLogs = async (colId: string): Promise<Log[]> => {
   const { data } = await api.get<unknown>(`/log/${colId}`);
   const validLogs = arrayOfLogsSchema.parse(data);
   return validLogs;
 };
 
-export const getSharedCollectionData = async (colId: string): Promise<Collection> => {
+export const getSharedCollection = async (colId: string): Promise<Collection> => {
   const { data } = await api.get<unknown>(`/share/${colId}`);
   const validCollection = collectionSchema.parse(data);
   return validCollection;
