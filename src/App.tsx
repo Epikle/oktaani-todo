@@ -1,17 +1,17 @@
 import { FC, useEffect } from 'react';
 
-import useLanguage from './hooks/useLanguage';
-import { isStorageAvailable } from './utils/utils';
-import Header from './components/UI/Header';
-import TodoList from './components/TodoList/TodoList';
-import Overlay from './components/UI/Overlay';
-import Toast from './components/UI/Toast';
 import useSelectedStore from './context/useSelectedStore';
 import useSettingsStore from './context/useSettingsStore';
 import useTodoStore from './context/useTodoStore';
 import useStatusStore from './context/useStatusStore';
-import env from './utils/env';
+import useLanguage from './hooks/useLanguage';
+import { isStorageAvailable } from './utils/utils';
+import TodoList from './components/TodoList/TodoList';
+import Overlay from './components/UI/Overlay';
+import Header from './components/UI/Header';
 import Footer from './components/UI/Footer';
+import Toast from './components/UI/Toast';
+import env from './utils/env';
 
 const shareParam = new URLSearchParams(document.location.search).get('share');
 
@@ -33,6 +33,7 @@ const App: FC = () => {
     if (shareParam) {
       (async () => {
         try {
+          // TODO
           // await createSharedCollection(shareParam);
           window.location.replace(env.BASE_URL);
         } catch (error) {

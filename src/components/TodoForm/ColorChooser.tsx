@@ -33,9 +33,9 @@ const ColorChooser: FC<Props> = ({ defaultColor, setColor, color }) => {
     if (selectedCollection?.color) {
       colorInputRef.current.value = selectedCollection.color;
     } else {
-      colorInputRef.current.value = defaultColor;
+      colorInputRef.current.value = color;
     }
-  }, [selectedCollection?.color, defaultColor, color]);
+  }, [selectedCollection?.color, color]);
 
   return (
     <input

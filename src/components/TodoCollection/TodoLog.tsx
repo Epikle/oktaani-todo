@@ -33,7 +33,7 @@ const TodoLog: FC<Props> = ({ id, languageName }) => {
       try {
         // TODO
         // const logsData = await getSharedCollectionLogData(id);
-        setLogs(logsData);
+        // setLogs(logsData);
       } catch (error) {
         setLogs([]);
       }
