@@ -3,17 +3,19 @@
 describe('Todo remove', () => {
   beforeEach(() => {
     cy.visit('/');
-    cy.get('[data-testid="todo-input"]').type('collection');
-    cy.get('[data-testid="submit-btn"]').click();
+    cy.get('[data-testid="todo-input"]').as('input');
+    cy.get('@input').type('collection');
+    cy.get('[data-testid="submit-btn"]').as('submitBtn');
+    cy.get('@submitBtn').click();
     cy.get('[data-testid="add-todo-btn"]').click();
-    cy.get('[data-testid="submit-btn"]').click();
+    cy.get('@submitBtn').click();
     cy.get('article').first().should('have.text', 'collection').click();
-    cy.get('[data-testid="todo-input"]').type('ITEM1');
-    cy.get('[data-testid="submit-btn"]').click();
-    cy.get('[data-testid="todo-input"]').type('ITEM2');
-    cy.get('[data-testid="submit-btn"]').click();
-    cy.get('[data-testid="todo-input"]').type('ITEM3');
-    cy.get('[data-testid="submit-btn"]').click();
+    cy.get('@input').type('ITEM1');
+    cy.get('@submitBtn').click();
+    cy.get('@input').type('ITEM2');
+    cy.get('@submitBtn').click();
+    cy.get('@input').type('ITEM3');
+    cy.get('@submitBtn').click();
     cy.get('article').first().should('have.attr', 'data-done').should('eq', '0/3');
   });
 

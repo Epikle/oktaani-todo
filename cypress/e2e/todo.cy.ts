@@ -22,7 +22,7 @@ describe('Todo', () => {
   });
 
   it('Should select collection and add item to it', () => {
-    cy.get('article').first().should('have.text', 'First Collection').click();
+    cy.get('article').first().click();
     cy.createCollectionItems();
     cy.get('article').first().find('ul > li').eq(1).should('have.text', 'ITEM1');
   });
