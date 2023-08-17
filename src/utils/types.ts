@@ -45,9 +45,9 @@ export const settingsSchema = z.object({
 export const PriorityEnum = z.enum(priorities);
 export const TypeEnum = z.enum(types);
 
-export const arrayOfItemsSchema = itemSchema.array().min(1);
-export const arrayOfNotesSchema = noteSchema.array().min(1);
-export const arrayOfCollectionsSchema = collectionSchema.array().min(1);
+export const arrayOfItemsSchema = itemSchema.array().nonempty();
+export const arrayOfNotesSchema = noteSchema.array().nonempty();
+export const arrayOfCollectionsSchema = collectionSchema.array().nonempty();
 export const arrayOfLogsSchema = z.array(logSchema);
 
 export type Item = z.infer<typeof itemSchema>;
