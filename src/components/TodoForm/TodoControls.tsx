@@ -1,9 +1,11 @@
-import { FC, useState } from 'react';
+import { Dispatch, FC, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faListCheck, faPen, faShareNodes, faSpinner, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 import type { TConfirm } from '../UI/Header';
 import useSelectedStore from '../../context/useSelectedStore';
+import { createSharedCollection } from '../../services/todo';
+import { copyToClipboard } from '../../utils/utils';
 import useTodoStore from '../../context/useTodoStore';
 import useLanguage from '../../hooks/useLanguage';
 import Button from '../UI/Button';
@@ -11,15 +13,16 @@ import Button from '../UI/Button';
 import styles from './TodoControls.module.scss';
 
 type Props = {
-  onConfirm: (type: TConfirm['type']) => void;
+  onConfirm: Dispatch<React.SetStateAction<Omit<TConfirm, 'type'> | null>>;
+  onLoading: Dispatch<React.SetStateAction<boolean>>;
 };
 
-const TodoControls: FC<Props> = ({ onConfirm }) => {
+const TodoControls: FC<Props> = ({ onConfirm, onLoading }) => {
   const [isLoading, setIsLoading] = useState(false);
   const selectedCollection = useSelectedStore((state) => state.selectedCollection);
-  const { setSelectedCollection } = useSelectedStore((state) => state.actions);
+  const { setSelectedCollection, resetSelection } = useSelectedStore((state) => state.actions);
   const items = useTodoStore((state) => state.items);
-  const { deleteDoneItems } = useTodoStore((state) => state.actions);
+  const { deleteDoneItems, deleteCollection } = useTodoStore((state) => state.actions);
   const { text } = useLanguage();
 
   if (!selectedCollection) return null;
@@ -35,6 +38,47 @@ const TodoControls: FC<Props> = ({ onConfirm }) => {
     // await editCollection(editedCollection);
   };
 
+  const deleteConfirmBtnHandler = () => {
+    if (!selectedCollection) return;
+    setIsLoading(true);
+    deleteCollection(selectedCollection.id);
+    resetSelection();
+    onConfirm(null);
+    setIsLoading(false);
+  };
+
+  const shareConfirmBtnHandler = async () => {
+    if (!selectedCollection) return;
+    onLoading(true);
+
+    // TODO: useTodoStore
+    await createSharedCollection(selectedCollection);
+    await copyToClipboard(selectedCollection.id);
+    // await editCollection(editedCollection);
+
+    onConfirm(null);
+    onLoading(false);
+  };
+
+  const confirmBtnHandler = (confirmType?: TConfirm['type']) => {
+    switch (confirmType) {
+      case 'delete':
+        onConfirm({
+          confirmText: text.controls.deleteConfirm,
+          handler: deleteConfirmBtnHandler,
+        });
+        return;
+      case 'share':
+        onConfirm({
+          confirmText: text.controls.shareConfirm,
+          handler: shareConfirmBtnHandler,
+        });
+        return;
+      default:
+        onConfirm(null);
+    }
+  };
+
   const doneItems = items && items.filter((i) => i.colId === selectedCollection?.id && i.status).length > 0;
 
   return (
@@ -46,14 +90,15 @@ const TodoControls: FC<Props> = ({ onConfirm }) => {
           disabled={isLoading || !doneItems}
           testId="remove-done-btn"
         >
-          {isLoading ? <FontAwesomeIcon icon={faSpinner} spinPulse /> : <FontAwesomeIcon icon={faListCheck} />}
+          {isLoading && <FontAwesomeIcon icon={faSpinner} spinPulse />}
+          {!isLoading && <FontAwesomeIcon icon={faListCheck} />}
         </Button>
       </li>
       <li>
         <Button
           className={selectedCollection.shared ? styles.shared : ''}
           title={selectedCollection.shared ? text.controls.stopShareCol : text.controls.shareCol}
-          onClick={() => (selectedCollection.shared ? stopShareBtnHandler() : onConfirm('share'))}
+          onClick={() => (selectedCollection.shared ? stopShareBtnHandler() : confirmBtnHandler('share'))}
           testId="share-col-btn"
         >
           <FontAwesomeIcon icon={faShareNodes} />
@@ -72,7 +117,7 @@ const TodoControls: FC<Props> = ({ onConfirm }) => {
       <li>
         <Button
           title={text.controls.removeCol}
-          onClick={() => onConfirm('delete')}
+          onClick={() => confirmBtnHandler('delete')}
           className={styles.trash}
           testId="delete-collection-btn"
         >
