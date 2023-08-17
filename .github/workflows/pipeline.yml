@@ -10,7 +10,7 @@ on:
 jobs:
   deploy:
     env:
-      VITE_BASE_URL: http://localhost:5173/todo-demo
+      VITE_BASE_URL: http://localhost:5173/todo
       VITE_API_URL: url
       VITE_LS_NAME_SETTINGS: ot-settings
       VITE_LS_NAME_COLLECTIONS: ot-collections
