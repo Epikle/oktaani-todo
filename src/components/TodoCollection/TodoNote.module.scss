@@ -16,6 +16,7 @@
     background-color: var(--color-bg-todo-input);
     border: none;
     color: var(--color-text-green);
+    resize: vertical;
   }
 
   &::before {

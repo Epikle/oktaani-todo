@@ -6,8 +6,8 @@
   padding-block: 1.25rem 2.25rem;
   color: var(--color-text-n);
   background-color: var(--color-bg-collection);
-  border-top: 6px solid var(--color-gray-800);
-  border-bottom: 3px solid var(--color-gray-800);
+  border-top: 16px solid var(--color-gray-800);
+  border-radius: var(--border-radius);
 
   .unset {
     display: grid;

@@ -1,4 +1,4 @@
-import { FC, ReactNode, useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import autoAnimate from '@formkit/auto-animate';
 
 import useSelectedStore from '../../context/useSelectedStore';
@@ -7,21 +7,27 @@ import TodoForm from '../TodoForm/TodoForm';
 import Settings from './Settings';
 
 import styles from './Header.module.scss';
+import Confirm from './Confirm';
 
 export type TConfirm = {
-  type: 'share' | 'delete';
-  confirmText: string;
+  message: string;
   handler: () => void;
-};
+} | null;
 
 const Header: FC = () => {
   const parent = useRef(null);
-  const [confirm, setConfirm] = useState<ReactNode>(null);
+  const [confirm, setConfirm] = useState<TConfirm>(null);
   const selectedCollection = useSelectedStore((state) => state.selectedCollection);
 
   useEffect(() => {
     if (parent.current) autoAnimate(parent.current);
   }, [parent]);
+
+  const confirmBtnHandler = () => {
+    if (!confirm) return;
+    confirm.handler();
+    setConfirm(null);
+  };
 
   return (
     <header className={styles.header}>
@@ -36,7 +42,9 @@ const Header: FC = () => {
           {selectedCollection && <TodoControls onConfirm={setConfirm} />}
         </div>
         {!confirm && <TodoForm />}
-        {confirm}
+        {confirm && (
+          <Confirm confirmText={confirm.message} onConfirm={confirmBtnHandler} onCancel={() => setConfirm(null)} />
+        )}
       </div>
     </header>
   );

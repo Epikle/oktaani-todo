@@ -53,17 +53,13 @@ const App: FC = () => {
       {!isStorageAvailable() && <Overlay>{text.errors.localStorage}</Overlay>}
       <Toast darkMode={darkMode} />
       <Header />
-      <main className={styles.main}>
-        <div className={styles.container}>
-          {shareParam && (
-            <main>
-              <p>Loading...</p>
-            </main>
-          )}
+      <div className={styles.container}>
+        <main className={styles.main}>
+          {shareParam && <p>Loading...</p>}
           {!shareParam && <TodoList />}
-        </div>
-      </main>
-      <Footer />
+        </main>
+        <Footer />
+      </div>
     </div>
   );
 };

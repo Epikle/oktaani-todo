@@ -1,4 +1,4 @@
-import { Dispatch, FC, ReactNode, SetStateAction } from 'react';
+import { Dispatch, FC, SetStateAction } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faListCheck, faPen, faShareNodes, faTrash } from '@fortawesome/free-solid-svg-icons';
 
@@ -6,23 +6,34 @@ import useSelectedStore from '../../context/useSelectedStore';
 import useTodoStore from '../../context/useTodoStore';
 import useLanguage from '../../hooks/useLanguage';
 import { Button, ButtonToggle } from '../UI/Button';
+import { type TConfirm } from '../UI/Header';
 
 import styles from './TodoControls.module.scss';
 
 type Props = {
-  onConfirm: Dispatch<SetStateAction<ReactNode>>;
+  onConfirm: Dispatch<SetStateAction<TConfirm>>;
 };
 
-const TodoControls: FC<Props> = () => {
+const TodoControls: FC<Props> = ({ onConfirm }) => {
   const selectedCollection = useSelectedStore((state) => state.selectedCollection);
-  const { setSelectedCollection } = useSelectedStore((state) => state.actions);
+  const { setSelectedCollection, resetSelection } = useSelectedStore((state) => state.actions);
   const items = useTodoStore((state) => state.items);
-  const { deleteDoneItems } = useTodoStore((state) => state.actions);
+  const { deleteDoneItems, deleteCollection } = useTodoStore((state) => state.actions);
   const { text } = useLanguage();
 
   if (!selectedCollection) return null;
 
   const doneItems = items && items.filter((i) => i.colId === selectedCollection?.id && i.status).length > 0;
+
+  const deleteCollectionBtnHandler = () => {
+    onConfirm({
+      message: text.controls.deleteConfirm,
+      handler: () => {
+        deleteCollection(selectedCollection.id);
+        resetSelection();
+      },
+    });
+  };
 
   return (
     <ul className={styles.controls} data-testid="todo-controls">
@@ -39,7 +50,7 @@ const TodoControls: FC<Props> = () => {
       <li>
         <ButtonToggle
           title={selectedCollection.shared ? text.controls.stopShareCol : text.controls.shareCol}
-          onClick={() => {}}
+          onChange={() => {}}
           testId="share-col-btn"
         >
           <FontAwesomeIcon icon={faShareNodes} />
@@ -48,7 +59,7 @@ const TodoControls: FC<Props> = () => {
       <li>
         <ButtonToggle
           title={text.controls.editCol}
-          onClick={() => setSelectedCollection({ id: selectedCollection.id, edit: !selectedCollection.edit })}
+          onChange={() => setSelectedCollection({ id: selectedCollection.id, edit: !selectedCollection.edit })}
           testId="edit-collection-title-btn"
           checked={selectedCollection.edit}
         >
@@ -59,7 +70,7 @@ const TodoControls: FC<Props> = () => {
         <Button
           title={text.controls.removeCol}
           className={styles.trash}
-          onClick={() => {}}
+          onClick={deleteCollectionBtnHandler}
           testId="delete-collection-btn"
         >
           <FontAwesomeIcon icon={faTrash} />
