@@ -1,45 +1,33 @@
-import { ButtonHTMLAttributes, forwardRef, useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { ButtonHTMLAttributes, InputHTMLAttributes, forwardRef, useId } from 'react';
+import { cn } from '../../utils/utils';
 
-type Props = {
-  onClick?: () => void | Promise<void>;
-  toggle?: boolean;
+import styles from './Button.module.scss';
+
+type ButtonProps = {
   testId?: string;
 };
 
-const Button = forwardRef<HTMLButtonElement, ButtonHTMLAttributes<HTMLButtonElement> & Props>(
-  ({ testId, toggle: toggleProp = false, onClick, children, ...props }, ref) => {
-    const [loading, setLoading] = useState(false);
-    const [toggle, setToggle] = useState(toggleProp);
-
-    const handler = async () => {
-      if (onClick) {
-        setLoading(true);
-        await onClick();
-        setLoading(false);
-      }
-      if (toggleProp !== undefined) {
-        setToggle((prevS) => !prevS);
-      }
-    };
-
-    return (
-      <button
-        type="button"
-        ref={ref}
-        data-testid={testId}
-        onClick={handler}
-        {...(toggle ? { 'data-active': true } : {})}
-        {...props}
-      >
-        {loading && <FontAwesomeIcon icon={faSpinner} spinPulse />}
-        {!loading && children}
-      </button>
-    );
-  },
+export const Button = forwardRef<HTMLButtonElement, ButtonHTMLAttributes<HTMLButtonElement> & ButtonProps>(
+  ({ testId, className, ...props }, ref) => (
+    <button ref={ref} type="button" className={cn(styles.button, className)} data-testid={testId} {...props} />
+  ),
 );
 
 Button.displayName = 'Button';
 
-export default Button;
+export const ButtonToggle = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInputElement> & ButtonProps>(
+  ({ testId, className, children, checked = false, ...props }, ref) => {
+    const id = useId();
+
+    return (
+      <>
+        <input id={id} ref={ref} type="checkbox" checked={checked} {...props} />
+        <label htmlFor={id} className={cn(styles.toggle, className)} data-testid={testId}>
+          {children}
+        </label>
+      </>
+    );
+  },
+);
+
+ButtonToggle.displayName = 'ButtonToggle';

@@ -17,8 +17,6 @@
     padding-bottom: 0.5rem;
 
     button {
-      @include button-base;
-
       font-size: 1.25rem;
       width: 100%;
       padding: 0.5rem 0.75rem;
@@ -90,10 +88,6 @@
       place-items: center;
       width: 1.75rem;
       height: 1.75rem;
-    }
-
-    button {
-      @include button-base;
     }
   }
 

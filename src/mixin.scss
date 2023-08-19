@@ -15,9 +15,9 @@
   transition: $element $timing ease-in;
 }
 
-@mixin button-base {
+@mixin button {
   @include transition(all, 200ms);
-
+  cursor: pointer;
   display: grid;
   place-content: center;
   width: 3rem;
@@ -26,26 +26,6 @@
   position: relative;
   background-color: var(--color-bg-btn);
   color: var(--color-text-green);
-
-  &:not([disabled]):is(:hover, :focus-visible) {
-    background-color: var(--color-bg-focus);
-  }
-
-  &:focus-visible {
-    @include focus-border;
-  }
-
-  &:disabled {
-    cursor: not-allowed;
-    opacity: 0.35;
-  }
-}
-
-@mixin button-active {
-  &[data-active] {
-    background-color: var(--color-bg-focus);
-    box-shadow: inset 0 -3px var(--color-p-red);
-  }
 }
 
 @mixin scrollbars($size: 10px, $foreground-color: #999, $background-color: #333) {

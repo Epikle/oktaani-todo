@@ -1,11 +1,11 @@
 import { FC, FormEvent, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 import useSelectedStore from '../../context/useSelectedStore';
 import useTodoStore from '../../context/useTodoStore';
 import useLanguage from '../../hooks/useLanguage';
-import Button from '../UI/Button';
+import { Button } from '../UI/Button';
 import ColorChooser from './ColorChooser';
 import TodoInput from './TodoInput';
 import { cn } from '../../utils/utils';
@@ -24,7 +24,6 @@ const TodoForm: FC = () => {
   const { createCollection, createItem, updateCollection } = useTodoStore((state) => state.actions);
   const { text } = useLanguage();
   const trimmedInput = todoInput.trim().replace(/\s+/g, ' ');
-  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (selectedCollection?.edit) {
@@ -34,10 +33,15 @@ const TodoForm: FC = () => {
     setTodoInput('');
   }, [selectedCollection?.edit, selectedCollection?.title]);
 
+  const isAddBtn = (selectedCollection && trimmedInput.length > 0) || trimmedInput.length > 0;
+
   const submitHandler = (event: FormEvent) => {
     event.preventDefault();
+    if (!isAddBtn) {
+      resetSelection();
+      return;
+    }
     if (trimmedInput.length === 0) return;
-    setIsLoading(true);
 
     if (selectedCollection) {
       if (selectedCollection?.edit) {
@@ -51,12 +55,9 @@ const TodoForm: FC = () => {
     }
 
     setTodoInput('');
-    setIsLoading(false);
   };
 
-  const isBtnDisabled = (!selectedCollection && trimmedInput.length === 0) || isLoading;
-  const isAddBtn = (selectedCollection && trimmedInput.length > 0) || trimmedInput.length > 0;
-  const addBtnHandler = isAddBtn ? submitHandler : () => resetSelection();
+  const isBtnDisabled = !selectedCollection && trimmedInput.length === 0;
   const maxLength = !selectedCollection || selectedCollection.edit ? COLLECTION_LENGTH : ITEM_LENGTH;
   const inputLengthText = `${todoInput.length}/${maxLength}`;
   const showInputLength = isAddBtn ? inputLengthText : '';
@@ -68,21 +69,20 @@ const TodoForm: FC = () => {
   return (
     <form
       className={cn(styles.form, { [styles.selected]: selectedCollection })}
-      onSubmit={submitHandler}
       data-collection={inputTitleText}
       data-length={showInputLength}
+      onSubmit={submitHandler}
     >
       <ColorChooser setColor={setColor} color={color} defaultColor={DEFAULT_COLOR} />
-      <TodoInput todoInput={todoInput} setTodoInput={setTodoInput} maxLength={maxLength} isLoading={isLoading} />
+      <TodoInput todoInput={todoInput} setTodoInput={setTodoInput} maxLength={maxLength} />
       <Button
         className={cn(styles.add, { [styles.blur]: selectedCollection && trimmedInput.length === 0 })}
+        type="submit"
         title={btnTitleText}
-        onClick={addBtnHandler}
         disabled={isBtnDisabled}
         testId="submit-btn"
       >
-        {isLoading && <FontAwesomeIcon icon={faSpinner} spinPulse />}
-        {!isLoading && <FontAwesomeIcon icon={faPlus} />}
+        <FontAwesomeIcon icon={faPlus} />
       </Button>
     </form>
   );

@@ -13,6 +13,8 @@ import Footer from './components/UI/Footer';
 import Toast from './components/UI/Toast';
 import env from './utils/env';
 
+import styles from './App.module.scss';
+
 const shareParam = new URLSearchParams(document.location.search).get('share');
 
 const App: FC = () => {
@@ -51,12 +53,16 @@ const App: FC = () => {
       {!isStorageAvailable() && <Overlay>{text.errors.localStorage}</Overlay>}
       <Toast darkMode={darkMode} />
       <Header />
-      {shareParam && (
-        <main>
-          <p>Loading...</p>
-        </main>
-      )}
-      {!shareParam && <TodoList />}
+      <main className={styles.main}>
+        <div className={styles.container}>
+          {shareParam && (
+            <main>
+              <p>Loading...</p>
+            </main>
+          )}
+          {!shareParam && <TodoList />}
+        </div>
+      </main>
       <Footer />
     </div>
   );

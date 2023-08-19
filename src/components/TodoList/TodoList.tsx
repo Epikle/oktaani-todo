@@ -13,8 +13,7 @@ const TodoCollection = lazy(() => import('../TodoCollection/TodoCollection'));
 const TodoList: FC = () => {
   const parent = useRef<HTMLDivElement>(null);
   const collections = useTodoStore((state) => state.collections);
-  const help = useSettingsStore((state) => state.help);
-  const sort = useSettingsStore((state) => state.sort);
+  const { help, sort } = useSettingsStore((state) => state);
 
   useEffect(() => {
     if (parent.current) autoAnimate(parent.current);
@@ -23,20 +22,16 @@ const TodoList: FC = () => {
   const sortStyles: CSSProperties = sort ? { gridTemplateColumns: '1fr' } : {};
 
   return (
-    <main className={styles.main}>
-      <div className={styles.container}>
-        <Suspense fallback={<LoadingSpinner />}>
-          <div className={styles.collections} ref={parent} style={sortStyles}>
-            {(help || !collections) && <Welcome />}
+    <div className={styles.collections} style={sortStyles} ref={parent}>
+      <Suspense fallback={<LoadingSpinner />}>
+        {(help || !collections) && <Welcome />}
 
-            {!help &&
-              collections?.map((collection, index) => (
-                <TodoCollection key={collection.id} collection={collection} index={index} />
-              ))}
-          </div>
-        </Suspense>
-      </div>
-    </main>
+        {!help &&
+          collections?.map((collection, index) => (
+            <TodoCollection key={collection.id} collection={collection} index={index} />
+          ))}
+      </Suspense>
+    </div>
   );
 };
 

@@ -6,7 +6,7 @@ import useSettingsStore from '../../context/useSettingsStore';
 import useTodoStore from '../../context/useTodoStore';
 import useLanguage from '../../hooks/useLanguage';
 import { cn } from '../../utils/utils';
-import Button from './Button';
+import { Button, ButtonToggle } from './Button';
 
 import styles from './Settings.module.scss';
 
@@ -23,15 +23,14 @@ const Settings: FC = () => {
         <li className={cn(styles['hidden-btns'], { [styles.selected]: showSettings })}>
           <ul>
             <li>
-              <Button
+              <ButtonToggle
                 title={text.controls.sort}
                 className={styles.sort}
-                onClick={toggleSort}
+                onChange={toggleSort}
                 disabled={!showSettings || !collections}
-                toggle={false}
               >
                 <FontAwesomeIcon icon={icon.faArrowDownShortWide} />
-              </Button>
+              </ButtonToggle>
             </li>
             <li>
               <Button
@@ -60,29 +59,25 @@ const Settings: FC = () => {
           </ul>
         </li>
         <li>
-          <Button
+          <ButtonToggle
             title={text.controls.settings}
             className={styles.gear}
-            onClick={() => setShowSettings((prevS) => !prevS)}
-            testId="btn-settings"
-            toggle={false}
+            onChange={() => setShowSettings(!showSettings)}
           >
             <FontAwesomeIcon icon={icon.faGear} />
-          </Button>
+          </ButtonToggle>
         </li>
       </ul>
       <ul>
         <li className={styles['help-container']}>
-          <Button
+          <ButtonToggle
             title={text.controls.help}
             className={styles.help}
-            onClick={toggleHelp}
+            onChange={toggleHelp}
             disabled={!collections}
-            testId="help-btn"
-            toggle={false}
           >
             <FontAwesomeIcon icon={icon.faCircleQuestion} />
-          </Button>
+          </ButtonToggle>
         </li>
       </ul>
     </div>

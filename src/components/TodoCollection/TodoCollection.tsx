@@ -11,7 +11,7 @@ import useSettingsStore from '../../context/useSettingsStore';
 import useTodoStore from '../../context/useTodoStore';
 import useLanguage from '../../hooks/useLanguage';
 import { cn, copyToClipboard, formatDate } from '../../utils/utils';
-import Button from '../UI/Button';
+import { Button } from '../UI/Button';
 import TodoLog from './TodoLog';
 import TodoItem from './TodoItem';
 import TodoNote from './TodoNote';

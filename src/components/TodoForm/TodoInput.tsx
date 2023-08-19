@@ -12,10 +12,9 @@ type Props = {
   todoInput: string;
   setTodoInput: Dispatch<SetStateAction<string>>;
   maxLength: number;
-  isLoading: boolean;
 };
 
-const TodoInput: FC<Props> = ({ todoInput, setTodoInput, maxLength, isLoading }) => {
+const TodoInput: FC<Props> = ({ todoInput, setTodoInput, maxLength }) => {
   const ref = useRef<HTMLInputElement>(null);
   const selectedCollection = useSelectedStore((state) => state.selectedCollection);
   const sort = useSettingsStore((state) => state.sort);
@@ -23,13 +22,13 @@ const TodoInput: FC<Props> = ({ todoInput, setTodoInput, maxLength, isLoading })
   const inputTextByType = selectedCollection?.type === TypeEnum.enum.todo ? text.header.newTodo : text.header.editNote;
   const placeholderText = selectedCollection ? inputTextByType : text.header.newCollection;
   const finalInputText = sort ? text.controls.sort : placeholderText;
-  const disabled = sort || isLoading || (selectedCollection?.type === TypeEnum.enum.note && !selectedCollection.edit);
+  const disabled = sort || (selectedCollection?.type === TypeEnum.enum.note && !selectedCollection.edit);
 
   useEffect(() => {
     if (selectedCollection && ref.current && selectedCollection.type === TypeEnum.enum.todo) {
       ref.current.focus();
     }
-  }, [selectedCollection, isLoading, selectedCollection?.title, selectedCollection?.type]);
+  }, [selectedCollection, selectedCollection?.title, selectedCollection?.type]);
 
   return (
     <input

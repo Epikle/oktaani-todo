@@ -6,7 +6,7 @@ import useLanguage from '../../hooks/useLanguage';
 import { formatDate } from '../../utils/utils';
 import useSettingsStore from '../../context/useSettingsStore';
 import usePriority from '../../hooks/usePriority';
-import Button from '../UI/Button';
+import { Button } from '../UI/Button';
 
 import styles from './TodoItem.module.scss';
 import { Item } from '../../utils/types';
@@ -54,9 +54,9 @@ const TodoItem: FC<Props> = ({ item, selected }) => {
       </label>
       {selected && (
         <Button
-          onClick={() => deleteItem(id)}
-          aria-label={text.todo.remove.replace('[]', message)}
           title={text.todo.remove.replace('[]', message)}
+          aria-label={text.todo.remove.replace('[]', message)}
+          onClick={() => deleteItem(id)}
           testId="item-btn-remove"
         >
           <FontAwesomeIcon icon={faTrash} />

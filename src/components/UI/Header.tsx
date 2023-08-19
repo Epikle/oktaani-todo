@@ -2,7 +2,7 @@ import { FC, ReactNode, useEffect, useRef, useState } from 'react';
 import autoAnimate from '@formkit/auto-animate';
 
 import useSelectedStore from '../../context/useSelectedStore';
-import TodoControls from '../TodoForm/TodoControls/TodoControls';
+import TodoControls from '../TodoForm/TodoControls';
 import TodoForm from '../TodoForm/TodoForm';
 import Settings from './Settings';
 

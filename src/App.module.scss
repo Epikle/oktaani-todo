@@ -1,0 +1,15 @@
+@import 'src/mixin';
+
+.main {
+  padding-top: 0.75rem;
+  padding-inline: 0.75rem;
+  overflow-y: auto;
+
+  .container {
+    @include container;
+    height: 100%;
+    display: grid;
+    grid-template-rows: 1fr max-content;
+    gap: 0.75rem;
+  }
+}

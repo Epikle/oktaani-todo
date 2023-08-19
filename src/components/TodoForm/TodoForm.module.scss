@@ -38,8 +38,6 @@
 
   .add,
   .blur {
-    @include button-base;
-
     svg {
       @include transition;
     }

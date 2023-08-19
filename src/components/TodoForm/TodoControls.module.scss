@@ -1,0 +1,17 @@
+@import 'src/mixin';
+
+.controls {
+  display: flex;
+  gap: 1px;
+  justify-content: flex-end;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+
+  li {
+    button {
+      &.trash:is(:hover, :focus-visible) {
+        color: var(--color-p-red);
+      }
+    }
+  }
+}

@@ -14,20 +14,13 @@
     .hidden-btns {
       @include transition;
       width: 0;
-      transform: translateX(100%);
+      pointer-events: none;
+      opacity: 0;
 
       ul {
         display: flex;
         gap: 1px;
 
-        .sort,
-        .language,
-        .mode {
-          @include button-base;
-        }
-        .sort {
-          @include button-active;
-        }
         .language::after {
           content: attr(data-language);
           position: absolute;
@@ -39,41 +32,32 @@
 
       &.selected {
         width: 100%;
-        transform: translateX(0);
+        pointer-events: all;
+        opacity: 1;
       }
     }
 
     .gear {
-      @include button-base;
+      svg {
+        transition: transform 200ms ease-in-out;
+      }
+    }
+
+    input[type='checkbox']:checked + .gear {
+      box-shadow: none;
 
       svg {
-        animation: rotate-back 200ms ease-in-out forwards;
+        transform: rotate(-180deg);
       }
+    }
 
-      &[data-active] svg {
-        animation: rotate 200ms ease-in-out forwards;
-      }
-
-      @keyframes rotate {
-        to {
-          rotate: -180deg;
-        }
-      }
-      @keyframes rotate-back {
-        to {
-          rotate: 180deg;
-        }
-      }
+    input[type='checkbox']:focus-visible + .gear {
+      @include focus-border;
     }
   }
 
   .help-container {
     border-radius: var(--border-radius);
     overflow: hidden;
-
-    .help {
-      @include button-base;
-      @include button-active;
-    }
   }
 }

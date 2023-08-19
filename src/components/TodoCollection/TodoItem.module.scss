@@ -70,6 +70,7 @@
     transition: color 250ms ease-in-out;
 
     &:is(:hover, :focus-visible) {
+      cursor: pointer;
       color: var(--color-p-red);
     }
   }

@@ -4,10 +4,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleExclamation, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 
 import useStatusStore from '../../context/useStatusStore';
-import Button from './Button';
+import { cn } from '../../utils/utils';
+import { Button } from './Button';
 
 import styles from './Toast.module.scss';
-import { cn } from '../../utils/utils';
 
 type Props = {
   darkMode: boolean;

@@ -13,7 +13,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import useLanguage from '../../hooks/useLanguage';
-import Button from './Button';
+import { Button } from './Button';
 import { DEFAULT_COLOR } from '../TodoForm/TodoForm';
 
 import styles from './Welcome.module.scss';

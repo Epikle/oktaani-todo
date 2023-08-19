@@ -59,8 +59,6 @@
 
   li {
     button {
-      @include button-base;
-
       &.trash:is(:hover, :focus-visible) {
         color: var(--color-p-red);
       }
@@ -132,15 +130,9 @@
   display: flex;
   border-radius: var(--border-radius);
   overflow: hidden;
-
-  .add {
-    @include button-base;
-  }
 }
 
 .language {
-  @include button-base;
-
   &::after {
     content: attr(data-language);
     position: absolute;
