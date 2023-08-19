@@ -9,28 +9,17 @@
 
   li {
     button {
-      @include text-green;
-      @include btn-hover-focus;
-      @include btn-bg-color;
-      @include transition;
-
-      display: grid;
-      place-content: center;
-      width: 3rem;
-      height: 3rem;
-      font-size: 1.5rem;
+      @include button-base;
 
       &.trash:is(:hover, :focus-visible) {
         color: var(--color-p-red);
       }
 
       &.edit-active {
-        @include bg-focus;
         box-shadow: inset 0 -3px var(--color-p-red);
       }
 
       &.shared {
-        @include bg-focus;
         box-shadow: inset 0 -3px var(--color-p-red);
       }
 

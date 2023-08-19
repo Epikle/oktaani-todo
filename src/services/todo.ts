@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { GenericAbortSignal } from 'axios';
 import { nanoid } from 'nanoid';
 import { ZodTypeAny } from 'zod';
 
@@ -33,8 +33,8 @@ export const getSharedCollection = async (colId: string): Promise<Collection> =>
   return validCollection;
 };
 
-export const createSharedCollection = async (collection: Collection): Promise<void> => {
-  await api.post<Collection>('/share', { ...collection, shared: true });
+export const createSharedCollection = async (collection: Collection, signal: GenericAbortSignal): Promise<void> => {
+  await api.post<Collection>('/share', { ...collection, shared: true }, { signal });
 };
 
 export const updateSharedCollection = async (collection: Collection): Promise<void> => {

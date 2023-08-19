@@ -11,26 +11,41 @@
   color: var(--color-text-green);
 }
 
-@mixin bg-focus {
-  background-color: var(--color-bg-focus);
+@mixin transition($element: all, $timing: 200ms) {
+  transition: $element $timing ease-in;
 }
 
-@mixin btn-hover-focus {
-  &:is(:hover, :focus-visible) {
-    @include bg-focus;
+@mixin button-base {
+  @include transition(all, 200ms);
+
+  display: grid;
+  place-content: center;
+  width: 3rem;
+  height: 3rem;
+  font-size: 1.5rem;
+  position: relative;
+  background-color: var(--color-bg-btn);
+  color: var(--color-text-green);
+
+  &:not([disabled]):is(:hover, :focus-visible) {
+    background-color: var(--color-bg-focus);
   }
 
   &:focus-visible {
     @include focus-border;
   }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.35;
+  }
 }
 
-@mixin btn-bg-color {
-  background-color: var(--color-bg-btn);
-}
-
-@mixin transition($element: all, $timing: 200ms) {
-  transition: $element $timing ease-in;
+@mixin button-active {
+  &[data-active] {
+    background-color: var(--color-bg-focus);
+    box-shadow: inset 0 -3px var(--color-p-red);
+  }
 }
 
 @mixin scrollbars($size: 10px, $foreground-color: #999, $background-color: #333) {
@@ -107,7 +122,11 @@
     background-color: var(--color-bg-todo-input);
   }
   code {
-    font-family: Consolas, Monaco, Andale Mono, monospace;
+    font-family:
+      Consolas,
+      Monaco,
+      Andale Mono,
+      monospace;
     line-height: 1.5;
     font-size: 13px;
   }

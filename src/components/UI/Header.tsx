@@ -1,11 +1,10 @@
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, ReactNode, useEffect, useRef, useState } from 'react';
 import autoAnimate from '@formkit/auto-animate';
 
 import useSelectedStore from '../../context/useSelectedStore';
-import TodoControls from '../TodoForm/TodoControls';
+import TodoControls from '../TodoForm/TodoControls/TodoControls';
 import TodoForm from '../TodoForm/TodoForm';
-import Settings from './Settings/Settings';
-import Confirm from './Confirm';
+import Settings from './Settings';
 
 import styles from './Header.module.scss';
 
@@ -17,8 +16,7 @@ export type TConfirm = {
 
 const Header: FC = () => {
   const parent = useRef(null);
-  const [confirm, setConfirm] = useState<Omit<TConfirm, 'type'> | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [confirm, setConfirm] = useState<ReactNode>(null);
   const selectedCollection = useSelectedStore((state) => state.selectedCollection);
 
   useEffect(() => {
@@ -35,17 +33,10 @@ const Header: FC = () => {
             </h1>
           </div>
           {!selectedCollection && <Settings />}
-          {selectedCollection && <TodoControls onConfirm={setConfirm} onLoading={setIsLoading} />}
+          {selectedCollection && <TodoControls onConfirm={setConfirm} />}
         </div>
         {!confirm && <TodoForm />}
-        {confirm && (
-          <Confirm
-            confirmText={confirm.confirmText}
-            onConfirm={confirm.handler}
-            onCancel={() => setConfirm(null)}
-            isLoading={isLoading}
-          />
-        )}
+        {confirm}
       </div>
     </header>
   );

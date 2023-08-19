@@ -147,7 +147,7 @@ const TodoCollection: FC<Props> = ({ collection, index }) => {
         <div>
           <p>{text.errors.apiGetCollection}</p>
           <div>
-            <Button>{text.collection.shareTryAgain}</Button>
+            <Button onClick={() => {}}>{text.collection.shareTryAgain}</Button>
             <Button onClick={disableShareBtnHandler}>{text.collection.shareFail}</Button>
           </div>
         </div>

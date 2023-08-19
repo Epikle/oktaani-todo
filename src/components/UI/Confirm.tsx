@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faCircleQuestion, faSpinner, faXmark } from '@fortawesome/free-solid-svg-icons';
 
@@ -9,13 +9,19 @@ import styles from './Confirm.module.scss';
 
 type Props = {
   confirmText: string;
-  onConfirm: () => void;
+  onConfirm: () => Promise<void> | void;
   onCancel: () => void;
-  isLoading: boolean;
 };
 
-const Confirm: FC<Props> = ({ confirmText, onConfirm, onCancel, isLoading }) => {
+const Confirm: FC<Props> = ({ confirmText, onConfirm, onCancel }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const { text } = useLanguage();
+
+  const confirmBtnHandler = async () => {
+    setIsLoading(true);
+    await onConfirm();
+    setIsLoading(false);
+  };
 
   return (
     <div className={styles.confirm} data-testid="confirm-container">
@@ -25,7 +31,12 @@ const Confirm: FC<Props> = ({ confirmText, onConfirm, onCancel, isLoading }) => 
       </div>
       <ul className={styles.controls}>
         <li>
-          <Button title={text.common.confirm} onClick={onConfirm} testId="confirm-delete-btn" disabled={isLoading}>
+          <Button
+            title={text.common.confirm}
+            onClick={confirmBtnHandler}
+            testId="confirm-delete-btn"
+            disabled={isLoading}
+          >
             {isLoading && <FontAwesomeIcon icon={faSpinner} spinPulse />}
             {!isLoading && <FontAwesomeIcon icon={faCheck} />}
           </Button>
@@ -36,7 +47,6 @@ const Confirm: FC<Props> = ({ confirmText, onConfirm, onCancel, isLoading }) => 
             title={text.common.cancel}
             onClick={onCancel}
             testId="cancel-delete-btn"
-            disabled={isLoading}
           >
             <FontAwesomeIcon icon={faXmark} />
           </Button>
