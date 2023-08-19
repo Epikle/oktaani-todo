@@ -9,7 +9,6 @@ describe('Confirm', () => {
     confirmText: 'test-confirm-text',
     onConfirm: vi.fn(),
     onCancel: vi.fn(),
-    isLoading: false,
   };
 
   it('Confirm is showing with all attributes', () => {
@@ -22,7 +21,7 @@ describe('Confirm', () => {
   });
 
   it('Confirm btn should show loading spinner', () => {
-    const { getByTestId } = render(<Confirm {...confirmSetup} isLoading />);
+    const { getByTestId } = render(<Confirm {...confirmSetup} />);
 
     const spinnerElem = getByTestId('confirm-delete-btn').querySelector('svg');
 
