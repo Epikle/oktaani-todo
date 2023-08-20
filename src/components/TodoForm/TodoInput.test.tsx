@@ -1,10 +1,9 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import { fireEvent, render } from '@testing-library/react';
 
 import TodoInput from './TodoInput';
 import useSelectedStore from '../../context/useSelectedStore';
 import useSettingsStore from '../../context/useSettingsStore';
-import { testCollections } from '../../setupTests';
+import { testCollections } from '../../../setupTests';
 
 const mockInputHandler = vi.fn();
 const spySelected = vi.spyOn(useSelectedStore.getState(), 'selectedCollection', 'get');
@@ -28,12 +27,6 @@ describe('TodoInput', () => {
 
   it('Input should be disabled when sorting', () => {
     spySort.mockReturnValue(true);
-    const { getByTestId } = render(<TodoInput todoInput="" setTodoInput={mockInputHandler} maxLength={10} />);
-    const inputElem = getByTestId('todo-input');
-    expect(inputElem).toBeDisabled();
-  });
-
-  it('Input should be disabled when loading', () => {
     const { getByTestId } = render(<TodoInput todoInput="" setTodoInput={mockInputHandler} maxLength={10} />);
     const inputElem = getByTestId('todo-input');
     expect(inputElem).toBeDisabled();

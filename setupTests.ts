@@ -1,7 +1,7 @@
 import { cleanup } from '@testing-library/react';
 import matchers from '@testing-library/jest-dom/matchers';
-import '@testing-library/jest-dom/extend-expect';
-import { Collection, ItemEntry } from './utils/types';
+import '@testing-library/jest-dom/vitest';
+import { Collection, ItemEntry } from './src/utils/types';
 
 expect.extend(matchers);
 

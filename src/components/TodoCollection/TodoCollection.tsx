@@ -31,21 +31,26 @@ type DragItem = {
 
 const TodoCollection: FC<Props> = ({ collection, index }) => {
   const { id, title, color, shared, createdAt, type } = collection;
-  const parent = useRef<HTMLUListElement>(null);
-  const ref = useRef<HTMLElement>(null);
+  const listRef = useRef<HTMLUListElement>(null);
+  const articleRef = useRef<HTMLElement>(null);
   const [isError, setIsError] = useState(false);
   const [isCopy, setIsCopy] = useState(false);
   const [showLog, setShowLog] = useState(false);
   const selectedCollection = useSelectedStore((state) => state.selectedCollection);
-  const sort = useSettingsStore((state) => state.sort);
-  const languageName = useSettingsStore((state) => state.languageName);
   const { setSelectedCollection, resetSelection } = useSelectedStore((state) => state.actions);
+  const { sort, languageName } = useSettingsStore((state) => state);
   const { updateCollection, changeOrder } = useTodoStore((state) => state.actions);
   const { text } = useLanguage();
   const isSelected = selectedCollection?.id === id;
-  // TODO
   const items = useTodoStore((state) => state.items?.filter((i) => i.colId === id));
   const note = useTodoStore((state) => state.notes?.find((n) => n.colId === id));
+  const doneTodos = type === TypeEnum.enum.todo ? items?.filter((todo) => todo.status).length : '';
+  const totalTodos = items?.length || 0;
+  const showDone = totalTodos > 0 && !sort && TypeEnum.enum.todo === type ? `${doneTodos}/${totalTodos}` : '';
+  const showCreated =
+    isSelected && formatDate(createdAt, languageName) && !sort
+      ? `${text.collection.created} ${formatDate(createdAt, languageName)}`
+      : '';
 
   const [{ handlerId }, drop] = useDrop<DragItem, void, { handlerId: Identifier | null }>({
     accept: 'collection',
@@ -53,28 +58,21 @@ const TodoCollection: FC<Props> = ({ collection, index }) => {
       handlerId: monitor.getHandlerId(),
     }),
     hover: (item: DragItem, monitor) => {
-      if (!ref.current) return;
-
+      if (!articleRef.current) return;
       const dragIdx = item.index;
       const hoverIdx = index;
-
       if (dragIdx === hoverIdx) return;
-
-      const hoverBoundingRect = ref.current?.getBoundingClientRect();
+      const hoverBoundingRect = articleRef.current?.getBoundingClientRect();
       const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
       const clientOffset = monitor.getClientOffset();
       const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top;
-
       if (dragIdx < hoverIdx && hoverClientY < hoverMiddleY) {
         return;
       }
-
       if (dragIdx > hoverIdx && hoverClientY > hoverMiddleY) {
         return;
       }
-
       changeOrder({ dragIdx, hoverIdx });
-
       // eslint-disable-next-line
       item.index = hoverIdx;
     },
@@ -112,21 +110,14 @@ const TodoCollection: FC<Props> = ({ collection, index }) => {
   };
 
   useEffect(() => {
-    if (parent.current) autoAnimate(parent.current);
-  }, [parent]);
+    if (listRef.current) autoAnimate(listRef.current);
+  }, [listRef]);
 
   const listStyles: CSSProperties = {
     borderColor: color,
   };
-  const doneTodos = type === TypeEnum.enum.todo ? items?.filter((todo) => todo.status).length : '';
-  const totalTodos = items?.length || 0;
-  const showDone = totalTodos > 0 && !sort && TypeEnum.enum.todo === type ? `${doneTodos}/${totalTodos}` : '';
-  const showCreated =
-    isSelected && formatDate(createdAt, languageName) && !sort
-      ? `${text.collection.created} ${formatDate(createdAt, languageName)}`
-      : '';
 
-  preview(drop(ref));
+  preview(drop(articleRef));
 
   // if (isLoading) {
   //   return (
@@ -157,7 +148,7 @@ const TodoCollection: FC<Props> = ({ collection, index }) => {
 
   return (
     <article
-      ref={ref}
+      ref={articleRef}
       data-handler-id={handlerId}
       className={cn(styles.collection, { [styles.selected]: isSelected, print: isSelected })}
       style={{ ...listStyles, opacity, minHeight: showLog ? '14rem' : 'auto' }}
@@ -194,7 +185,7 @@ const TodoCollection: FC<Props> = ({ collection, index }) => {
       )}
       {!sort && TypeEnum.enum.note === type && <TodoNote id={id} isSelected={isSelected} note={note?.message || ''} />}
       {!sort && TypeEnum.enum.todo === type && (
-        <ul ref={parent} className={styles['item-list']}>
+        <ul ref={listRef} className={styles['item-list']}>
           {items && items.map((item) => <TodoItem key={item.id} item={item} selected={isSelected} />)}
         </ul>
       )}

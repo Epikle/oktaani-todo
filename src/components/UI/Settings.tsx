@@ -63,6 +63,7 @@ const Settings: FC = () => {
             title={text.controls.settings}
             className={styles.gear}
             onChange={() => setShowSettings(!showSettings)}
+            testId="btn-settings"
           >
             <FontAwesomeIcon icon={icon.faGear} />
           </ButtonToggle>

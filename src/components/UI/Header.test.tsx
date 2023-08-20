@@ -1,9 +1,8 @@
 import { render } from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect';
 
 import Header from './Header';
 import useSelectedStore from '../../context/useSelectedStore';
-import { testCollections } from '../../setupTests';
+import { testCollections } from '../../../setupTests';
 
 vi.mock('@formkit/auto-animate');
 const spySelected = vi.spyOn(useSelectedStore.getState(), 'selectedCollection', 'get');
@@ -16,9 +15,9 @@ describe('Header', () => {
 
   it('Should show settings button', () => {
     const { getByTestId, queryByTestId } = render(<Header />);
-    const settingsBtnElem = getByTestId('btn-settings');
+    const settingsElem = getByTestId('todo-settings');
     const todoControlsElem = queryByTestId('todo-controls');
-    expect(settingsBtnElem).toBeInTheDocument();
+    expect(settingsElem).toBeInTheDocument();
     expect(todoControlsElem).not.toBeInTheDocument();
   });
 

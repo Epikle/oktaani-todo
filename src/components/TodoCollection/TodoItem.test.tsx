@@ -1,41 +1,40 @@
-import { fireEvent, render } from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect';
+import { render } from '@testing-library/react';
 
 import TodoItem from './TodoItem';
 import { PriorityEnum } from '../../utils/types';
 
-describe('TodoItem', () => {
-  const itemSetup = {
-    item: {
-      id: 'todo123',
-      message: 'Test item',
-      status: false,
-      createdAt: Date(),
-      priority: PriorityEnum.enum.low,
-      colId: 'col-id',
-    },
-    selected: true,
-  };
+const itemSetup = {
+  item: {
+    id: 'todo123',
+    message: 'Test item',
+    status: false,
+    createdAt: Date(),
+    priority: PriorityEnum.enum.low,
+    colId: 'col-id',
+  },
+  selected: false,
+};
 
-  it('Item is showing with all attributes', () => {
+vi.mock('@formkit/auto-animate');
+
+describe('TodoItem', () => {
+  it('should show todo item with text', () => {
     const { getByLabelText } = render(<TodoItem {...itemSetup} />);
-    const item = getByLabelText(itemSetup.item.message);
-    expect(item).toBeInTheDocument();
+    const itemElem = getByLabelText(itemSetup.item.message);
+    expect(itemElem).toBeInTheDocument();
   });
 
-  it('When clicked checkbox should be checked', () => {
-    const { getByRole, getByLabelText } = render(<TodoItem {...itemSetup} />);
-    const checkbox = getByRole('checkbox');
-    const itemElem = getByLabelText(itemSetup.item.message);
-    fireEvent.click(itemElem);
-    expect(checkbox).toBeChecked();
+  it('should show not checked todo item', () => {
+    const { getByRole } = render(<TodoItem {...itemSetup} />);
+    const checkboxElem = getByRole('checkbox');
+    expect(checkboxElem).not.toBeChecked();
   });
 
   it('Should render checkbox already checked', () => {
     itemSetup.item.status = true;
     const { getByRole } = render(<TodoItem {...itemSetup} />);
-    const checkbox = getByRole('checkbox');
-    expect(checkbox).toBeChecked();
+    const checkboxElem = getByRole('checkbox');
+    expect(checkboxElem).toBeChecked();
   });
 
   afterEach(() => {

@@ -4,7 +4,7 @@ import { act } from 'react-dom/test-utils';
 import useTodoStore from './useTodoStore';
 import * as todoService from '../services/todo';
 import { Collection } from '../utils/types';
-import { testCollections, testItem } from '../setupTests';
+import { testCollections, testItem } from '../../setupTests';
 
 const spyGetTodosFromLS = vi.spyOn(todoService, 'getFromLocalStorage');
 const spySaveCollectionsToLS = vi.spyOn(todoService, 'saveToLocalStorage');

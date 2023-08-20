@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useRef } from 'react';
 import autoAnimate from '@formkit/auto-animate';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -19,18 +19,12 @@ type Props = {
 };
 
 const TodoItem: FC<Props> = ({ item, selected }) => {
-  const btnRef = useRef<HTMLButtonElement>(null);
   const { id, message, status, createdAt, priority } = item;
-  const [done, setDone] = useState(status);
+  const btnRef = useRef<HTMLButtonElement>(null);
   const { toggleItemStatus, updateItemPriority, deleteItem } = useTodoStore((state) => state.actions);
   const languageName = useSettingsStore((state) => state.languageName);
-  const { text } = useLanguage();
   const { priorityColor, nextPriority } = usePriority(priority);
-
-  const todoDoneHandler = () => {
-    setDone((prevS) => !prevS);
-    toggleItemStatus(id);
-  };
+  const { text } = useLanguage();
 
   useEffect(() => {
     if (btnRef.current) autoAnimate(btnRef.current);
@@ -40,27 +34,27 @@ const TodoItem: FC<Props> = ({ item, selected }) => {
     <li className={styles['todo-item']} style={{ '--color-priority': priorityColor } as React.CSSProperties}>
       <Button
         ref={btnRef}
-        aria-label={text.todo.priority}
         title={text.todo.priority}
+        aria-label={text.todo.priority}
         className={styles['priority-btn']}
         onClick={() => updateItemPriority({ id, priorityEntry: nextPriority() })}
         testId="item-btn-priority"
         data-priority={priority}
       >
-        {done && <FontAwesomeIcon icon={faCheck} />}
+        {status && <FontAwesomeIcon icon={faCheck} />}
       </Button>
 
       <input
-        type="checkbox"
         id={id}
-        checked={done}
-        onChange={todoDoneHandler}
+        type="checkbox"
         title={text.todo.markDone.replace('[]', message)}
+        onChange={() => toggleItemStatus(id)}
+        checked={status}
       />
-
       <label htmlFor={id} title={`${text.collection.created} ${formatDate(createdAt, languageName)}`}>
         {message}
       </label>
+
       {selected && (
         <Button
           title={text.todo.remove.replace('[]', message)}
