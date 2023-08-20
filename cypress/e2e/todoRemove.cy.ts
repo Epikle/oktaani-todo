@@ -8,8 +8,6 @@ describe('Todo remove', () => {
     cy.get('[data-testid="submit-btn"]').as('submitBtn');
     cy.get('@submitBtn').click();
     cy.get('[data-testid="add-todo-btn"]').click();
-    cy.get('@submitBtn').click();
-    cy.get('article').first().should('have.text', 'collection').click();
     cy.get('@input').type('ITEM1');
     cy.get('@submitBtn').click();
     cy.get('@input').type('ITEM2');
@@ -20,7 +18,7 @@ describe('Todo remove', () => {
   });
 
   it('marks one item as done and clears all done items and should update collection correctly', () => {
-    cy.get('article').first().children().get('ul > li input[type="checkbox"]').first().click();
+    cy.get(':nth-child(1) > label').click();
     cy.get('article').first().should('have.attr', 'data-done').should('eq', '1/3');
     cy.get('[data-testid="remove-done-btn"]').click();
     cy.get('article').first().should('have.attr', 'data-done').should('eq', '0/2');
