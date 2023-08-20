@@ -48,3 +48,10 @@ export const copyToClipboard = async (id: string) => {
 };
 
 export const cn = (...inputs: ClassValue[]) => clsx(inputs);
+
+// export const testDelay = async (promise) => {
+//   await new Promise((resolve) => {
+//     setTimeout(resolve, 2000);
+//   });
+//   return promise();
+// };

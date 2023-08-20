@@ -11,22 +11,25 @@ import Confirm from './Confirm';
 
 export type TConfirm = {
   message: string;
-  handler: () => void;
+  handler: () => void | Promise<void>;
 } | null;
 
 const Header: FC = () => {
   const parent = useRef(null);
   const [confirm, setConfirm] = useState<TConfirm>(null);
+  const [loading, setLoading] = useState(false);
   const selectedCollection = useSelectedStore((state) => state.selectedCollection);
 
   useEffect(() => {
     if (parent.current) autoAnimate(parent.current);
   }, [parent]);
 
-  const confirmBtnHandler = () => {
+  const confirmBtnHandler = async () => {
     if (!confirm) return;
-    confirm.handler();
+    setLoading(true);
+    await confirm.handler();
     setConfirm(null);
+    setLoading(false);
   };
 
   return (
@@ -43,7 +46,12 @@ const Header: FC = () => {
         </div>
         {!confirm && <TodoForm />}
         {confirm && (
-          <Confirm confirmText={confirm.message} onConfirm={confirmBtnHandler} onCancel={() => setConfirm(null)} />
+          <Confirm
+            confirmText={confirm.message}
+            loading={loading}
+            onConfirm={confirmBtnHandler}
+            onCancel={() => setConfirm(null)}
+          />
         )}
       </div>
     </header>

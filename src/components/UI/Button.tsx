@@ -16,13 +16,13 @@ export const Button = forwardRef<HTMLButtonElement, ButtonHTMLAttributes<HTMLBut
 Button.displayName = 'Button';
 
 export const ButtonToggle = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInputElement> & ButtonProps>(
-  ({ testId, className, children, ...props }, ref) => {
+  ({ testId, className, children, title, ...props }, ref) => {
     const id = useId();
 
     return (
       <>
         <input id={id} ref={ref} type="checkbox" className={styles.checkbox} {...props} />
-        <label htmlFor={id} className={cn(styles.toggle, className)} data-testid={testId}>
+        <label htmlFor={id} className={cn(styles.toggle, className)} data-testid={testId} title={title}>
           {children}
         </label>
       </>

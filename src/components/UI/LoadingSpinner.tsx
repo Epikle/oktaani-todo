@@ -7,6 +7,7 @@ import styles from './LoadingSpinner.module.scss';
 const LoadingSpinner: FC = () => (
   <div className={styles.container}>
     <FontAwesomeIcon icon={faSpinner} spinPulse size="2xl" />
+    Loading, please wait.
   </div>
 );
 

@@ -12,7 +12,7 @@ const languages = {
       language: 'Change language',
       removeDone: 'Remove done items',
       shareCol: 'Share collection',
-      stopShareCol: 'Shop sharing collection',
+      stopShareCol: 'Stop sharing collection',
       editCol: 'Edit collection title',
       removeCol: 'Remove collection',
       deleteConfirm: 'Are you sure?',
@@ -60,6 +60,7 @@ const languages = {
       editing: 'Editing',
       loading: 'Loading...',
       error: 'Error',
+      close: 'Close',
     },
     errors: {
       localStorage: 'You need to allow localStorage usage to use this app.',
@@ -130,6 +131,7 @@ const languages = {
       editing: 'Muokkaa',
       loading: 'Ladataan...',
       error: 'Virhe',
+      close: 'Sulje',
     },
     errors: {
       localStorage: 'Sovellus tarvitsee paikallisen tallennuksen päälle toimiakseen.',

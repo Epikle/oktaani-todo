@@ -5,6 +5,7 @@ import Confirm from './Confirm';
 describe('Confirm', () => {
   const confirmSetup = {
     confirmText: 'test-confirm-text',
+    loading: false,
     onConfirm: vi.fn(),
     onCancel: vi.fn(),
   };

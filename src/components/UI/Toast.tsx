@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleExclamation, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 
+import useLanguage from '../../hooks/useLanguage';
 import useStatusStore from '../../context/useStatusStore';
 import { cn } from '../../utils/utils';
 import { Button } from './Button';
@@ -19,6 +20,7 @@ const Toast: FC<Props> = ({ darkMode }) => {
   const isError = useStatusStore((state) => state.isError);
   const errorMessage = useStatusStore((state) => state.errorMessage);
   const { resetError } = useStatusStore((state) => state.actions);
+  const { text } = useLanguage();
 
   useEffect(() => {
     if (isError) {
@@ -36,7 +38,7 @@ const Toast: FC<Props> = ({ darkMode }) => {
     <div className={cn(styles.toast, { [styles.show]: isError, 'dark-mode': darkMode })} hidden={!isError}>
       <FontAwesomeIcon icon={faCircleExclamation} size="2xl" />
       {errorMessage}
-      <Button onClick={resetError} disabled={!isError}>
+      <Button title={text.common.close} onClick={resetError} disabled={!isError}>
         <FontAwesomeIcon icon={faCircleXmark} size="xl" />
       </Button>
     </div>

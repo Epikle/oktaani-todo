@@ -9,6 +9,7 @@ import { Button, ButtonToggle } from '../UI/Button';
 import { type TConfirm } from '../UI/Header';
 
 import styles from './TodoControls.module.scss';
+import { cn } from '../../utils/utils';
 
 type Props = {
   onConfirm: Dispatch<SetStateAction<TConfirm>>;
@@ -18,12 +19,27 @@ const TodoControls: FC<Props> = ({ onConfirm }) => {
   const selectedCollection = useSelectedStore((state) => state.selectedCollection);
   const { setSelectedCollection, resetSelection } = useSelectedStore((state) => state.actions);
   const items = useTodoStore((state) => state.items);
-  const { deleteDoneItems, deleteCollection } = useTodoStore((state) => state.actions);
+  const { deleteDoneItems, deleteCollection, updateCollection } = useTodoStore((state) => state.actions);
   const { text } = useLanguage();
 
   if (!selectedCollection) return null;
 
   const doneItems = items && items.filter((i) => i.colId === selectedCollection?.id && i.status).length > 0;
+
+  const shareCollectionBtnHandler = () => {
+    if (selectedCollection.shared) {
+      updateCollection({ id: selectedCollection.id, shared: false });
+      setSelectedCollection({ id: selectedCollection.id, edit: false });
+    } else {
+      onConfirm({
+        message: text.controls.shareConfirm,
+        handler: () => {
+          updateCollection({ id: selectedCollection.id, shared: true });
+          setSelectedCollection({ id: selectedCollection.id, edit: false });
+        },
+      });
+    }
+  };
 
   const deleteCollectionBtnHandler = () => {
     onConfirm({
@@ -48,13 +64,14 @@ const TodoControls: FC<Props> = ({ onConfirm }) => {
         </Button>
       </li>
       <li>
-        <ButtonToggle
+        <Button
           title={selectedCollection.shared ? text.controls.stopShareCol : text.controls.shareCol}
-          onChange={() => {}}
+          className={cn({ [styles.shared]: selectedCollection.shared })}
+          onClick={shareCollectionBtnHandler}
           testId="share-col-btn"
         >
           <FontAwesomeIcon icon={faShareNodes} />
-        </ButtonToggle>
+        </Button>
       </li>
       <li>
         <ButtonToggle
