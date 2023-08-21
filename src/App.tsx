@@ -37,7 +37,7 @@ const App: FC = () => {
       (async () => {
         try {
           // TODO
-          // await createSharedCollection(shareParam);
+          // await getSharedCollection(shareParam);
           window.location.replace(env.BASE_URL);
         } catch (error) {
           setError(text.errors.apiGetCollection);

@@ -3,6 +3,7 @@ import { AxiosError } from 'axios';
 import autoAnimate from '@formkit/auto-animate';
 
 import useSelectedStore from '../../context/useSelectedStore';
+import useLanguage from '../../hooks/useLanguage';
 import TodoControls from '../TodoForm/TodoControls';
 import TodoForm from '../TodoForm/TodoForm';
 import Settings from './Settings';
@@ -23,6 +24,7 @@ const Header: FC = () => {
   const [loading, setLoading] = useState(false);
   const selectedCollection = useSelectedStore((state) => state.selectedCollection);
   const { setError } = useStatusStore((state) => state.actions);
+  const { text } = useLanguage();
 
   useEffect(() => {
     if (parent.current) autoAnimate(parent.current);
@@ -35,8 +37,7 @@ const Header: FC = () => {
       await confirm.handler();
     } catch (error) {
       if (error instanceof AxiosError && error.name === 'CanceledError') return;
-      // TODO lang
-      setError('Something went wrong.');
+      setError(text.errors.default);
     } finally {
       setConfirm(null);
       setLoading(false);

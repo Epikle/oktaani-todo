@@ -67,7 +67,7 @@ const languages = {
       apiGetCollection: 'Fetching the shared collection failed. Please try again.',
       apiUpdateCollection: 'There was a failure in updating the shared collection. Please try again.',
       apiShareCollection: 'Failed to share the collection. Please try again.',
-      default: 'Something went wrong.',
+      default: 'Oops! Something Went Wrong.',
     },
   },
   fi: {
@@ -138,7 +138,7 @@ const languages = {
       apiGetCollection: 'Noudettaessa jaettua kokoelmaa tapahtui virhe. Yritä uudelleen.',
       apiUpdateCollection: 'Jaettua kokoelmaa ei voitu päivittää. Yritä uudelleen.',
       apiShareCollection: 'Kokoelman jakaminen epäonnistui. Yritä uudelleen.',
-      default: 'Jotain meni pieleen.',
+      default: 'Hups! Jotain meni vikaan.',
     },
   },
 };
