@@ -2,43 +2,34 @@ import axios, { GenericAbortSignal } from 'axios';
 import { nanoid } from 'nanoid';
 import { ZodTypeAny } from 'zod';
 
+import * as types from '../utils/types';
 import env from '../utils/env';
-import {
-  Collection,
-  CollectionEntry,
-  Item,
-  ItemEntry,
-  Log,
-  Note,
-  NoteEntry,
-  arrayOfLogsSchema,
-  collectionSchema,
-  itemSchema,
-  noteSchema,
-} from '../utils/types';
 
 const api = axios.create({
   baseURL: env.API_URL,
 });
 
-export const getSharedLogs = async (colId: string): Promise<Log[]> => {
+export const getSharedLogs = async (colId: string): Promise<types.Log[]> => {
   const { data } = await api.get<unknown>(`/log/${colId}`);
-  const validLogs = arrayOfLogsSchema.parse(data);
+  const validLogs = types.arrayOfLogsSchema.parse(data);
   return validLogs;
 };
 
-export const getSharedCollection = async (colId: string): Promise<Collection> => {
+export const getSharedCollection = async (colId: string): Promise<types.SharedCollectionData> => {
   const { data } = await api.get<unknown>(`/share/${colId}`);
-  const validCollection = collectionSchema.parse(data);
+  const validCollection = types.sharedCollectionDataSchema.parse(data);
   return validCollection;
 };
 
-export const createSharedCollection = async (collection: Collection, signal: GenericAbortSignal): Promise<void> => {
-  await api.post<Collection>('/share', { ...collection, shared: true }, { signal });
+export const createSharedCollection = async (
+  collectionData: types.SharedCollectionData,
+  signal: GenericAbortSignal,
+): Promise<void> => {
+  await api.post('/share', collectionData, { signal });
 };
 
-export const updateSharedCollection = async (collection: Collection): Promise<void> => {
-  await api.put<Collection>(`/share/${collection.id}`, collection);
+export const updateSharedCollection = async (collectionData: types.SharedCollectionData): Promise<void> => {
+  await api.put(`/share/${collectionData.col.id}`, collectionData);
 };
 
 export const deleteSharedCollection = async (colId: string): Promise<void> => {
@@ -56,29 +47,29 @@ export const getFromLocalStorage = <T>(key: string, schema: ZodTypeAny): T => {
   return validData;
 };
 
-export const createCollectionEntry = (entry: CollectionEntry): Collection => {
+export const createCollectionEntry = (entry: types.CollectionEntry): types.Collection => {
   const newCollection = {
     id: nanoid(),
     ...entry,
   };
-  const validCollection = collectionSchema.parse(newCollection);
+  const validCollection = types.collectionSchema.parse(newCollection);
   return validCollection;
 };
 
-export const createItemEntry = (entry: ItemEntry): Item => {
+export const createItemEntry = (entry: types.ItemEntry): types.Item => {
   const newItem = {
     id: nanoid(),
     ...entry,
   };
-  const validItem = itemSchema.parse(newItem);
+  const validItem = types.itemSchema.parse(newItem);
   return validItem;
 };
 
-export const createNoteEntry = (entry: NoteEntry): Note => {
+export const createNoteEntry = (entry: types.NoteEntry): types.Note => {
   const newNote = {
     id: nanoid(),
     ...entry,
   };
-  const validNote = noteSchema.parse(newNote);
+  const validNote = types.noteSchema.parse(newNote);
   return validNote;
 };

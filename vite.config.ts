@@ -27,7 +27,7 @@ export default defineConfig({
       provider: 'istanbul',
     },
     env: {
-      VITE_BASE_URL: 'http://localhost:5173/todo',
+      VITE_BASE_URL: 'http://localhost:5173/todo/',
       VITE_API_URL: 'api-url-test',
       VITE_LS_NAME_SETTINGS: 'ot-settings',
       VITE_LS_NAME_COLLECTIONS: 'ot-collections',

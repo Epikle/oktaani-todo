@@ -1,8 +1,9 @@
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import { faBars, faCheck, faCopy, faFileLines, faShareNodes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import autoAnimate from '@formkit/auto-animate';
 
+import { getSharedCollection } from '../../services/todo';
 import { Collection, TypeEnum } from '../../utils/types';
 import useSelectedStore from '../../context/useSelectedStore';
 import useSettingsStore from '../../context/useSettingsStore';
@@ -36,6 +37,7 @@ const TodoCollection: FC<Props> = ({ collection, index }) => {
   const selectedCollection = useSelectedStore((state) => state.selectedCollection);
   const { setSelectedCollection, resetSelection } = useSelectedStore((state) => state.actions);
   const { sort, languageName } = useSettingsStore((state) => state);
+  const { updateCollection } = useTodoStore((state) => state.actions);
   const { handlerId, opacity, drop, drag, preview } = useDnD({ ref: articleRef, id, index });
   const { text } = useLanguage();
   const isSelected = selectedCollection?.id === id;
@@ -48,6 +50,23 @@ const TodoCollection: FC<Props> = ({ collection, index }) => {
     isSelected && formatDate(createdAt, languageName) && !sort
       ? `${text.collection.created} ${formatDate(createdAt, languageName)}`
       : '';
+
+  const getSharedData = useCallback(async () => {
+    try {
+      setLoading(true);
+      const { col } = await getSharedCollection(id);
+      updateCollection(col);
+    } catch (error) {
+      setIsError(true);
+    } finally {
+      setLoading(false);
+    }
+  }, [id, updateCollection]);
+
+  useEffect(() => {
+    if (!shared) return;
+    getSharedData();
+  }, [shared, getSharedData]);
 
   const selectedCollectionHandler = () => {
     if (isSelected) {
@@ -81,8 +100,10 @@ const TodoCollection: FC<Props> = ({ collection, index }) => {
   if (isError) {
     return (
       <TodoCollectionError
+        id={id}
         className={cn(styles.collection, styles.error, { [styles.selected]: isSelected, print: isSelected })}
         setIsError={setIsError}
+        onRetry={getSharedData}
       />
     );
   }

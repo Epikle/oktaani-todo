@@ -30,7 +30,7 @@
     opacity: 0;
   }
 
-  button {
+  .button {
     @include text-green;
     @include transition;
 
@@ -40,9 +40,12 @@
     display: grid;
     place-content: center;
     background-color: transparent;
+    width: fit-content;
+    height: fit-content;
 
     &:is(:hover, :focus-visible) {
       color: var(--color-p-red);
+      background-color: transparent;
     }
   }
 

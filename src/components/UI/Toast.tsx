@@ -38,8 +38,8 @@ const Toast: FC<Props> = ({ darkMode }) => {
     <div className={cn(styles.toast, { [styles.show]: isError, 'dark-mode': darkMode })} hidden={!isError}>
       <FontAwesomeIcon icon={faCircleExclamation} size="2xl" />
       {errorMessage}
-      <Button title={text.common.close} onClick={resetError} disabled={!isError}>
-        <FontAwesomeIcon icon={faCircleXmark} size="xl" />
+      <Button title={text.common.close} onClick={resetError} disabled={!isError} className={styles.button}>
+        <FontAwesomeIcon icon={faCircleXmark} />
       </Button>
     </div>
   );

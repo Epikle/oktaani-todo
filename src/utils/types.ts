@@ -49,6 +49,11 @@ export const arrayOfItemsSchema = itemSchema.array().nonempty();
 export const arrayOfNotesSchema = noteSchema.array().nonempty();
 export const arrayOfCollectionsSchema = collectionSchema.array().nonempty();
 export const arrayOfLogsSchema = z.array(logSchema);
+export const sharedCollectionDataSchema = z.object({
+  col: collectionSchema,
+  items: arrayOfItemsSchema.nullable(),
+  note: noteSchema.nullable(),
+});
 
 export type Item = z.infer<typeof itemSchema>;
 export type ItemEntry = Pick<Item, 'colId' | 'message'>;
@@ -60,3 +65,9 @@ export type CollectionType = z.infer<typeof TypeEnum>;
 export type ItemPriority = z.infer<typeof PriorityEnum>;
 export type Log = z.infer<typeof logSchema>;
 export type Settings = z.infer<typeof settingsSchema>;
+
+export type SharedCollectionData = {
+  col: Collection;
+  items: Item[] | null;
+  note: Note | null;
+};

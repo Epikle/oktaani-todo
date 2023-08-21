@@ -7,6 +7,7 @@ import useStatusStore from './context/useStatusStore';
 import useLanguage from './hooks/useLanguage';
 import { isStorageAvailable } from './utils/utils';
 import TodoList from './components/TodoList/TodoList';
+import LoadingSpinner from './components/UI/LoadingSpinner';
 import Overlay from './components/UI/Overlay';
 import Header from './components/UI/Header';
 import Footer from './components/UI/Footer';
@@ -55,7 +56,7 @@ const App: FC = () => {
       <Header />
       <div className={styles.container}>
         <main className={styles.main}>
-          {shareParam && <p>Loading...</p>}
+          {shareParam && <LoadingSpinner />}
           {!shareParam && <TodoList />}
         </main>
         <Footer />

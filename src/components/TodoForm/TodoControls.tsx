@@ -2,14 +2,15 @@ import { Dispatch, FC, SetStateAction } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faListCheck, faPen, faShareNodes, faTrash } from '@fortawesome/free-solid-svg-icons';
 
+import { createSharedCollection } from '../../services/todo';
 import useSelectedStore from '../../context/useSelectedStore';
 import useTodoStore from '../../context/useTodoStore';
 import useLanguage from '../../hooks/useLanguage';
 import { Button, ButtonToggle } from '../UI/Button';
 import { type TConfirm } from '../UI/Header';
+import { cn } from '../../utils/utils';
 
 import styles from './TodoControls.module.scss';
-import { cn } from '../../utils/utils';
 
 type Props = {
   onConfirm: Dispatch<SetStateAction<TConfirm>>;
@@ -31,9 +32,17 @@ const TodoControls: FC<Props> = ({ onConfirm }) => {
       updateCollection({ id: selectedCollection.id, shared: false });
       setSelectedCollection({ id: selectedCollection.id, edit: false });
     } else {
+      const sharedData = {
+        col: { ...selectedCollection, shared: true },
+        items,
+        note: null,
+      };
+      const controller = new AbortController();
       onConfirm({
+        controller,
         message: text.controls.shareConfirm,
-        handler: () => {
+        handler: async () => {
+          await createSharedCollection(sharedData, controller.signal);
           updateCollection({ id: selectedCollection.id, shared: true });
           setSelectedCollection({ id: selectedCollection.id, edit: false });
         },
@@ -42,7 +51,9 @@ const TodoControls: FC<Props> = ({ onConfirm }) => {
   };
 
   const deleteCollectionBtnHandler = () => {
+    const controller = new AbortController();
     onConfirm({
+      controller,
       message: text.controls.deleteConfirm,
       handler: () => {
         deleteCollection(selectedCollection.id);
