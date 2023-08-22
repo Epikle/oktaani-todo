@@ -12,6 +12,7 @@ export type TodoSlice = {
   notes: types.Note[] | null;
   actions: {
     initCollections: () => void;
+    initSharedCollection: (entry: types.SharedCollectionData) => void;
     createCollection: (entry: types.CollectionEntry) => void;
     updateCollection: (entry: Partial<types.Collection> & { id: string }) => void;
     deleteCollection: (id: string) => void;
@@ -42,6 +43,37 @@ const useTodoStore = create<TodoSlice>()(
           set({ collections });
         } catch (error) {
           set({ collections: null });
+        }
+      },
+
+      initSharedCollection: (entry) => {
+        try {
+          const { col: collection, items, note } = types.sharedCollectionDataSchema.parse(entry);
+          set((state) => {
+            if (state.collections?.some((c) => c.id === collection.id)) {
+              return;
+            }
+            const newCollections = state.collections ? [collection, ...state.collections] : [collection];
+            state.collections = newCollections;
+            todoService.saveToLocalStorage<types.Collection[]>(env.LS_NAME_COLLECTIONS, newCollections);
+
+            if (items) {
+              const newItems = state.items ? [...items, ...state.items] : items;
+              state.items = newItems;
+              todoService.saveToLocalStorage<types.Item[]>(env.LS_NAME_ITEMS, newItems);
+            }
+
+            if (note) {
+              const newNotes = state.notes ? state.notes.concat(note) : [note];
+              state.notes = newNotes;
+              todoService.saveToLocalStorage<types.Note[]>(env.LS_NAME_NOTES, newNotes);
+            }
+          });
+        } catch (error) {
+          useStatusStore.setState({
+            errorMessage: 'Shared collection creation failed. Please try again.',
+            isError: true,
+          });
         }
       },
 
@@ -162,8 +194,8 @@ const useTodoStore = create<TodoSlice>()(
             if (!note || !state.notes) {
               const validNote = todoService.createNoteEntry(entry);
               const newNotes = state.notes ? state.notes.concat(validNote) : [validNote];
-              todoService.saveToLocalStorage<types.Note[]>(env.LS_NAME_NOTES, newNotes);
               state.notes = newNotes;
+              todoService.saveToLocalStorage<types.Note[]>(env.LS_NAME_NOTES, newNotes);
             } else {
               note.message = entry.message;
               todoService.saveToLocalStorage<types.Note[]>(env.LS_NAME_NOTES, state.notes);

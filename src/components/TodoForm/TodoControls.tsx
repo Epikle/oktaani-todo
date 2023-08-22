@@ -2,7 +2,7 @@ import { Dispatch, FC, SetStateAction } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faListCheck, faPen, faShareNodes, faTrash } from '@fortawesome/free-solid-svg-icons';
 
-import { createSharedCollection } from '../../services/todo';
+import { createSharedCollection, deleteSharedCollection } from '../../services/todo';
 import useSelectedStore from '../../context/useSelectedStore';
 import useTodoStore from '../../context/useTodoStore';
 import useLanguage from '../../hooks/useLanguage';
@@ -27,8 +27,9 @@ const TodoControls: FC<Props> = ({ onConfirm }) => {
 
   const doneItems = items && items.filter((i) => i.colId === selectedCollection?.id && i.status).length > 0;
 
-  const shareCollectionBtnHandler = () => {
+  const shareCollectionBtnHandler = async () => {
     if (selectedCollection.shared) {
+      await deleteSharedCollection(selectedCollection.id);
       updateCollection({ id: selectedCollection.id, shared: false });
       setSelectedCollection({ id: selectedCollection.id, edit: false });
     } else {
@@ -55,7 +56,10 @@ const TodoControls: FC<Props> = ({ onConfirm }) => {
     onConfirm({
       controller,
       message: text.controls.deleteConfirm,
-      handler: () => {
+      handler: async () => {
+        if (selectedCollection.shared) {
+          await deleteSharedCollection(selectedCollection.id, controller.signal);
+        }
         deleteCollection(selectedCollection.id);
         resetSelection();
       },

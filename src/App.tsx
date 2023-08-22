@@ -5,6 +5,7 @@ import useSettingsStore from './context/useSettingsStore';
 import useTodoStore from './context/useTodoStore';
 import useStatusStore from './context/useStatusStore';
 import useLanguage from './hooks/useLanguage';
+import { getSharedCollection } from './services/todo';
 import { isStorageAvailable } from './utils/utils';
 import TodoList from './components/TodoList/TodoList';
 import LoadingSpinner from './components/UI/LoadingSpinner';
@@ -22,7 +23,7 @@ const App: FC = () => {
   const selectedCollection = useSelectedStore((state) => state.selectedCollection);
   const darkMode = useSettingsStore((state) => state.darkMode);
   const { initSettings } = useSettingsStore((state) => state.actions);
-  const { initCollections, initItems, initNotes } = useTodoStore((state) => state.actions);
+  const { initCollections, initItems, initNotes, initSharedCollection } = useTodoStore((state) => state.actions);
   const { setError } = useStatusStore((state) => state.actions);
   const { text } = useLanguage();
 
@@ -36,8 +37,8 @@ const App: FC = () => {
     if (shareParam) {
       (async () => {
         try {
-          // TODO
-          // await getSharedCollection(shareParam);
+          const sharedCollectionData = await getSharedCollection(shareParam);
+          initSharedCollection(sharedCollectionData);
           window.location.replace(env.BASE_URL);
         } catch (error) {
           setError(text.errors.apiGetCollection);
@@ -47,7 +48,7 @@ const App: FC = () => {
         }
       })();
     }
-  }, [initSettings, initCollections, initItems, setError, initNotes, text]);
+  }, [initSettings, initCollections, initItems, setError, initNotes, initSharedCollection, text]);
 
   return (
     <div className={darkMode ? 'content dark-mode' : 'content'}>

@@ -1,10 +1,12 @@
 import { FC, useEffect, useState } from 'react';
 
-// import { getSharedCollectionLogData } from '../../services/todo';
+import { getSharedLogs } from '../../services/todo';
 import { formatDate } from '../../utils/utils';
 import { type Languages } from '../../utils/languages';
+import useStatusStore from '../../context/useStatusStore';
 import useSelectedStore from '../../context/useSelectedStore';
 import useLanguage from '../../hooks/useLanguage';
+import { Log } from '../../utils/types';
 
 import styles from './TodoLog.module.scss';
 
@@ -13,17 +15,11 @@ type Props = {
   languageName: Languages;
 };
 
-export type Log = {
-  id: string;
-  shareId: string;
-  message: string;
-  createdAt: string;
-};
-
 const TodoLog: FC<Props> = ({ id, languageName }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [logs, setLogs] = useState<Log[] | []>([]);
   const selectedCollection = useSelectedStore((state) => state.selectedCollection);
+  const { setError } = useStatusStore((state) => state.actions);
   const isSelected = selectedCollection?.id === id;
   const { text } = useLanguage();
 
@@ -31,15 +27,14 @@ const TodoLog: FC<Props> = ({ id, languageName }) => {
     (async () => {
       setIsLoading(true);
       try {
-        // TODO
-        // const logsData = await getSharedCollectionLogData(id);
-        // setLogs(logsData);
+        const logsData = await getSharedLogs(id);
+        setLogs(logsData);
       } catch (error) {
-        setLogs([]);
+        setError(text.errors.default);
       }
       setIsLoading(false);
     })();
-  }, [id]);
+  }, [id, setError, text.errors.default]);
 
   if (!isSelected) return null;
 
@@ -50,7 +45,6 @@ const TodoLog: FC<Props> = ({ id, languageName }) => {
         {isLoading && <p>{text.common.loading}</p>}
         {!isLoading && logs.length === 0 && <p>{text.collection.noLogs}</p>}
         {!isLoading &&
-          logs &&
           logs.length > 0 &&
           logs.map((log) => (
             <p key={log.id}>

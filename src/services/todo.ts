@@ -32,8 +32,8 @@ export const updateSharedCollection = async (collectionData: types.SharedCollect
   await api.put(`/share/${collectionData.col.id}`, collectionData);
 };
 
-export const deleteSharedCollection = async (colId: string): Promise<void> => {
-  await api.delete(`/share/${colId}`);
+export const deleteSharedCollection = async (colId: string, signal?: GenericAbortSignal): Promise<void> => {
+  await api.delete(`/share/${colId}`, { signal });
 };
 
 export const saveToLocalStorage = <T>(key: string, data: T): void => {
