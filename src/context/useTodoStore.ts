@@ -42,7 +42,10 @@ const useTodoStore = create<TodoSlice>()(
           );
           set({ collections });
         } catch (error) {
-          set({ collections: null });
+          useStatusStore.setState({
+            errorMessage: 'Unable to retrieve collection data.',
+            isError: true,
+          });
         }
       },
 
@@ -102,11 +105,11 @@ const useTodoStore = create<TodoSlice>()(
       deleteCollection: (id) =>
         set((state) => {
           const filteredCollections = state.collections?.filter((c) => c.id !== id);
-          const newCollections = filteredCollections && filteredCollections?.length > 0 ? filteredCollections : null;
+          const newCollections = filteredCollections?.length ? filteredCollections : null;
           const filteredItems = state.items?.filter((i) => i.colId !== id);
-          const newItems = filteredItems && filteredItems?.length > 0 ? filteredItems : null;
+          const newItems = filteredItems?.length ? filteredItems : null;
           const filteredNotes = state.notes?.filter((i) => i.colId !== id);
-          const newNotes = filteredNotes && filteredNotes?.length > 0 ? filteredNotes : null;
+          const newNotes = filteredNotes?.length ? filteredNotes : null;
 
           todoService.saveToLocalStorage<types.Collection[] | null>(env.LS_NAME_COLLECTIONS, newCollections);
           todoService.saveToLocalStorage<types.Item[] | null>(env.LS_NAME_ITEMS, newItems);
@@ -120,7 +123,10 @@ const useTodoStore = create<TodoSlice>()(
           const items = todoService.getFromLocalStorage<types.Item[]>(env.LS_NAME_ITEMS, types.arrayOfItemsSchema);
           set({ items });
         } catch (error) {
-          set({ items: null });
+          useStatusStore.setState({
+            errorMessage: 'Unable to retrieve collection data.',
+            isError: true,
+          });
         }
       },
 
@@ -159,7 +165,7 @@ const useTodoStore = create<TodoSlice>()(
         set((state) => {
           const filteredItems = state.items?.filter((i) => i.id !== id);
           if (filteredItems) {
-            const newItems = filteredItems && filteredItems?.length > 0 ? filteredItems : null;
+            const newItems = filteredItems?.length ? filteredItems : null;
             todoService.saveToLocalStorage<types.Item[] | null>(env.LS_NAME_ITEMS, newItems);
             return { items: newItems };
           }
@@ -170,7 +176,7 @@ const useTodoStore = create<TodoSlice>()(
         set((state) => {
           const filteredItems = state.items?.filter((i) => i.colId !== id || !i.status);
           if (filteredItems) {
-            const newItems = filteredItems && filteredItems?.length > 0 ? filteredItems : null;
+            const newItems = filteredItems?.length ? filteredItems : null;
             todoService.saveToLocalStorage<types.Item[] | null>(env.LS_NAME_ITEMS, newItems);
             return { items: newItems };
           }
@@ -182,7 +188,10 @@ const useTodoStore = create<TodoSlice>()(
           const notes = todoService.getFromLocalStorage<types.Note[]>(env.LS_NAME_NOTES, types.arrayOfNotesSchema);
           set({ notes });
         } catch (error) {
-          set({ notes: null });
+          useStatusStore.setState({
+            errorMessage: 'Unable to retrieve collection data.',
+            isError: true,
+          });
         }
       },
 

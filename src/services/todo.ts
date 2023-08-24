@@ -41,7 +41,7 @@ export const saveToLocalStorage = <T>(key: string, data: T): void => {
 };
 
 export const getFromLocalStorage = <T>(key: string, schema: ZodTypeAny): T => {
-  const data = localStorage.getItem(key) || '';
+  const data = localStorage.getItem(key) || 'null';
   const parsedData = JSON.parse(data) as unknown;
   const validData = schema.parse(parsedData);
   return validData;

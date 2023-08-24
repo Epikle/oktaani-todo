@@ -2,6 +2,8 @@ import { z } from 'zod';
 import { allowedLanguages } from './languages';
 
 const priorities = ['low', 'medium', 'high'] as const;
+const types = ['todo', 'note'] as const;
+
 export const itemSchema = z.object({
   colId: z.string().min(1),
   id: z.string().min(1),
@@ -18,7 +20,6 @@ export const noteSchema = z.object({
   createdAt: z.string().datetime().default(new Date().toISOString()),
 });
 
-const types = ['todo', 'note'] as const;
 export const collectionSchema = z.object({
   id: z.string().min(1),
   title: z.string().min(1),
@@ -44,10 +45,9 @@ export const settingsSchema = z.object({
 
 export const PriorityEnum = z.enum(priorities);
 export const TypeEnum = z.enum(types);
-
-export const arrayOfItemsSchema = itemSchema.array().nonempty();
-export const arrayOfNotesSchema = noteSchema.array().nonempty();
-export const arrayOfCollectionsSchema = collectionSchema.array().nonempty();
+export const arrayOfItemsSchema = z.union([z.array(itemSchema).nonempty(), z.null()]).default(null);
+export const arrayOfNotesSchema = z.union([z.array(noteSchema).nonempty(), z.null()]).default(null);
+export const arrayOfCollectionsSchema = z.union([z.array(collectionSchema).nonempty(), z.null()]).default(null);
 export const arrayOfLogsSchema = z.array(logSchema);
 export const sharedCollectionDataSchema = z.object({
   col: collectionSchema,
@@ -65,7 +65,6 @@ export type CollectionType = z.infer<typeof TypeEnum>;
 export type ItemPriority = z.infer<typeof PriorityEnum>;
 export type Log = z.infer<typeof logSchema>;
 export type Settings = z.infer<typeof settingsSchema>;
-
 export type SharedCollectionData = {
   col: Collection;
   items: Item[] | null;

@@ -54,6 +54,7 @@ const TodoCollection: FC<Props> = ({ collection, index }) => {
   const getSharedData = useCallback(async () => {
     try {
       setLoading(true);
+      // TODO
       const { col } = await getSharedCollection(id);
       updateCollection(col);
     } catch (error) {
