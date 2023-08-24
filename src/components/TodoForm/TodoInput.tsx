@@ -42,6 +42,8 @@ const TodoInput: FC<Props> = ({ todoInput, setTodoInput, maxLength }) => {
       maxLength={maxLength}
       disabled={disabled}
       data-testid="todo-input"
+      name="todo-input"
+      autoComplete="off"
     />
   );
 };

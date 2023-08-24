@@ -17,7 +17,7 @@ export type TodoSlice = {
     updateCollection: (entry: Partial<types.Collection> & { id: string }) => void;
     deleteCollection: (id: string) => void;
     initItems: () => void;
-    createItem: (entry: types.ItemEntry) => void;
+    createItem: (entry: types.ItemEntry) => types.Item | null;
     toggleItemStatus: (id: string) => void;
     updateItemPriority: ({ id, priorityEntry }: { id: string; priorityEntry: types.ItemPriority }) => void;
     deleteItem: (id: string) => void;
@@ -93,7 +93,7 @@ const useTodoStore = create<TodoSlice>()(
         }
       },
 
-      updateCollection: (entry) =>
+      updateCollection: async (entry) =>
         set((state) => {
           const collection = state.collections?.find((c) => c.id === entry.id);
           if (state.collections && collection) {
@@ -138,8 +138,10 @@ const useTodoStore = create<TodoSlice>()(
             state.items = newItems;
             todoService.saveToLocalStorage<types.Item[]>(env.LS_NAME_ITEMS, newItems);
           });
+          return validItem;
         } catch (error) {
           useStatusStore.setState({ errorMessage: 'Item creation failed. Please try again.', isError: true });
+          return null;
         }
       },
 

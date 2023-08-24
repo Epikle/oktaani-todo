@@ -2,6 +2,7 @@ import { FC, FormEvent, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
+import { createSharedItem, updateSharedCollection } from '../../services/todo';
 import useSelectedStore from '../../context/useSelectedStore';
 import useTodoStore from '../../context/useTodoStore';
 import useLanguage from '../../hooks/useLanguage';
@@ -35,7 +36,7 @@ const TodoForm: FC = () => {
 
   const isAddBtn = (selectedCollection && trimmedInput.length > 0) || trimmedInput.length > 0;
 
-  const submitHandler = (event: FormEvent) => {
+  const submitHandler = async (event: FormEvent) => {
     event.preventDefault();
     if (!isAddBtn) {
       resetSelection();
@@ -45,10 +46,18 @@ const TodoForm: FC = () => {
 
     if (selectedCollection) {
       if (selectedCollection?.edit) {
+        if (selectedCollection.shared) {
+          // TODO loading spinner
+          await updateSharedCollection({ id: selectedCollection.id, title: trimmedInput });
+        }
         updateCollection({ id: selectedCollection.id, title: trimmedInput });
         setSelectedCollection({ id: selectedCollection.id, edit: false });
       } else {
-        createItem({ colId: selectedCollection.id, message: trimmedInput });
+        const createdItem = createItem({ colId: selectedCollection.id, message: trimmedInput });
+        if (selectedCollection.shared && createdItem) {
+          // TODO loading spinner
+          await createSharedItem(createdItem);
+        }
       }
     } else {
       createCollection({ title: trimmedInput, color });

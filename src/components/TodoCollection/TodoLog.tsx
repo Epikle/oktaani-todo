@@ -1,8 +1,8 @@
 import { FC, useEffect, useState } from 'react';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 
 import { getSharedLogs } from '../../services/todo';
-import { formatDate } from '../../utils/utils';
-import { type Languages } from '../../utils/languages';
 import useStatusStore from '../../context/useStatusStore';
 import useSelectedStore from '../../context/useSelectedStore';
 import useLanguage from '../../hooks/useLanguage';
@@ -10,12 +10,13 @@ import { Log } from '../../utils/types';
 
 import styles from './TodoLog.module.scss';
 
+dayjs.extend(relativeTime);
+
 type Props = {
   id: string;
-  languageName: Languages;
 };
 
-const TodoLog: FC<Props> = ({ id, languageName }) => {
+const TodoLog: FC<Props> = ({ id }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [logs, setLogs] = useState<Log[] | []>([]);
   const selectedCollection = useSelectedStore((state) => state.selectedCollection);
@@ -48,8 +49,7 @@ const TodoLog: FC<Props> = ({ id, languageName }) => {
           logs.length > 0 &&
           logs.map((log) => (
             <p key={log.id}>
-              {log.message} -{' '}
-              {formatDate(log.createdAt, languageName, { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+              {log.message} - {dayjs(log.createdAt).fromNow()}
             </p>
           ))}
       </div>

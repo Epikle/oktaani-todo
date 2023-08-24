@@ -2,7 +2,7 @@ import { Dispatch, FC, SetStateAction } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faListCheck, faPen, faShareNodes, faTrash } from '@fortawesome/free-solid-svg-icons';
 
-import { createSharedCollection, deleteSharedCollection } from '../../services/todo';
+import { createSharedCollection, deleteSharedCollection, deleteSharedDoneItems } from '../../services/todo';
 import useSelectedStore from '../../context/useSelectedStore';
 import useTodoStore from '../../context/useTodoStore';
 import useLanguage from '../../hooks/useLanguage';
@@ -66,12 +66,20 @@ const TodoControls: FC<Props> = ({ onConfirm }) => {
     });
   };
 
+  const deleteDoneBtnHandler = async () => {
+    deleteDoneItems(selectedCollection.id);
+    if (selectedCollection.shared) {
+      // TODO loading spinner
+      await deleteSharedDoneItems(selectedCollection.id);
+    }
+  };
+
   return (
     <ul className={styles.controls} data-testid="todo-controls">
       <li>
         <Button
           title={text.controls.removeDone}
-          onClick={() => deleteDoneItems(selectedCollection.id)}
+          onClick={deleteDoneBtnHandler}
           disabled={!doneItems}
           testId="remove-done-btn"
         >

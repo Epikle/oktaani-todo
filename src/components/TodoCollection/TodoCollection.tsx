@@ -53,8 +53,8 @@ const TodoCollection: FC<Props> = ({ collection, index }) => {
 
   const getSharedData = useCallback(async () => {
     try {
+      setIsError(false);
       setLoading(true);
-      // TODO
       const { col } = await getSharedCollection(id);
       updateCollection(col);
     } catch (error) {
@@ -135,7 +135,7 @@ const TodoCollection: FC<Props> = ({ collection, index }) => {
           <FontAwesomeIcon icon={faBars} size="2x" />
         </button>
       )}
-      {shared && showLog && <TodoLog id={id} languageName={languageName} />}
+      {shared && showLog && <TodoLog id={id} />}
       {shared && !sort && (
         <div className={styles.shared}>
           {isSelected && (

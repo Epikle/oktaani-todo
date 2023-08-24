@@ -5,6 +5,7 @@ import useTodoStore from '../../context/useTodoStore';
 import useLanguage from '../../hooks/useLanguage';
 
 import styles from './ColorChooser.module.scss';
+import { updateSharedCollection } from '../../services/todo';
 
 type Props = {
   defaultColor: string;
@@ -18,14 +19,16 @@ const ColorChooser: FC<Props> = ({ defaultColor, setColor, color }) => {
   const { updateCollection } = useTodoStore((state) => state.actions);
   const { text } = useLanguage();
 
-  const colorInputHandler = () => {
+  const colorInputHandler = async () => {
     if (!colorInputRef.current) return;
-    setColor(colorInputRef.current.value);
-    if (!selectedCollection) return;
-    updateCollection({
-      id: selectedCollection.id,
-      color: colorInputRef.current.value,
-    });
+    if (!selectedCollection) {
+      setColor(colorInputRef.current.value);
+    } else {
+      updateCollection({ id: selectedCollection.id, color: colorInputRef.current.value });
+      if (selectedCollection.shared) {
+        await updateSharedCollection({ id: selectedCollection.id, color: colorInputRef.current.value });
+      }
+    }
   };
 
   useEffect(() => {
