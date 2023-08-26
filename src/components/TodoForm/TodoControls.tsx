@@ -28,7 +28,9 @@ const TodoControls: FC<Props> = ({ onConfirm }) => {
 
   if (!selectedCollection) return null;
 
-  const doneItems = items && items.filter((i) => i.colId === selectedCollection?.id && i.status).length > 0;
+  const doneItems = items && items.filter((i) => i.colId === selectedCollection.id && i.status).length > 0;
+  const filteredItems = items && items.filter((i) => i.colId === selectedCollection.id);
+  const selectedColItems = filteredItems?.length && filteredItems.length > 0 ? filteredItems : null;
 
   const shareCollectionBtnHandler = async () => {
     if (selectedCollection.shared) {
@@ -38,7 +40,7 @@ const TodoControls: FC<Props> = ({ onConfirm }) => {
     } else {
       const sharedData = {
         col: { ...selectedCollection, shared: true },
-        items,
+        items: selectedColItems,
         note: null,
       };
       const controller = new AbortController();
@@ -101,6 +103,7 @@ const TodoControls: FC<Props> = ({ onConfirm }) => {
           className={cn({ [styles.shared]: selectedCollection.shared })}
           onClick={shareCollectionBtnHandler}
           testId="share-col-btn"
+          disabled={selectedCollection.type === 'note'}
         >
           <FontAwesomeIcon icon={faShareNodes} />
         </Button>

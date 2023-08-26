@@ -122,7 +122,7 @@ describe('useTodoStore', () => {
     initMockCollections(testCollections);
     const { result } = renderHook(() => useTodoStore((state) => state));
     act(() => {
-      result.current.actions.toggleItemStatus('fake-id');
+      result.current.actions.updateItem({ id: 'fake-id', status: true });
     });
     await waitFor(() => {
       expect(spySaveCollectionsToLS).toBeCalledTimes(0);

@@ -13,6 +13,7 @@ const itemSetup = {
     colId: 'col-id',
   },
   selected: false,
+  shared: false,
 };
 
 vi.mock('@formkit/auto-animate');

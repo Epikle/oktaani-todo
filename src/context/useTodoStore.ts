@@ -158,6 +158,7 @@ const useTodoStore = create<TodoSlice>()(
         set((state) => {
           const filteredItems = state.items?.filter((i) => i.colId !== id);
           const newItems = filteredItems?.length ? [...(entries || []), ...filteredItems] : entries;
+          todoService.saveToLocalStorage<types.Item[] | null>(env.LS_NAME_ITEMS, newItems);
           return { items: newItems };
         }),
 
