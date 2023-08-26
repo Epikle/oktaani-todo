@@ -1,10 +1,11 @@
 import { FC, FormEvent, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 import { createSharedItem, updateSharedCollection } from '../../services/todo';
 import useSelectedStore from '../../context/useSelectedStore';
 import useTodoStore from '../../context/useTodoStore';
+import useStatusStore from '../../context/useStatusStore';
 import useLanguage from '../../hooks/useLanguage';
 import { Button } from '../UI/Button';
 import ColorChooser from './ColorChooser';
@@ -18,11 +19,13 @@ const COLLECTION_LENGTH = 100;
 const ITEM_LENGTH = 300;
 
 const TodoForm: FC = () => {
+  const [loading, setLoading] = useState(false);
   const [color, setColor] = useState(DEFAULT_COLOR);
   const [todoInput, setTodoInput] = useState('');
   const selectedCollection = useSelectedStore((state) => state.selectedCollection);
   const { setSelectedCollection, resetSelection } = useSelectedStore((state) => state.actions);
   const { createCollection, createItem, updateCollection } = useTodoStore((state) => state.actions);
+  const { setError } = useStatusStore((state) => state.actions);
   const { text } = useLanguage();
   const trimmedInput = todoInput.trim().replace(/\s+/g, ' ');
 
@@ -44,19 +47,27 @@ const TodoForm: FC = () => {
     }
     if (trimmedInput.length === 0) return;
 
+    setLoading(true);
+
     if (selectedCollection) {
       if (selectedCollection?.edit) {
         if (selectedCollection.shared) {
-          // TODO loading spinner
-          await updateSharedCollection({ id: selectedCollection.id, title: trimmedInput });
+          try {
+            await updateSharedCollection({ id: selectedCollection.id, title: trimmedInput });
+          } catch (error) {
+            setError(text.errors.default);
+          }
         }
         updateCollection({ id: selectedCollection.id, title: trimmedInput });
         setSelectedCollection({ id: selectedCollection.id, edit: false });
       } else {
         const createdItem = createItem({ colId: selectedCollection.id, message: trimmedInput });
         if (selectedCollection.shared && createdItem) {
-          // TODO loading spinner
-          await createSharedItem(createdItem);
+          try {
+            await createSharedItem(createdItem);
+          } catch (error) {
+            setError(text.errors.default);
+          }
         }
       }
     } else {
@@ -64,9 +75,10 @@ const TodoForm: FC = () => {
     }
 
     setTodoInput('');
+    setLoading(false);
   };
 
-  const isBtnDisabled = !selectedCollection && trimmedInput.length === 0;
+  const isBtnDisabled = (!selectedCollection && trimmedInput.length === 0) || loading;
   const maxLength = !selectedCollection || selectedCollection.edit ? COLLECTION_LENGTH : ITEM_LENGTH;
   const inputLengthText = `${todoInput.length}/${maxLength}`;
   const showInputLength = isAddBtn ? inputLengthText : '';
@@ -91,7 +103,8 @@ const TodoForm: FC = () => {
         disabled={isBtnDisabled}
         testId="submit-btn"
       >
-        <FontAwesomeIcon icon={faPlus} />
+        {!loading && <FontAwesomeIcon icon={faPlus} />}
+        {loading && <FontAwesomeIcon icon={faSpinner} spinPulse />}
       </Button>
     </form>
   );
