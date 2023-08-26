@@ -29,7 +29,7 @@ export const createSharedCollection = async (
 };
 
 export const createSharedItem = async (item: types.Item): Promise<void> => {
-  await api.post(`/share/items/${item.colId}`, item);
+  await api.post(`/share/${item.colId}/items`, item);
 };
 
 export const updateSharedCollection = async (
@@ -38,12 +38,20 @@ export const updateSharedCollection = async (
   await api.put(`/share/${collectionData.id}`, collectionData);
 };
 
+export const updateSharedItem = async (item: Partial<types.Item> & { colId: string; id: string }): Promise<void> => {
+  await api.put(`/share/${item.colId}/items/${item.id}`, item);
+};
+
 export const deleteSharedCollection = async (colId: string, signal?: GenericAbortSignal): Promise<void> => {
   await api.delete(`/share/${colId}`, { signal });
 };
 
 export const deleteSharedDoneItems = async (colId: string): Promise<void> => {
-  await api.delete(`/share/items/${colId}`);
+  await api.delete(`/share/${colId}/items`);
+};
+
+export const deleteSharedItem = async (colId: string, id: string): Promise<void> => {
+  await api.delete(`/share/${colId}/items/${id}`);
 };
 
 export const saveToLocalStorage = <T>(key: string, data: T): void => {

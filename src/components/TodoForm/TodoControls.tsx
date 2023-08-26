@@ -1,8 +1,9 @@
-import { Dispatch, FC, SetStateAction } from 'react';
+import { Dispatch, FC, SetStateAction, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faListCheck, faPen, faShareNodes, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faListCheck, faPen, faShareNodes, faSpinner, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 import { createSharedCollection, deleteSharedCollection, deleteSharedDoneItems } from '../../services/todo';
+import useStatusStore from '../../context/useStatusStore';
 import useSelectedStore from '../../context/useSelectedStore';
 import useTodoStore from '../../context/useTodoStore';
 import useLanguage from '../../hooks/useLanguage';
@@ -17,8 +18,10 @@ type Props = {
 };
 
 const TodoControls: FC<Props> = ({ onConfirm }) => {
+  const [loading, setLoading] = useState(false);
   const selectedCollection = useSelectedStore((state) => state.selectedCollection);
   const { setSelectedCollection, resetSelection } = useSelectedStore((state) => state.actions);
+  const { setError } = useStatusStore((state) => state.actions);
   const items = useTodoStore((state) => state.items);
   const { deleteDoneItems, deleteCollection, updateCollection } = useTodoStore((state) => state.actions);
   const { text } = useLanguage();
@@ -67,11 +70,16 @@ const TodoControls: FC<Props> = ({ onConfirm }) => {
   };
 
   const deleteDoneBtnHandler = async () => {
+    setLoading(true);
     deleteDoneItems(selectedCollection.id);
     if (selectedCollection.shared) {
-      // TODO loading spinner
-      await deleteSharedDoneItems(selectedCollection.id);
+      try {
+        await deleteSharedDoneItems(selectedCollection.id);
+      } catch (error) {
+        setError(text.errors.default);
+      }
     }
+    setLoading(false);
   };
 
   return (
@@ -80,10 +88,11 @@ const TodoControls: FC<Props> = ({ onConfirm }) => {
         <Button
           title={text.controls.removeDone}
           onClick={deleteDoneBtnHandler}
-          disabled={!doneItems}
+          disabled={!doneItems || loading}
           testId="remove-done-btn"
         >
-          <FontAwesomeIcon icon={faListCheck} />
+          {!loading && <FontAwesomeIcon icon={faListCheck} />}
+          {loading && <FontAwesomeIcon icon={faSpinner} spinPulse />}
         </Button>
       </li>
       <li>

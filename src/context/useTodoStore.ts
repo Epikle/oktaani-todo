@@ -18,8 +18,8 @@ export type TodoSlice = {
     deleteCollection: (id: string) => void;
     initItems: () => void;
     createItem: (entry: types.ItemEntry) => types.Item | null;
-    toggleItemStatus: (id: string) => void;
-    updateItemPriority: ({ id, priorityEntry }: { id: string; priorityEntry: types.ItemPriority }) => void;
+    updateItem: (entry: Partial<types.Item> & { id: string }) => void;
+    updateItems: ({ id, entries }: { id: string; entries: types.Item[] | null }) => void;
     deleteItem: (id: string) => void;
     deleteDoneItems: (id: string) => void;
     initNotes: () => void;
@@ -145,22 +145,20 @@ const useTodoStore = create<TodoSlice>()(
         }
       },
 
-      toggleItemStatus: (id) =>
+      updateItem: (entry) =>
         set((state) => {
-          const item = state.items?.find((i) => i.id === id);
+          const item = state.items?.find((i) => i.id === entry.id);
           if (item && state.items) {
-            item.status = !item.status;
+            Object.assign(item, entry);
             todoService.saveToLocalStorage<types.Item[]>(env.LS_NAME_ITEMS, state.items);
           }
         }),
 
-      updateItemPriority: ({ id, priorityEntry }) =>
+      updateItems: ({ id, entries }) =>
         set((state) => {
-          const item = state.items?.find((i) => i.id === id);
-          if (item && state.items) {
-            item.priority = priorityEntry;
-            todoService.saveToLocalStorage<types.Item[]>(env.LS_NAME_ITEMS, state.items);
-          }
+          const filteredItems = state.items?.filter((i) => i.colId !== id);
+          const newItems = filteredItems?.length ? [...(entries || []), ...filteredItems] : entries;
+          return { items: newItems };
         }),
 
       deleteItem: (id) =>

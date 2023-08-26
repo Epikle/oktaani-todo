@@ -12,10 +12,12 @@ const TodoCollectionLoading: FC<Props> = ({ className }) => {
   const { text } = useLanguage();
 
   return (
-    <article className={className} style={{ textAlign: 'center' }}>
-      <h2>{text.common.loading}</h2>
-      <FontAwesomeIcon icon={faSpinner} size="2xl" spinPulse />
-    </article>
+    <div className={className} style={{ textAlign: 'center' }}>
+      <div>
+        <h2>{text.common.loading}</h2>
+        <FontAwesomeIcon icon={faSpinner} size="2xl" spinPulse />
+      </div>
+    </div>
   );
 };
 

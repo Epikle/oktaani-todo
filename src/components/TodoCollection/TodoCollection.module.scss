@@ -9,6 +9,15 @@
   border-top: 16px solid var(--color-gray-800);
   border-radius: var(--border-radius);
 
+  .loading {
+    position: absolute;
+    inset: 0;
+    backdrop-filter: blur(4px);
+    display: grid;
+    place-items: center;
+    z-index: 50;
+  }
+
   .unset {
     display: grid;
     place-items: center;

@@ -34,10 +34,11 @@ const TodoCollection: FC<Props> = ({ collection, index }) => {
   const [isCopy, setIsCopy] = useState(false);
   const [showLog, setShowLog] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [prevIsSelected, setPrevIsSelected] = useState(false);
   const selectedCollection = useSelectedStore((state) => state.selectedCollection);
   const { setSelectedCollection, resetSelection } = useSelectedStore((state) => state.actions);
   const { sort, languageName } = useSettingsStore((state) => state);
-  const { updateCollection } = useTodoStore((state) => state.actions);
+  const { updateCollection, updateItems } = useTodoStore((state) => state.actions);
   const { handlerId, opacity, drop, drag, preview } = useDnD({ ref: articleRef, id, index });
   const { text } = useLanguage();
   const isSelected = selectedCollection?.id === id;
@@ -55,14 +56,22 @@ const TodoCollection: FC<Props> = ({ collection, index }) => {
     try {
       setIsError(false);
       setLoading(true);
-      const { col } = await getSharedCollection(id);
+      const { col, items: itemsData } = await getSharedCollection(id);
       updateCollection(col);
+      updateItems({ id, entries: itemsData });
     } catch (error) {
       setIsError(true);
     } finally {
       setLoading(false);
     }
-  }, [id, updateCollection]);
+  }, [id, updateCollection, updateItems]);
+
+  useEffect(() => {
+    setPrevIsSelected(isSelected);
+    if (shared && isSelected && !prevIsSelected) {
+      getSharedData();
+    }
+  }, [shared, getSharedData, isSelected, prevIsSelected]);
 
   useEffect(() => {
     if (!shared) return;
@@ -92,12 +101,6 @@ const TodoCollection: FC<Props> = ({ collection, index }) => {
 
   preview(drop(articleRef));
 
-  if (loading) {
-    return (
-      <TodoCollectionLoading className={cn(styles.collection, { [styles.selected]: isSelected, print: isSelected })} />
-    );
-  }
-
   if (isError) {
     return (
       <TodoCollectionError
@@ -118,6 +121,7 @@ const TodoCollection: FC<Props> = ({ collection, index }) => {
       data-done={showDone}
       data-created={showCreated}
     >
+      {loading && <TodoCollectionLoading className={styles.loading} />}
       <h2>
         <button type="button" onClick={selectedCollectionHandler} disabled={sort || !type}>
           {title}
@@ -127,7 +131,7 @@ const TodoCollection: FC<Props> = ({ collection, index }) => {
       {!sort && TypeEnum.enum.note === type && <TodoNote id={id} isSelected={isSelected} note={note?.message || ''} />}
       {!sort && TypeEnum.enum.todo === type && (
         <ul ref={listRef} className={styles['item-list']}>
-          {items && items.map((item) => <TodoItem key={item.id} item={item} selected={isSelected} />)}
+          {items && items.map((item) => <TodoItem key={item.id} item={item} selected={isSelected} shared={shared} />)}
         </ul>
       )}
       {sort && (
