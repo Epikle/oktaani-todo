@@ -47,9 +47,9 @@
     "@typescript-eslint/eslint-plugin": "^6.4.1",
     "@typescript-eslint/parser": "^6.4.1",
     "@vitejs/plugin-react": "^4.0.4",
-    "@vitest/coverage-istanbul": "^0.34.2",
+    "@vitest/coverage-istanbul": "^0.34.3",
     "cypress": "^12.17.4",
-    "eslint": "^8.47.0",
+    "eslint": "^8.48.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^17.1.0",
     "eslint-config-prettier": "^9.0.0",
@@ -62,10 +62,10 @@
     "prettier": "^3.0.2",
     "sass": "^1.66.1",
     "ts-node": "^10.9.1",
-    "typescript": "^5.1.6",
+    "typescript": "^5.2.2",
     "vite": "^4.4.9",
     "vite-plugin-istanbul": "^5.0.0",
-    "vitest": "^0.34.2"
+    "vitest": "^0.34.3"
   },
   "nyc": {
     "report-dir": "cypress-coverage"
