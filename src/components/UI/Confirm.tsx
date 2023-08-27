@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faCircleQuestion, faSpinner, faXmark } from '@fortawesome/free-solid-svg-icons';
 
@@ -15,7 +15,15 @@ type Props = {
 };
 
 const Confirm: FC<Props> = ({ confirmText, loading, onConfirm, onCancel }) => {
+  const [disabled, setDisabled] = useState(false);
   const { text } = useLanguage();
+
+  const confirmBtnHandler = async () => {
+    setTimeout(() => {
+      setDisabled(true);
+    }, 600);
+    await onConfirm();
+  };
 
   return (
     <div className={styles.confirm} data-testid="confirm-container">
@@ -27,7 +35,7 @@ const Confirm: FC<Props> = ({ confirmText, loading, onConfirm, onCancel }) => {
         <li>
           <Button
             title={text.common.confirm}
-            onClick={async () => onConfirm()}
+            onClick={confirmBtnHandler}
             testId="confirm-delete-btn"
             disabled={loading}
           >
@@ -40,6 +48,7 @@ const Confirm: FC<Props> = ({ confirmText, loading, onConfirm, onCancel }) => {
             className={styles['cancel-btn']}
             title={text.common.cancel}
             onClick={onCancel}
+            disabled={disabled}
             testId="cancel-delete-btn"
           >
             <FontAwesomeIcon icon={faXmark} />

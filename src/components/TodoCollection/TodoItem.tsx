@@ -31,7 +31,6 @@ const TodoItem: FC<Props> = ({ item, selected, shared }) => {
   const { text } = useLanguage();
 
   const deleteItemBtnHandler = async () => {
-    deleteItem(id);
     if (shared) {
       try {
         await deleteSharedItem(colId, id);
@@ -39,11 +38,11 @@ const TodoItem: FC<Props> = ({ item, selected, shared }) => {
         setError(text.errors.default);
       }
     }
+    deleteItem(id);
   };
 
   const priorityBtnHandler = async () => {
     const newPriority = nextPriority();
-    updateItem({ ...item, priority: newPriority });
     if (shared) {
       try {
         await updateSharedItem({ ...item, priority: newPriority });
@@ -51,10 +50,10 @@ const TodoItem: FC<Props> = ({ item, selected, shared }) => {
         setError(text.errors.default);
       }
     }
+    updateItem({ ...item, priority: newPriority });
   };
 
   const statusHandler = async () => {
-    updateItem({ ...item, status: !status });
     if (shared) {
       try {
         await updateSharedItem({ ...item, status: !status });
@@ -62,6 +61,7 @@ const TodoItem: FC<Props> = ({ item, selected, shared }) => {
         setError(text.errors.default);
       }
     }
+    updateItem({ ...item, status: !status });
   };
 
   useEffect(() => {

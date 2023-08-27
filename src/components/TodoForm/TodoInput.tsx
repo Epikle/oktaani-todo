@@ -10,11 +10,11 @@ import styles from './TodoInput.module.scss';
 
 type Props = {
   todoInput: string;
-  setTodoInput: Dispatch<SetStateAction<string>>;
   maxLength: number;
+  setTodoInput: Dispatch<SetStateAction<string>>;
 };
 
-const TodoInput: FC<Props> = ({ todoInput, setTodoInput, maxLength }) => {
+const TodoInput: FC<Props> = ({ todoInput, maxLength, setTodoInput }) => {
   const ref = useRef<HTMLInputElement>(null);
   const selectedCollection = useSelectedStore((state) => state.selectedCollection);
   const sort = useSettingsStore((state) => state.sort);
