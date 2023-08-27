@@ -1,8 +1,14 @@
-# oktaaniTODO - TS edition - WIP
+# oktaaniTODO - WIP
 
 [oktaaniTODO | DEMO](https://oktaani.com/todo/)
 
 ![Preview image](https://raw.githubusercontent.com/Epikle/oktaani-todo/main/oktaani-todo-preview.png)
+
+![Preview image loading state](https://raw.githubusercontent.com/Epikle/oktaani-todo/main/oktaani-todo-preview-loading.png)
+
+![Preview image error state](https://raw.githubusercontent.com/Epikle/oktaani-todo/main/oktaani-todo-preview-error.png)
+
+![Preview image toast](https://raw.githubusercontent.com/Epikle/oktaani-todo/main/oktaani-todo-preview-toast.png)
 
 ## My process
 
