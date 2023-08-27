@@ -2,48 +2,48 @@ import { Dispatch, FC, SetStateAction, useEffect, useRef } from 'react';
 
 import useSelectedStore from '../../context/useSelectedStore';
 import useSettingsStore from '../../context/useSettingsStore';
-import { TodoTypeEnum } from '../../context/useTodoStore';
 import useLanguage from '../../hooks/useLanguage';
+import { TypeEnum } from '../../utils/types';
+import { cn } from '../../utils/utils';
 
 import styles from './TodoInput.module.scss';
 
 type Props = {
   todoInput: string;
-  setTodoInput: Dispatch<SetStateAction<string>>;
   maxLength: number;
-  isLoading: boolean;
+  setTodoInput: Dispatch<SetStateAction<string>>;
 };
 
-const TodoInput: FC<Props> = ({ todoInput, setTodoInput, maxLength, isLoading }) => {
+const TodoInput: FC<Props> = ({ todoInput, maxLength, setTodoInput }) => {
   const ref = useRef<HTMLInputElement>(null);
-  const title = useSelectedStore((state) => state.title);
-  const selected = useSelectedStore((state) => state.selected);
-  const type = useSelectedStore((state) => state.type);
-  const edit = useSelectedStore((state) => state.edit);
+  const selectedCollection = useSelectedStore((state) => state.selectedCollection);
   const sort = useSettingsStore((state) => state.sort);
   const { text } = useLanguage();
-  const inputTextByType = type === TodoTypeEnum.Enum.todo ? text.header.newTodo : text.header.editNote;
-  const placeholderText = selected ? inputTextByType : text.header.newCollection;
-  const styleClasses = selected ? [styles.todo, styles.selected].join(' ') : styles.todo;
+  const inputTextByType = selectedCollection?.type === TypeEnum.enum.todo ? text.header.newTodo : text.header.editNote;
+  const placeholderText = selectedCollection ? inputTextByType : text.header.newCollection;
+  const finalInputText = sort ? text.controls.sort : placeholderText;
+  const disabled = sort || (selectedCollection?.type === TypeEnum.enum.note && !selectedCollection.edit);
 
   useEffect(() => {
-    if (selected && ref.current && TodoTypeEnum.enum.todo === type) {
+    if (selectedCollection && ref.current && selectedCollection.type === TypeEnum.enum.todo) {
       ref.current.focus();
     }
-  }, [selected, isLoading, title, type]);
+  }, [selectedCollection, selectedCollection?.title, selectedCollection?.type]);
 
   return (
     <input
       ref={ref}
       type="text"
-      className={styleClasses}
-      placeholder={sort ? text.controls.sort : placeholderText}
-      title={placeholderText}
+      className={cn(styles.todo, { [styles.selected]: selectedCollection })}
+      placeholder={finalInputText}
+      title={finalInputText}
       value={todoInput}
       onChange={(e) => setTodoInput(e.target.value)}
       maxLength={maxLength}
-      disabled={sort || isLoading || (TodoTypeEnum.Enum.note === type && !edit)}
+      disabled={disabled}
       data-testid="todo-input"
+      name="todo-input"
+      autoComplete="off"
     />
   );
 };

@@ -38,17 +38,6 @@
 
   .add,
   .blur {
-    @include text-green;
-    @include btn-hover-focus;
-    @include btn-bg-color;
-    @include transition;
-
-    width: 3rem;
-    height: 3rem;
-    display: grid;
-    place-content: center;
-    font-size: 1.5rem;
-
     svg {
       @include transition;
     }
@@ -65,12 +54,6 @@
       svg {
         transform: rotate(45deg);
       }
-    }
-
-    &.hide {
-      transform: translateX(3rem);
-      width: 0rem;
-      color: transparent;
     }
 
     &:disabled {

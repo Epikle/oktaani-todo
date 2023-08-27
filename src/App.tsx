@@ -1,37 +1,44 @@
 import { FC, useEffect } from 'react';
 
-import useLanguage from './hooks/useLanguage';
-import { getSettingsFromLS } from './services/settings';
-import { isStorageAvailable } from './utils/utils';
-import Header from './components/UI/Header';
-import TodoList from './components/TodoList/TodoList';
-import Overlay from './components/UI/Overlay';
-import Toast from './components/UI/Toast';
 import useSelectedStore from './context/useSelectedStore';
 import useSettingsStore from './context/useSettingsStore';
 import useTodoStore from './context/useTodoStore';
 import useStatusStore from './context/useStatusStore';
+import useLanguage from './hooks/useLanguage';
+import { getSharedCollection } from './services/todo';
+import { isStorageAvailable } from './utils/utils';
+import TodoList from './components/TodoList/TodoList';
+import LoadingSpinner from './components/UI/LoadingSpinner';
+import Overlay from './components/UI/Overlay';
+import Header from './components/UI/Header';
+import Footer from './components/UI/Footer';
+import Toast from './components/UI/Toast';
 import env from './utils/env';
+
+import styles from './App.module.scss';
 
 const shareParam = new URLSearchParams(document.location.search).get('share');
 
 const App: FC = () => {
-  const title = useSelectedStore((state) => state.title);
+  const selectedCollection = useSelectedStore((state) => state.selectedCollection);
   const darkMode = useSettingsStore((state) => state.darkMode);
-  const { setSettings } = useSettingsStore((state) => state.actions);
-  const { initCollections, createSharedCollection } = useTodoStore((state) => state.actions);
+  const { initSettings } = useSettingsStore((state) => state.actions);
+  const { initCollections, initItems, initNotes, initSharedCollection } = useTodoStore((state) => state.actions);
   const { setError } = useStatusStore((state) => state.actions);
   const { text } = useLanguage();
 
-  document.title = title ? `${title} | oktaaniTODO` : 'oktaaniTODO';
+  document.title = selectedCollection?.title ? `${selectedCollection.title} | oktaaniTODO` : 'oktaaniTODO';
 
   useEffect(() => {
     initCollections();
-    setSettings(getSettingsFromLS());
+    initItems();
+    initNotes();
+    initSettings();
     if (shareParam) {
       (async () => {
         try {
-          await createSharedCollection(shareParam);
+          const sharedCollectionData = await getSharedCollection(shareParam);
+          initSharedCollection(sharedCollectionData);
           window.location.replace(env.BASE_URL);
         } catch (error) {
           setError(text.errors.apiGetCollection);
@@ -41,19 +48,20 @@ const App: FC = () => {
         }
       })();
     }
-  }, [setSettings, initCollections, createSharedCollection, setError, text]);
+  }, [initSettings, initCollections, initItems, setError, initNotes, initSharedCollection, text]);
 
   return (
     <div className={darkMode ? 'content dark-mode' : 'content'}>
       {!isStorageAvailable() && <Overlay>{text.errors.localStorage}</Overlay>}
       <Toast darkMode={darkMode} />
       <Header />
-      {shareParam && (
-        <main>
-          <p>Loading...</p>
+      <div className={styles.container}>
+        <main className={styles.main}>
+          {shareParam && <LoadingSpinner />}
+          {!shareParam && <TodoList />}
         </main>
-      )}
-      {!shareParam && <TodoList />}
+        <Footer />
+      </div>
     </div>
   );
 };

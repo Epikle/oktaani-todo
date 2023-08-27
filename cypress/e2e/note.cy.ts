@@ -11,8 +11,6 @@ describe('Note', () => {
     cy.get('[data-testid="submit-btn"]').as('submitBtn');
     cy.get('@submitBtn').click();
     cy.get('[data-testid="add-note-btn"]').click();
-    cy.get('@submitBtn').click();
-    cy.get('h2 > button').click();
     cy.get('textarea').type(text);
     cy.get('@submitBtn').click();
     cy.get('p').should('have.text', text);

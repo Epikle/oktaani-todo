@@ -1,59 +1,93 @@
-import axios from 'axios';
+import axios, { GenericAbortSignal } from 'axios';
 import { nanoid } from 'nanoid';
+import { ZodTypeAny } from 'zod';
 
-import type { Collection, Item, ItemEntry, NewCollectionEntry, TodoTypes } from '../context/useTodoStore';
-import type { Log } from '../components/TodoCollection/TodoLog';
+import * as types from '../utils/types';
 import env from '../utils/env';
 
-const LS_NAME = env.LS_NAME_TODOS;
 const api = axios.create({
   baseURL: env.API_URL,
 });
 
-export const getSharedCollectionLogData = async (id: string) => {
-  const { data } = await api.get<Log[] | []>(`/log/${id}`);
-  return data;
+export const getSharedLogs = async (colId: string): Promise<types.Log[]> => {
+  const { data } = await api.get<unknown>(`/log/${colId}`);
+  const validLogs = types.arrayOfLogsSchema.parse(data);
+  return validLogs;
 };
 
-export const getSharedCollectionData = async (id: string) => {
-  const { data } = await api.get<Collection>(`/share/${id}`);
-  return data;
+export const getSharedCollection = async (colId: string): Promise<types.SharedCollectionData> => {
+  const { data } = await api.get<unknown>(`/share/${colId}`);
+  const validCollection = types.sharedCollectionDataSchema.parse(data);
+  return validCollection;
 };
 
-export const createSharedCollection = async (collection: Collection) => {
-  await api.post('/share', { ...collection, shared: true });
+export const createSharedCollection = async (
+  collectionData: types.SharedCollectionData,
+  signal: GenericAbortSignal,
+): Promise<void> => {
+  await api.post('/share', collectionData, { signal });
 };
 
-export const updateSharedCollection = async (collection: Collection) => {
-  await api.put(`/share/${collection.id}`, collection);
+export const createSharedItem = async (item: types.Item): Promise<void> => {
+  await api.post(`/share/${item.colId}/items`, item);
 };
 
-export const deleteSharedCollection = async (id: string) => {
-  await api.delete(`/share/${id}`);
+export const updateSharedCollection = async (
+  collectionData: Partial<types.Collection> & { id: string },
+): Promise<void> => {
+  await api.put(`/share/${collectionData.id}`, collectionData);
 };
 
-export const saveCollectionsToLS = (collections: Collection[]) => {
-  localStorage.setItem(LS_NAME, JSON.stringify(collections));
+export const updateSharedItem = async (item: Partial<types.Item> & { colId: string; id: string }): Promise<void> => {
+  await api.put(`/share/${item.colId}/items/${item.id}`, item);
 };
 
-export const getTodosFromLS = () => {
-  const collections = localStorage.getItem(LS_NAME);
-  return JSON.parse(collections || '[]') as unknown;
+export const deleteSharedCollection = async (colId: string, signal?: GenericAbortSignal): Promise<void> => {
+  await api.delete(`/share/${colId}`, { signal });
 };
 
-export const createCollectionEntry = (entry: NewCollectionEntry, type: TodoTypes): Collection => ({
-  shared: false,
-  todos: [],
-  note: '',
-  created: Date(),
-  id: nanoid(),
-  type,
-  ...entry,
-});
+export const deleteSharedDoneItems = async (colId: string): Promise<void> => {
+  await api.delete(`/share/${colId}/items`);
+};
 
-export const createItemEntry = (entry: ItemEntry): Item => ({
-  id: nanoid(),
-  done: false,
-  created: Date(),
-  ...entry,
-});
+export const deleteSharedItem = async (colId: string, id: string): Promise<void> => {
+  await api.delete(`/share/${colId}/items/${id}`);
+};
+
+export const saveToLocalStorage = <T>(key: string, data: T): void => {
+  localStorage.setItem(key, JSON.stringify(data));
+};
+
+export const getFromLocalStorage = <T>(key: string, schema: ZodTypeAny): T => {
+  const data = localStorage.getItem(key) || 'null';
+  const parsedData = JSON.parse(data) as unknown;
+  const validData = schema.parse(parsedData);
+  return validData;
+};
+
+export const createCollectionEntry = (entry: types.CollectionEntry): types.Collection => {
+  const newCollection = {
+    id: nanoid(),
+    ...entry,
+  };
+  const validCollection = types.collectionSchema.parse(newCollection);
+  return validCollection;
+};
+
+export const createItemEntry = (entry: types.ItemEntry): types.Item => {
+  const newItem = {
+    id: nanoid(),
+    ...entry,
+  };
+  const validItem = types.itemSchema.parse(newItem);
+  return validItem;
+};
+
+export const createNoteEntry = (entry: types.NoteEntry): types.Note => {
+  const newNote = {
+    id: nanoid(),
+    ...entry,
+  };
+  const validNote = types.noteSchema.parse(newNote);
+  return validNote;
+};

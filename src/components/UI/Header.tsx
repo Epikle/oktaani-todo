@@ -1,94 +1,52 @@
 import { FC, useEffect, useRef, useState } from 'react';
+import { AxiosError } from 'axios';
 import autoAnimate from '@formkit/auto-animate';
 
-import useTodoStore from '../../context/useTodoStore';
 import useSelectedStore from '../../context/useSelectedStore';
-import useStatusStore from '../../context/useStatusStore';
-import { createSharedCollection } from '../../services/todo';
 import useLanguage from '../../hooks/useLanguage';
-import { copyToClipboard } from '../../utils/utils';
 import TodoControls from '../TodoForm/TodoControls';
 import TodoForm from '../TodoForm/TodoForm';
-import Settings from './Settings/Settings';
+import Settings from './Settings';
 import Confirm from './Confirm';
+import useStatusStore from '../../context/useStatusStore';
 
 import styles from './Header.module.scss';
 
 export type TConfirm = {
-  type: 'share' | 'delete';
-  confirmText: string;
-  handler: () => void;
-};
+  message: string;
+  handler: () => void | Promise<void>;
+  controller: AbortController;
+} | null;
 
 const Header: FC = () => {
   const parent = useRef(null);
-  const [confirm, setConfirm] = useState<Omit<TConfirm, 'type'> | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const title = useSelectedStore((state) => state.title);
-  const color = useSelectedStore((state) => state.color);
-  const selected = useSelectedStore((state) => state.selected);
-  const type = useSelectedStore((state) => state.type);
-  const id = useSelectedStore((state) => state.id);
-  const shared = useSelectedStore((state) => state.shared);
-  const collections = useTodoStore((state) => state.collections);
+  const [confirm, setConfirm] = useState<TConfirm>(null);
+  const [loading, setLoading] = useState(false);
+  const selectedCollection = useSelectedStore((state) => state.selectedCollection);
   const { setError } = useStatusStore((state) => state.actions);
-  const { setSelectedCollection, resetSelection } = useSelectedStore((state) => state.actions);
-  const { editCollection, deleteCollection } = useTodoStore((state) => state.actions);
   const { text } = useLanguage();
 
   useEffect(() => {
     if (parent.current) autoAnimate(parent.current);
   }, [parent]);
 
-  const deleteConfirmBtnHandler = async () => {
-    setIsLoading(true);
-    await deleteCollection({ id, shared });
-    resetSelection();
-    setConfirm(null);
-    setIsLoading(false);
-  };
-
-  const shareConfirmBtnHandler = async () => {
-    const selectedCollection = collections.find((collection) => collection.id === id);
-    if (!selectedCollection) return;
-    setIsLoading(true);
+  const confirmBtnHandler = async () => {
+    if (!confirm) return;
+    setLoading(true);
     try {
-      await createSharedCollection(selectedCollection);
-      await copyToClipboard(id);
-      const editedCollection = {
-        id,
-        title,
-        color,
-        type,
-        shared: true,
-      };
-      await editCollection(editedCollection);
-      setSelectedCollection(editedCollection);
+      await confirm.handler();
     } catch (error) {
-      setError(text.errors.apiShareCollection);
+      if (error instanceof AxiosError && error.name === 'CanceledError') return;
+      setError(text.errors.default);
+    } finally {
+      setConfirm(null);
+      setLoading(false);
     }
-
-    setConfirm(null);
-    setIsLoading(false);
   };
 
-  const confirmBtnHandler = (confirmType?: TConfirm['type']) => {
-    switch (confirmType) {
-      case 'delete':
-        setConfirm({
-          confirmText: text.controls.deleteConfirm,
-          handler: deleteConfirmBtnHandler,
-        });
-        return;
-      case 'share':
-        setConfirm({
-          confirmText: text.controls.shareConfirm,
-          handler: shareConfirmBtnHandler,
-        });
-        return;
-      default:
-        setConfirm(null);
-    }
+  const cancelBtnHandler = () => {
+    confirm?.controller.abort();
+    setConfirm(null);
   };
 
   return (
@@ -100,17 +58,17 @@ const Header: FC = () => {
               oktaani<strong>TODO</strong>
             </h1>
           </div>
-          {selected ? <TodoControls onConfirm={confirmBtnHandler} /> : <Settings />}
+          {!selectedCollection && <Settings />}
+          {selectedCollection && <TodoControls onConfirm={setConfirm} />}
         </div>
-        {confirm ? (
+        {!confirm && <TodoForm />}
+        {confirm && (
           <Confirm
-            confirmText={confirm.confirmText}
-            onConfirm={confirm.handler}
-            onCancel={confirmBtnHandler}
-            isLoading={isLoading}
+            confirmText={confirm.message}
+            loading={loading}
+            onConfirm={confirmBtnHandler}
+            onCancel={cancelBtnHandler}
           />
-        ) : (
-          <TodoForm />
         )}
       </div>
     </header>

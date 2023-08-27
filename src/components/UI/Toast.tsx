@@ -3,10 +3,12 @@ import { createPortal } from 'react-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleExclamation, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 
+import useLanguage from '../../hooks/useLanguage';
 import useStatusStore from '../../context/useStatusStore';
+import { cn } from '../../utils/utils';
+import { Button } from './Button';
 
 import styles from './Toast.module.scss';
-import Button from './Button';
 
 type Props = {
   darkMode: boolean;
@@ -18,6 +20,7 @@ const Toast: FC<Props> = ({ darkMode }) => {
   const isError = useStatusStore((state) => state.isError);
   const errorMessage = useStatusStore((state) => state.errorMessage);
   const { resetError } = useStatusStore((state) => state.actions);
+  const { text } = useLanguage();
 
   useEffect(() => {
     if (isError) {
@@ -31,13 +34,12 @@ const Toast: FC<Props> = ({ darkMode }) => {
     };
   }, [isError, resetError]);
 
-  const toastStyles = isError ? [styles.toast, styles.show] : [styles.toast];
   const element = (
-    <div className={darkMode ? ['dark-mode', ...toastStyles].join(' ') : toastStyles.join(' ')} hidden={!isError}>
+    <div className={cn(styles.toast, { [styles.show]: isError, 'dark-mode': darkMode })} hidden={!isError}>
       <FontAwesomeIcon icon={faCircleExclamation} size="2xl" />
       {errorMessage}
-      <Button onClick={resetError} disabled={!isError}>
-        <FontAwesomeIcon icon={faCircleXmark} size="xl" />
+      <Button title={text.common.close} onClick={resetError} disabled={!isError} className={styles.button}>
+        <FontAwesomeIcon icon={faCircleXmark} />
       </Button>
     </div>
   );

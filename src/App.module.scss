@@ -1,0 +1,11 @@
+@import 'src/mixin';
+
+.container {
+  display: grid;
+  grid-template-rows: 1fr max-content;
+  padding: 0.75rem;
+
+  main {
+    width: 100%;
+  }
+}

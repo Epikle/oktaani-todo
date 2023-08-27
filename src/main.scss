@@ -5,24 +5,24 @@
 body {
   font-family: var(--ff-primary);
   font-size: var(--fs-normal);
+  scrollbar-gutter: stable;
 }
 
 .content {
-  height: 100vh;
+  min-height: 100vh;
   display: grid;
   grid-template-rows: max-content 1fr;
   background-color: var(--color-bg-body);
 }
 
 main {
+  @include container;
   scrollbar-gutter: stable;
-  
   p {
     margin-top: 1rem;
     text-align: center;
     color: var(--color-text-p);
   }
-  @include scrollbars(8px, var(--color-border-header), var(--color-bg-collection));
 }
 
 @media print {

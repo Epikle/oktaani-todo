@@ -34,8 +34,10 @@ picture {
 input,
 button,
 textarea,
+label,
 select {
   font: inherit;
+  -webkit-tap-highlight-color: transparent;
 }
 
 input,

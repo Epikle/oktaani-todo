@@ -1,45 +1,53 @@
 import { create } from 'zustand';
-import { z } from 'zod';
+import { immer } from 'zustand/middleware/immer';
 
-import { saveSettingsToLS } from '../services/settings';
-import { allowedLanguages } from '../utils/languages';
+import { Settings, settingsSchema } from '../utils/types';
+import { getFromLocalStorage, saveToLocalStorage } from '../services/todo';
+import useStatusStore from './useStatusStore';
+import env from '../utils/env';
 
-const SettingsZ = z.object({
-  languageName: z.enum(allowedLanguages),
-  darkMode: z.boolean(),
-  sort: z.boolean(),
-});
-
-type SettingsState = z.infer<typeof SettingsZ>;
-export type SettingsLS = Omit<SettingsState, 'sort'>;
-export type SettingsSlice = SettingsState & {
+export type SettingsSlice = Settings & {
   actions: {
+    initSettings: () => void;
     setSettings: (settings: unknown) => void;
-    sortCollections: () => void;
+    toggleSort: () => void;
+    toggleHelp: () => void;
   };
 };
 
 const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-const useSettingsStore = create<SettingsSlice>((set) => ({
-  languageName: 'en-us',
-  darkMode: isDarkMode,
-  sort: false,
-  actions: {
-    setSettings: (settings) =>
-      set((state) => {
+const useSettingsStore = create<SettingsSlice>()(
+  immer((set) => ({
+    languageName: 'en-us',
+    darkMode: isDarkMode,
+    sort: false,
+    help: false,
+    actions: {
+      initSettings: () => {
         try {
-          const validatedSettings = SettingsZ.omit({ sort: true }).parse(settings);
-          saveSettingsToLS(validatedSettings);
-          return { ...state, ...validatedSettings };
+          const validatedSettings = getFromLocalStorage<Omit<Settings, 'sort' | 'help'>>(
+            env.LS_NAME_SETTINGS,
+            settingsSchema.omit({ sort: true, help: true }),
+          );
+          set({ ...validatedSettings });
         } catch (error) {
-          const { languageName, darkMode } = state;
-          saveSettingsToLS({ languageName, darkMode });
-          return state;
+          set({ darkMode: isDarkMode, languageName: 'en-us' });
         }
-      }),
-    sortCollections: () => set((state) => ({ ...state, sort: !state.sort })),
-  },
-}));
+      },
+      setSettings: (settings) => {
+        try {
+          const validatedSettings = settingsSchema.omit({ sort: true, help: true }).parse(settings);
+          saveToLocalStorage<Pick<Settings, 'languageName' | 'darkMode'>>(env.LS_NAME_SETTINGS, validatedSettings);
+          set({ ...validatedSettings });
+        } catch (error) {
+          useStatusStore.setState({ errorMessage: 'Failed to update settings. Please try again.', isError: true });
+        }
+      },
+      toggleSort: () => set((state) => ({ sort: !state.sort })),
+      toggleHelp: () => set((state) => ({ help: !state.help })),
+    },
+  })),
+);
 
 export default useSettingsStore;

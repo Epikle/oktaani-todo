@@ -1,20 +1,20 @@
-import { TodoItemPriority } from '../context/useTodoStore';
+import { ItemPriority, PriorityEnum } from '../utils/types';
 
-const priorityColors: Record<TodoItemPriority, string> = {
+const priorityColors: Record<ItemPriority, string> = {
   low: 'hsl(0, 0%, 50%)',
   medium: 'hsl(104, 13%, 36%)',
   high: 'hsl(6, 92%, 36%)',
 };
 
-const usePriority = (priority: TodoItemPriority) => {
+const usePriority = (priority: ItemPriority) => {
   const priorityColor = priorityColors[priority];
-  const priorities = Object.keys(priorityColors);
+  const priorities = PriorityEnum.options;
 
   const nextPriority = () => {
     const currentPriorityIndex = priorities.indexOf(priority);
     const nextIndex = (currentPriorityIndex + 1) % priorities.length;
 
-    return priorities[nextIndex] as TodoItemPriority;
+    return priorities[nextIndex];
   };
 
   return { priorityColor, nextPriority };

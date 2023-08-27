@@ -1,21 +1,29 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faCircleQuestion, faSpinner, faXmark } from '@fortawesome/free-solid-svg-icons';
 
 import useLanguage from '../../hooks/useLanguage';
-import Button from './Button';
+import { Button } from './Button';
 
 import styles from './Confirm.module.scss';
 
 type Props = {
   confirmText: string;
-  onConfirm: () => void;
+  loading: boolean;
+  onConfirm: () => Promise<void> | void;
   onCancel: () => void;
-  isLoading: boolean;
 };
 
-const Confirm: FC<Props> = ({ confirmText, onConfirm, onCancel, isLoading }) => {
+const Confirm: FC<Props> = ({ confirmText, loading, onConfirm, onCancel }) => {
+  const [disabled, setDisabled] = useState(false);
   const { text } = useLanguage();
+
+  const confirmBtnHandler = async () => {
+    setTimeout(() => {
+      setDisabled(true);
+    }, 600);
+    await onConfirm();
+  };
 
   return (
     <div className={styles.confirm} data-testid="confirm-container">
@@ -25,8 +33,14 @@ const Confirm: FC<Props> = ({ confirmText, onConfirm, onCancel, isLoading }) => 
       </div>
       <ul className={styles.controls}>
         <li>
-          <Button title={text.common.confirm} onClick={onConfirm} testId="confirm-delete-btn" disabled={isLoading}>
-            {isLoading ? <FontAwesomeIcon icon={faSpinner} spinPulse /> : <FontAwesomeIcon icon={faCheck} />}
+          <Button
+            title={text.common.confirm}
+            onClick={confirmBtnHandler}
+            testId="confirm-delete-btn"
+            disabled={loading}
+          >
+            {loading && <FontAwesomeIcon icon={faSpinner} spinPulse />}
+            {!loading && <FontAwesomeIcon icon={faCheck} />}
           </Button>
         </li>
         <li>
@@ -34,8 +48,8 @@ const Confirm: FC<Props> = ({ confirmText, onConfirm, onCancel, isLoading }) => 
             className={styles['cancel-btn']}
             title={text.common.cancel}
             onClick={onCancel}
+            disabled={disabled}
             testId="cancel-delete-btn"
-            disabled={isLoading}
           >
             <FontAwesomeIcon icon={faXmark} />
           </Button>

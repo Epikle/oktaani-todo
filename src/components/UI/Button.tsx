@@ -1,21 +1,33 @@
-import { FC, ComponentPropsWithoutRef } from 'react';
+import { ButtonHTMLAttributes, InputHTMLAttributes, forwardRef, useId } from 'react';
+import { cn } from '../../utils/utils';
 
-type Props = ComponentPropsWithoutRef<'button'> & {
+import styles from './Button.module.scss';
+
+type ButtonProps = {
   testId?: string;
 };
 
-const Button: FC<Props> = ({ className, title, testId, onClick, content, children, ...rest }) => (
-  <button
-    type="button"
-    className={className}
-    aria-label={title}
-    title={title}
-    onClick={onClick}
-    data-testid={testId}
-    {...rest}
-  >
-    {children}
-  </button>
+export const Button = forwardRef<HTMLButtonElement, ButtonHTMLAttributes<HTMLButtonElement> & ButtonProps>(
+  ({ testId, className, ...props }, ref) => (
+    <button ref={ref} type="button" className={cn(styles.button, className)} data-testid={testId} {...props} />
+  ),
 );
 
-export default Button;
+Button.displayName = 'Button';
+
+export const ButtonToggle = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInputElement> & ButtonProps>(
+  ({ testId, className, children, title, ...props }, ref) => {
+    const id = useId();
+
+    return (
+      <>
+        <input id={id} ref={ref} type="checkbox" className={styles.checkbox} {...props} />
+        <label htmlFor={id} className={cn(styles.toggle, className)} data-testid={testId} title={title}>
+          {children}
+        </label>
+      </>
+    );
+  },
+);
+
+ButtonToggle.displayName = 'ButtonToggle';

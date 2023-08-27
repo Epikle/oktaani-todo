@@ -1,270 +1,230 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
-import { z } from 'zod';
 
-import useSelectedStore, { type SelectedEntry } from './useSelectedStore';
 import * as todoService from '../services/todo';
+import * as types from '../utils/types';
+import env from '../utils/env';
+import useStatusStore from './useStatusStore';
 
-export const TodoTypeEnum = z.enum(['todo', 'note', 'unset']);
-export const TodoItemPriorityEnum = z.enum(['low', 'medium', 'high']);
-export type TodoItemPriority = z.infer<typeof TodoItemPriorityEnum>;
-export const ItemZ = z.object({
-  id: z.string(),
-  text: z.string(),
-  done: z.boolean().default(false),
-  created: z.string(),
-  priority: TodoItemPriorityEnum.default('low'),
-});
-export const CollectionZ = z.object({
-  id: z.string(),
-  title: z.string(),
-  color: z.string(),
-  shared: z.boolean(),
-  created: z.string(),
-  todos: ItemZ.array(),
-  note: z.string().default(''),
-  type: TodoTypeEnum.default('todo'),
-});
-
-type TodoState = typeof initialTodoState;
-export type TodoSlice = TodoState & {
+export type TodoSlice = {
+  collections: types.Collection[] | null;
+  items: types.Item[] | null;
+  notes: types.Note[] | null;
   actions: {
     initCollections: () => void;
-    createCollection: (entry: NewCollectionEntry) => void;
-    createSharedCollection: (shareId: string) => Promise<void>;
-    updateSharedCollection: (id: string) => Promise<void>;
-    editNote: ({ id, note }: { id: string; note: string }) => Promise<void>;
-    createCollectionItem: ({ id, itemEntry }: { id: string; itemEntry: ItemEntry }) => Promise<void>;
-    changeOrder: ({ dragIndex, hoverIndex }: { dragIndex: number; hoverIndex: number }) => void;
-    deleteCollection: ({ id, shared }: { id: string; shared: boolean }) => Promise<void>;
-    toggleItemDone: ({ id, colId }: { id: string; colId: string }) => Promise<void>;
-    removeDoneItems: (id: string) => Promise<void>;
-    removeTodoItem: ({ id, colId }: { id: string; colId: string }) => Promise<void>;
-    editCollection: (entry: Partial<SelectedEntry> & { noShare?: boolean }) => Promise<void>;
-    editTodoItemPriority: ({
-      id,
-      colId,
-      newPriority,
-    }: {
-      id: string;
-      colId: string;
-      newPriority: TodoItemPriority;
-    }) => Promise<void>;
-    toggleHelp: () => void;
+    initSharedCollection: (entry: types.SharedCollectionData) => void;
+    createCollection: (entry: types.CollectionEntry) => void;
+    updateCollection: (entry: Partial<types.Collection> & { id: string }) => void;
+    deleteCollection: (id: string) => void;
+    initItems: () => void;
+    createItem: (entry: types.ItemEntry) => types.Item | null;
+    updateItem: (entry: Partial<types.Item> & { id: string }) => void;
+    updateItems: ({ id, entries }: { id: string; entries: types.Item[] | null }) => void;
+    deleteItem: (id: string) => void;
+    deleteDoneItems: (id: string) => void;
+    initNotes: () => void;
+    updateNote: (entry: types.NoteEntry) => void;
+    changeOrder: ({ dragIdx, hoverIdx }: { dragIdx: number; hoverIdx: number }) => void;
   };
 };
 
-export type TodoTypes = z.infer<typeof TodoTypeEnum>;
-export type Collection = z.infer<typeof CollectionZ>;
-export type Item = z.infer<typeof ItemZ>;
-export type NewCollectionEntry = Pick<Collection, 'title' | 'color'>;
-export type ItemEntry = Omit<Item, 'id' | 'done' | 'created'>;
-
-const initialTodoState: { collections: Collection[] | []; help: boolean } = { collections: [], help: false };
-
 const useTodoStore = create<TodoSlice>()(
-  immer((set, get) => ({
-    ...initialTodoState,
+  immer((set) => ({
+    collections: null,
+    items: null,
+    notes: null,
     actions: {
-      initCollections: () =>
-        set(() => {
+      initCollections: () => {
+        try {
+          const collections = todoService.getFromLocalStorage<types.Collection[]>(
+            env.LS_NAME_COLLECTIONS,
+            types.arrayOfCollectionsSchema,
+          );
+          set({ collections });
+        } catch (error) {
+          useStatusStore.setState({
+            errorMessage: 'Unable to retrieve collection data.',
+            isError: true,
+          });
+        }
+      },
+
+      initSharedCollection: (entry) => {
+        try {
+          const { col: collection, items, note } = types.sharedCollectionDataSchema.parse(entry);
+          set((state) => {
+            if (state.collections?.some((c) => c.id === collection.id)) {
+              return;
+            }
+            const newCollections = state.collections ? [collection, ...state.collections] : [collection];
+            state.collections = newCollections;
+            todoService.saveToLocalStorage<types.Collection[]>(env.LS_NAME_COLLECTIONS, newCollections);
+
+            if (items) {
+              const newItems = state.items ? [...items, ...state.items] : items;
+              state.items = newItems;
+              todoService.saveToLocalStorage<types.Item[]>(env.LS_NAME_ITEMS, newItems);
+            }
+
+            if (note) {
+              const newNotes = state.notes ? state.notes.concat(note) : [note];
+              state.notes = newNotes;
+              todoService.saveToLocalStorage<types.Note[]>(env.LS_NAME_NOTES, newNotes);
+            }
+          });
+        } catch (error) {
+          useStatusStore.setState({
+            errorMessage: 'Shared collection creation failed. Please try again.',
+            isError: true,
+          });
+        }
+      },
+
+      createCollection: (entry) => {
+        try {
+          const collectionEntry = todoService.createCollectionEntry(entry);
+          set((state) => {
+            const newCollections = state.collections ? [collectionEntry, ...state.collections] : [collectionEntry];
+            state.collections = newCollections;
+            todoService.saveToLocalStorage<types.Collection[]>(env.LS_NAME_COLLECTIONS, newCollections);
+          });
+        } catch (error) {
+          useStatusStore.setState({ errorMessage: 'Collection creation failed. Please try again.', isError: true });
+        }
+      },
+
+      updateCollection: async (entry) =>
+        set((state) => {
+          const collection = state.collections?.find((c) => c.id === entry.id);
+          if (state.collections && collection) {
+            Object.assign(collection, entry);
+            todoService.saveToLocalStorage<types.Collection[]>(env.LS_NAME_COLLECTIONS, state.collections);
+          }
+        }),
+
+      deleteCollection: (id) =>
+        set((state) => {
+          const filteredCollections = state.collections?.filter((c) => c.id !== id);
+          const newCollections = filteredCollections?.length ? filteredCollections : null;
+          const filteredItems = state.items?.filter((i) => i.colId !== id);
+          const newItems = filteredItems?.length ? filteredItems : null;
+          const filteredNotes = state.notes?.filter((i) => i.colId !== id);
+          const newNotes = filteredNotes?.length ? filteredNotes : null;
+
+          todoService.saveToLocalStorage<types.Collection[] | null>(env.LS_NAME_COLLECTIONS, newCollections);
+          todoService.saveToLocalStorage<types.Item[] | null>(env.LS_NAME_ITEMS, newItems);
+          todoService.saveToLocalStorage<types.Note[] | null>(env.LS_NAME_NOTES, newNotes);
+
+          return { collections: newCollections, items: newItems, notes: newNotes };
+        }),
+
+      initItems: () => {
+        try {
+          const items = todoService.getFromLocalStorage<types.Item[]>(env.LS_NAME_ITEMS, types.arrayOfItemsSchema);
+          set({ items });
+        } catch (error) {
+          useStatusStore.setState({
+            errorMessage: 'Unable to retrieve collection data.',
+            isError: true,
+          });
+        }
+      },
+
+      createItem: (entry) => {
+        try {
+          const validItem = todoService.createItemEntry(entry);
+          set((state) => {
+            const newItems = state.items ? [validItem, ...state.items] : [validItem];
+            state.items = newItems;
+            todoService.saveToLocalStorage<types.Item[]>(env.LS_NAME_ITEMS, newItems);
+          });
+          return validItem;
+        } catch (error) {
+          useStatusStore.setState({ errorMessage: 'Item creation failed. Please try again.', isError: true });
+          return null;
+        }
+      },
+
+      updateItem: (entry) =>
+        set((state) => {
+          const item = state.items?.find((i) => i.id === entry.id);
+          if (item && state.items) {
+            Object.assign(item, entry);
+            todoService.saveToLocalStorage<types.Item[]>(env.LS_NAME_ITEMS, state.items);
+          }
+        }),
+
+      updateItems: ({ id, entries }) =>
+        set((state) => {
+          const filteredItems = state.items?.filter((i) => i.colId !== id);
+          const newItems = filteredItems?.length ? [...(entries || []), ...filteredItems] : entries;
+          todoService.saveToLocalStorage<types.Item[] | null>(env.LS_NAME_ITEMS, newItems);
+          return { items: newItems };
+        }),
+
+      deleteItem: (id) =>
+        set((state) => {
+          const filteredItems = state.items?.filter((i) => i.id !== id);
+          if (filteredItems) {
+            const newItems = filteredItems?.length ? filteredItems : null;
+            todoService.saveToLocalStorage<types.Item[] | null>(env.LS_NAME_ITEMS, newItems);
+            return { items: newItems };
+          }
+          return state;
+        }),
+
+      deleteDoneItems: (id) =>
+        set((state) => {
+          const filteredItems = state.items?.filter((i) => i.colId !== id || !i.status);
+          if (filteredItems) {
+            const newItems = filteredItems?.length ? filteredItems : null;
+            todoService.saveToLocalStorage<types.Item[] | null>(env.LS_NAME_ITEMS, newItems);
+            return { items: newItems };
+          }
+          return state;
+        }),
+
+      initNotes: () => {
+        try {
+          const notes = todoService.getFromLocalStorage<types.Note[]>(env.LS_NAME_NOTES, types.arrayOfNotesSchema);
+          set({ notes });
+        } catch (error) {
+          useStatusStore.setState({
+            errorMessage: 'Unable to retrieve collection data.',
+            isError: true,
+          });
+        }
+      },
+
+      updateNote: (entry) => {
+        set((state) => {
+          const note = state.notes?.find((n) => n.colId === entry.colId);
+
           try {
-            const collections = CollectionZ.array().parse(todoService.getTodosFromLS());
-            return { collections };
+            if (!note || !state.notes) {
+              const validNote = todoService.createNoteEntry(entry);
+              const newNotes = state.notes ? state.notes.concat(validNote) : [validNote];
+              state.notes = newNotes;
+              todoService.saveToLocalStorage<types.Note[]>(env.LS_NAME_NOTES, newNotes);
+            } else {
+              note.message = entry.message;
+              todoService.saveToLocalStorage<types.Note[]>(env.LS_NAME_NOTES, state.notes);
+            }
           } catch (error) {
-            return { collections: [] };
+            useStatusStore.setState({ errorMessage: 'Updating the note failed. Please try again.', isError: true });
+          }
+        });
+      },
+
+      changeOrder: ({ dragIdx, hoverIdx }) =>
+        set((state) => {
+          if (state.collections) {
+            const movingCollection = state.collections[dragIdx];
+            state.collections.splice(dragIdx, 1);
+            state.collections.splice(hoverIdx, 0, movingCollection);
+            todoService.saveToLocalStorage<types.Collection[]>(env.LS_NAME_COLLECTIONS, state.collections);
           }
         }),
-      createCollection: (entry) =>
-        set((state) => {
-          const createdEntry = todoService.createCollectionEntry(entry, 'unset');
-          todoService.saveCollectionsToLS([createdEntry, ...state.collections]);
-          return { collections: [createdEntry, ...state.collections] };
-        }),
-
-      createSharedCollection: async (shareId) => {
-        const collection = await todoService.getSharedCollectionData(shareId);
-
-        set((state) => {
-          if (state.collections.some((col) => col.id === collection.id)) {
-            return { collections: state.collections };
-          }
-
-          todoService.saveCollectionsToLS([collection, ...state.collections]);
-
-          return { collections: [collection, ...state.collections] };
-        });
-      },
-      updateSharedCollection: async (id) => {
-        const sharedCollectionData = await todoService.getSharedCollectionData(id);
-        set((state) => {
-          const collection = state.collections.find((col) => col.id === id);
-          if (collection) {
-            Object.assign(collection, sharedCollectionData);
-            todoService.saveCollectionsToLS(state.collections);
-          }
-        });
-      },
-      editNote: async ({ id, note }) => {
-        const { collections } = get();
-        const collectionStateCopy = JSON.parse(JSON.stringify(collections)) as TodoState['collections'];
-        const selectedCollection = collectionStateCopy.find((col) => col.id === id);
-
-        if (!selectedCollection) return;
-
-        selectedCollection.note = note;
-
-        if (selectedCollection && selectedCollection.shared) {
-          await todoService.updateSharedCollection(selectedCollection);
-        }
-
-        todoService.saveCollectionsToLS(collectionStateCopy);
-
-        set(() => ({ collections: collectionStateCopy }));
-      },
-      createCollectionItem: async ({ id, itemEntry }) => {
-        const { collections } = get();
-        const collectionStateCopy = JSON.parse(JSON.stringify(collections)) as TodoState['collections'];
-        const selectedCollection = collectionStateCopy.find((col) => col.id === id);
-
-        if (!selectedCollection) return;
-
-        const createdItem = ItemZ.parse(todoService.createItemEntry(itemEntry));
-
-        if (selectedCollection && selectedCollection.shared) {
-          const sharedCollectionData = await todoService.getSharedCollectionData(id);
-          selectedCollection.todos = [createdItem, ...sharedCollectionData.todos];
-          await todoService.updateSharedCollection(selectedCollection);
-
-          todoService.saveCollectionsToLS(collectionStateCopy);
-
-          set(() => ({ collections: collectionStateCopy }));
-          return;
-        }
-
-        selectedCollection.todos = [createdItem, ...selectedCollection.todos];
-
-        todoService.saveCollectionsToLS(collectionStateCopy);
-
-        set(() => ({ collections: collectionStateCopy }));
-      },
-      changeOrder: ({ dragIndex, hoverIndex }) =>
-        set((state) => {
-          const movingCollection = state.collections[dragIndex];
-          state.collections.splice(dragIndex, 1);
-          state.collections.splice(hoverIndex, 0, movingCollection);
-
-          todoService.saveCollectionsToLS(state.collections);
-        }),
-      deleteCollection: async ({ id, shared }) => {
-        if (shared) await todoService.deleteSharedCollection(id);
-        set((state) => {
-          const filteredCollectionList = state.collections.filter((col) => col.id !== id);
-          todoService.saveCollectionsToLS([...filteredCollectionList]);
-
-          return { collections: [...filteredCollectionList] };
-        });
-      },
-      toggleItemDone: async ({ id, colId }) => {
-        const { collections } = get();
-        const collectionsCopy = JSON.parse(JSON.stringify(collections)) as TodoState['collections'];
-        const selectedCollection = collectionsCopy.find((col) => col.id === colId);
-        if (!collectionsCopy) return;
-        const toggleItem = collectionsCopy
-          .map((col) => col.todos)
-          .flat()
-          .find((item) => item.id === id);
-
-        if (!toggleItem || !selectedCollection) return;
-
-        toggleItem.done = !toggleItem.done;
-
-        if (selectedCollection.shared) await todoService.updateSharedCollection(selectedCollection);
-
-        set(() => {
-          todoService.saveCollectionsToLS(collectionsCopy);
-          return { collections: collectionsCopy };
-        });
-      },
-      removeDoneItems: async (id) => {
-        const { collections } = get();
-        const collectionsCopy = JSON.parse(JSON.stringify(collections)) as TodoState['collections'];
-        const selectedCollection = collectionsCopy.find((col) => col.id === id);
-
-        if (!selectedCollection) return;
-
-        selectedCollection.todos = [...selectedCollection.todos.filter((item) => !item.done)];
-        if (selectedCollection.shared) await todoService.updateSharedCollection(selectedCollection);
-
-        set(() => {
-          todoService.saveCollectionsToLS(collectionsCopy);
-          return { collections: collectionsCopy };
-        });
-      },
-      removeTodoItem: async ({ id, colId }) => {
-        const { collections } = get();
-        const collectionsCopy = JSON.parse(JSON.stringify(collections)) as TodoState['collections'];
-        const selectedCollection = collectionsCopy.find((col) => col.id === colId);
-
-        if (!selectedCollection) return;
-
-        const removedItemIndex = selectedCollection.todos.findIndex((item) => item.id === id);
-
-        selectedCollection.todos.splice(removedItemIndex, 1);
-
-        if (selectedCollection.shared) await todoService.updateSharedCollection(selectedCollection);
-
-        set(() => {
-          todoService.saveCollectionsToLS(collectionsCopy);
-          return { collections: collectionsCopy };
-        });
-      },
-      editTodoItemPriority: async ({ id, colId, newPriority }) => {
-        const { collections } = get();
-        const collectionsCopy = JSON.parse(JSON.stringify(collections)) as TodoState['collections'];
-        const selectedCollection = collectionsCopy.find((col) => col.id === colId);
-        if (!collectionsCopy) return;
-        const itemPriority = collectionsCopy
-          .map((col) => col.todos)
-          .flat()
-          .find((item) => item.id === id);
-
-        if (!itemPriority || !selectedCollection) return;
-
-        itemPriority.priority = newPriority;
-
-        if (selectedCollection.shared) await todoService.updateSharedCollection(selectedCollection);
-
-        set(() => {
-          todoService.saveCollectionsToLS(collectionsCopy);
-          return { collections: collectionsCopy };
-        });
-      },
-      editCollection: async (entry) => {
-        const { collections } = get();
-        const collection = collections.find((col) => col.id === entry.id);
-
-        if (collection && entry.shared) {
-          const newCollection = { ...collection, ...entry };
-          await todoService.updateSharedCollection(newCollection);
-        }
-
-        if (collection && collection.shared && !entry.shared && !entry.noShare) {
-          await todoService.deleteSharedCollection(collection.id);
-        }
-
-        set((state) => {
-          const stateCollection = state.collections.find((col) => col.id === entry.id);
-
-          if (stateCollection) {
-            Object.assign(stateCollection, entry);
-            todoService.saveCollectionsToLS(state.collections);
-            const { id, title, color } = stateCollection;
-            useSelectedStore.setState((s) => ({ ...s, id, title, color, type: entry.type }));
-          }
-        });
-      },
-      toggleHelp: () => set((state) => ({ help: !state.help })),
     },
   })),
 );

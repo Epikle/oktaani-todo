@@ -10,7 +10,7 @@ export default defineConfig({
   chromeWebSecurity: false,
   video: false,
   e2e: {
-    baseUrl: 'http://localhost:5173/todo-demo',
+    baseUrl: 'http://localhost:5173/todo',
     setupNodeEvents(on, config) {
       codeCoverageTask(on, config);
       // include any other plugin code...

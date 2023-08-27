@@ -6,51 +6,36 @@
   align-items: center;
   gap: 1rem;
   margin-block: 0.5rem;
-  padding-inline: 0 0.75rem;
+  padding-inline: 1rem;
+  padding-block: 0.4rem;
   font-family: var(--ff-secondary);
   @include transition(background-color, 200ms);
-  // border-left: 4px solid var(--color-priority, hsl(0, 0%, 50%));
 
   &:hover {
     background-color: var(--color-todo-item-hover);
   }
 
-  .priority {
-    align-self: stretch;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.4rem;
-    background-color: var(--color-todo-item-hover);
+  .priority-btn {
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    background-color: var(--color-priority, hsl(0, 0%, 50%));
+    border-radius: 50%;
+    width: 2rem;
+    height: 2rem;
 
-    button {
+    &:is(:hover, :focus-visible) {
+      cursor: pointer;
       background-color: var(--color-priority, hsl(0, 0%, 50%));
-      border-radius: 50%;
-      width: 1.75rem;
-      aspect-ratio: 1 / 1;
     }
   }
 
   input {
-    min-width: 1.75rem;
-    min-height: 1.75rem;
-    accent-color: var(--color-gray-800);
+    @include sr-only;
 
-    &:hover {
-      cursor: pointer;
-    }
-
-    &:focus-visible {
-      @include focus-border;
-      outline: 2px solid var(--color-text-p);
-      outline-offset: 2px;
-    }
-
-    &:checked {
-      + label {
-        text-decoration: 3px line-through var(--color-gray-800);
-        opacity: 0.6;
-      }
+    &:checked + label {
+      text-decoration: 3px line-through var(--color-gray-800);
+      opacity: 0.6;
     }
   }
 
@@ -65,12 +50,14 @@
     }
   }
 
-  button {
+  .remove {
     all: unset;
-    transition: color 250ms ease-in-out;
+    @include transition(color, 200ms);
 
     &:is(:hover, :focus-visible) {
+      cursor: pointer;
       color: var(--color-p-red);
+      background-color: transparent;
     }
   }
 }

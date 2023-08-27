@@ -1,28 +1,6 @@
-@import 'src/mixin';
-
-.main {
-  padding-top: 0.75rem;
-  padding-inline: 0.75rem;
-  overflow-y: auto;
-
-  .container {
-    @include container;
-
-    height: 100%;
-    display: grid;
-    grid-template-rows: 1fr max-content;
-    gap: 0.75rem;
-
-    .empty {
-      text-align: center;
-      color: var(--color-text-p);
-    }
-
-    .collections {
-      align-self: flex-start;
-      display: grid;
-      gap: 0.75rem;
-      grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
-    }
-  }
+.collections {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+  align-self: flex-start;
+  gap: 0.75rem;
 }

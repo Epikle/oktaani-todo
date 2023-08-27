@@ -14,23 +14,25 @@ export default defineConfig({
       requireEnv: false,
     }),
   ],
-  base: '/todo-demo/',
+  base: '/todo/',
   build: {
     sourcemap: true,
   },
   test: {
     globals: true,
     environment: 'jsdom',
-    setupFiles: ['./src/setupTests.ts'],
+    setupFiles: ['./setupTests.ts'],
     exclude: [...configDefaults.exclude, 'instrumented'],
     coverage: {
       provider: 'istanbul',
     },
     env: {
-      VITE_BASE_URL: 'http://localhost:5173/todo-demo',
-      VITE_API_URL: 'test',
-      VITE_LS_NAME_TODOS: 'test-todos',
-      VITE_LS_NAME_SETTINGS: 'test-settings',
+      VITE_BASE_URL: 'http://localhost:5173/todo/',
+      VITE_API_URL: 'api-url-test',
+      VITE_LS_NAME_SETTINGS: 'ot-settings',
+      VITE_LS_NAME_COLLECTIONS: 'ot-collections',
+      VITE_LS_NAME_ITEMS: 'ot-items',
+      VITE_LS_NAME_NOTES: 'ot-notes',
     },
   },
   preview: {

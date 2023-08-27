@@ -16,7 +16,7 @@ let timeoutId: ReturnType<typeof setTimeout> | null = null;
 let timeoutId2: ReturnType<typeof setTimeout> | null = null;
 
 const TodoNote: FC<Props> = ({ id, isSelected, note }) => {
-  const { editNote } = useTodoStore((state) => state.actions);
+  const { updateNote } = useTodoStore((state) => state.actions);
   const [saving, setSaving] = useState('');
   const { text } = useLanguage();
 
@@ -24,8 +24,8 @@ const TodoNote: FC<Props> = ({ id, isSelected, note }) => {
     if (timeoutId) clearTimeout(timeoutId);
     if (timeoutId2) clearTimeout(timeoutId2);
 
-    timeoutId = setTimeout(async () => {
-      await editNote({ id, note: event.target.value });
+    timeoutId = setTimeout(() => {
+      updateNote({ colId: id, message: event.target.value });
       setSaving(text.note.saved);
     }, 2000);
 

@@ -25,17 +25,6 @@
 
     li {
       button {
-        @include text-green;
-        @include btn-hover-focus;
-        @include btn-bg-color;
-        @include transition;
-
-        display: grid;
-        place-content: center;
-        width: 3rem;
-        height: 3rem;
-        font-size: 1.5rem;
-
         &.cancel-btn {
           background-color: var(--color-p-red);
           color: var(--color-p-gray);
