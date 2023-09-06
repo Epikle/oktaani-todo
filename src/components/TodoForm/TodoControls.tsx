@@ -2,6 +2,7 @@ import { Dispatch, FC, SetStateAction, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faListCheck, faPen, faShareNodes, faSpinner, faTrash } from '@fortawesome/free-solid-svg-icons';
 
+import { createStatsByType } from '../../services/stats';
 import { createSharedCollection, deleteSharedCollection, deleteSharedDoneItems } from '../../services/todo';
 import useStatusStore from '../../context/useStatusStore';
 import useSelectedStore from '../../context/useSelectedStore';
@@ -51,6 +52,7 @@ const TodoControls: FC<Props> = ({ onConfirm }) => {
           await createSharedCollection(sharedData, controller.signal);
           updateCollection({ id: selectedCollection.id, shared: true });
           setSelectedCollection({ id: selectedCollection.id, edit: false });
+          createStatsByType('shareCollection');
         },
       });
     }

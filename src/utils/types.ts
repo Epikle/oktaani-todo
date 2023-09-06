@@ -3,6 +3,7 @@ import { allowedLanguages } from './languages';
 
 const priorities = ['low', 'medium', 'high'] as const;
 const types = ['todo', 'note'] as const;
+const statsTypes = ['newCollection', 'deleteCollection', 'newItem', 'deleteItem', 'shareCollection'] as const;
 
 export const itemSchema = z.object({
   colId: z.string().min(1),
@@ -45,6 +46,7 @@ export const settingsSchema = z.object({
 
 export const PriorityEnum = z.enum(priorities);
 export const TypeEnum = z.enum(types);
+export const statsTypesEnum = z.enum(statsTypes);
 export const arrayOfItemsSchema = z.union([z.array(itemSchema).nonempty(), z.null()]).default(null);
 export const arrayOfNotesSchema = z.union([z.array(noteSchema).nonempty(), z.null()]).default(null);
 export const arrayOfCollectionsSchema = z.union([z.array(collectionSchema).nonempty(), z.null()]).default(null);
@@ -65,6 +67,7 @@ export type CollectionType = z.infer<typeof TypeEnum>;
 export type ItemPriority = z.infer<typeof PriorityEnum>;
 export type Log = z.infer<typeof logSchema>;
 export type Settings = z.infer<typeof settingsSchema>;
+export type StatsTypes = z.infer<typeof statsTypesEnum>;
 export type SharedCollectionData = {
   col: Collection;
   items: Item[] | null;

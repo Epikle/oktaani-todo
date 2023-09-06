@@ -5,6 +5,7 @@ import * as todoService from '../services/todo';
 import * as types from '../utils/types';
 import env from '../utils/env';
 import useStatusStore from './useStatusStore';
+import { createStatsByType } from '../services/stats';
 
 export type TodoSlice = {
   collections: types.Collection[] | null;
@@ -88,6 +89,7 @@ const useTodoStore = create<TodoSlice>()(
             state.collections = newCollections;
             todoService.saveToLocalStorage<types.Collection[]>(env.LS_NAME_COLLECTIONS, newCollections);
           });
+          createStatsByType('newCollection');
         } catch (error) {
           useStatusStore.setState({ errorMessage: 'Collection creation failed. Please try again.', isError: true });
         }
@@ -115,6 +117,8 @@ const useTodoStore = create<TodoSlice>()(
           todoService.saveToLocalStorage<types.Item[] | null>(env.LS_NAME_ITEMS, newItems);
           todoService.saveToLocalStorage<types.Note[] | null>(env.LS_NAME_NOTES, newNotes);
 
+          createStatsByType('deleteCollection');
+
           return { collections: newCollections, items: newItems, notes: newNotes };
         }),
 
@@ -138,6 +142,7 @@ const useTodoStore = create<TodoSlice>()(
             state.items = newItems;
             todoService.saveToLocalStorage<types.Item[]>(env.LS_NAME_ITEMS, newItems);
           });
+          createStatsByType('newItem');
           return validItem;
         } catch (error) {
           useStatusStore.setState({ errorMessage: 'Item creation failed. Please try again.', isError: true });
@@ -168,6 +173,7 @@ const useTodoStore = create<TodoSlice>()(
           if (filteredItems) {
             const newItems = filteredItems?.length ? filteredItems : null;
             todoService.saveToLocalStorage<types.Item[] | null>(env.LS_NAME_ITEMS, newItems);
+            createStatsByType('deleteItem');
             return { items: newItems };
           }
           return state;
