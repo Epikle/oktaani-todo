@@ -2,6 +2,10 @@
 @import 'src/colors';
 @import 'src/mixin';
 
+html {
+  background-color: var(--color-bg-body);
+}
+
 body {
   font-family: var(--ff-primary);
   font-size: var(--fs-normal);

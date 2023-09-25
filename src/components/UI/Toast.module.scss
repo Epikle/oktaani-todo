@@ -19,6 +19,7 @@
   min-width: 20rem;
   border-radius: 0 0 var(--border-radius) var(--border-radius);
   overflow: hidden;
+  opacity: 0;
 
   &::after {
     content: '';
@@ -51,6 +52,7 @@
   }
 
   &.show {
+    opacity: 1;
     transform: translate(-50%, 0);
 
     &::after {
