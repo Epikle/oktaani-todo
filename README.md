@@ -1,6 +1,8 @@
-# oktaaniTODO - WIP
+# oktaaniTODO
 
 [oktaaniTODO | DEMO](https://oktaani.com/todo/)
+
+[oktaaniTODO Statistics](https://github.com/Epikle/oktaani-todo-stats)
 
 ![Preview image](https://raw.githubusercontent.com/Epikle/oktaani-todo/main/oktaani-todo-preview.png)
 
