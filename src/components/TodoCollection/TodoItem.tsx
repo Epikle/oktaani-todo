@@ -1,7 +1,7 @@
-import { FC, useEffect, useRef } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import autoAnimate from '@formkit/auto-animate';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faSpinner, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 import { deleteSharedItem, updateSharedItem } from '../../services/todo';
 import useStatusStore from '../../context/useStatusStore';
@@ -23,6 +23,7 @@ type Props = {
 
 const TodoItem: FC<Props> = ({ item, selected, shared }) => {
   const { id, message, status, createdAt, priority, colId } = item;
+  const [isLoading, setIsLoading] = useState(false);
   const btnRef = useRef<HTMLButtonElement>(null);
   const { updateItem, deleteItem } = useTodoStore((state) => state.actions);
   const { setError } = useStatusStore((state) => state.actions);
@@ -31,6 +32,7 @@ const TodoItem: FC<Props> = ({ item, selected, shared }) => {
   const { text } = useLanguage();
 
   const deleteItemBtnHandler = async () => {
+    setIsLoading(true);
     if (shared) {
       try {
         await deleteSharedItem(colId, id);
@@ -39,10 +41,12 @@ const TodoItem: FC<Props> = ({ item, selected, shared }) => {
       }
     }
     deleteItem(id);
+    setIsLoading(false);
   };
 
   const priorityBtnHandler = async () => {
     const newPriority = nextPriority();
+    updateItem({ ...item, priority: newPriority });
     if (shared) {
       try {
         await updateSharedItem({ ...item, priority: newPriority });
@@ -50,10 +54,10 @@ const TodoItem: FC<Props> = ({ item, selected, shared }) => {
         setError(text.errors.default);
       }
     }
-    updateItem({ ...item, priority: newPriority });
   };
 
   const statusHandler = async () => {
+    updateItem({ ...item, status: !status });
     if (shared) {
       try {
         await updateSharedItem({ ...item, status: !status });
@@ -61,7 +65,6 @@ const TodoItem: FC<Props> = ({ item, selected, shared }) => {
         setError(text.errors.default);
       }
     }
-    updateItem({ ...item, status: !status });
   };
 
   useEffect(() => {
@@ -100,8 +103,9 @@ const TodoItem: FC<Props> = ({ item, selected, shared }) => {
           className={styles.remove}
           onClick={deleteItemBtnHandler}
           testId="item-btn-remove"
+          disabled={isLoading}
         >
-          <FontAwesomeIcon icon={faTrash} />
+          {isLoading ? <FontAwesomeIcon icon={faSpinner} spinPulse /> : <FontAwesomeIcon icon={faTrash} />}
         </Button>
       )}
     </li>

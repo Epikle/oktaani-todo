@@ -19,7 +19,8 @@ type Props = {
 };
 
 const TodoControls: FC<Props> = ({ onConfirm }) => {
-  const [loading, setLoading] = useState(false);
+  const [isLoadingDelete, setIsLoadingDelete] = useState(false);
+  const [isLoadingShare, setIsLoadingShare] = useState(false);
   const selectedCollection = useSelectedStore((state) => state.selectedCollection);
   const { setSelectedCollection, resetSelection } = useSelectedStore((state) => state.actions);
   const { setError } = useStatusStore((state) => state.actions);
@@ -34,6 +35,7 @@ const TodoControls: FC<Props> = ({ onConfirm }) => {
   const selectedColItems = filteredItems?.length && filteredItems.length > 0 ? filteredItems : null;
 
   const shareCollectionBtnHandler = async () => {
+    setIsLoadingShare(true);
     if (selectedCollection.shared) {
       await deleteSharedCollection(selectedCollection.id);
       updateCollection({ id: selectedCollection.id, shared: false });
@@ -56,6 +58,7 @@ const TodoControls: FC<Props> = ({ onConfirm }) => {
         },
       });
     }
+    setIsLoadingShare(false);
   };
 
   const deleteCollectionBtnHandler = () => {
@@ -74,7 +77,7 @@ const TodoControls: FC<Props> = ({ onConfirm }) => {
   };
 
   const deleteDoneBtnHandler = async () => {
-    setLoading(true);
+    setIsLoadingDelete(true);
     deleteDoneItems(selectedCollection.id);
     if (selectedCollection.shared) {
       try {
@@ -83,7 +86,7 @@ const TodoControls: FC<Props> = ({ onConfirm }) => {
         setError(text.errors.default);
       }
     }
-    setLoading(false);
+    setIsLoadingDelete(false);
   };
 
   return (
@@ -92,11 +95,10 @@ const TodoControls: FC<Props> = ({ onConfirm }) => {
         <Button
           title={text.controls.removeDone}
           onClick={deleteDoneBtnHandler}
-          disabled={!doneItems || loading}
+          disabled={!doneItems || isLoadingDelete}
           testId="remove-done-btn"
         >
-          {!loading && <FontAwesomeIcon icon={faListCheck} />}
-          {loading && <FontAwesomeIcon icon={faSpinner} spinPulse />}
+          {isLoadingDelete ? <FontAwesomeIcon icon={faSpinner} spinPulse /> : <FontAwesomeIcon icon={faListCheck} />}
         </Button>
       </li>
       <li>
@@ -105,9 +107,9 @@ const TodoControls: FC<Props> = ({ onConfirm }) => {
           className={cn({ [styles.shared]: selectedCollection.shared })}
           onClick={shareCollectionBtnHandler}
           testId="share-col-btn"
-          disabled={selectedCollection.type === 'note'}
+          disabled={selectedCollection.type === 'note' || isLoadingShare}
         >
-          <FontAwesomeIcon icon={faShareNodes} />
+          {isLoadingShare ? <FontAwesomeIcon icon={faSpinner} spinPulse /> : <FontAwesomeIcon icon={faShareNodes} />}
         </Button>
       </li>
       <li>
