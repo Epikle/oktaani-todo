@@ -1,0 +1,8 @@
+{
+  "name": "oktaaniTODO",
+  "short_name": "oktaaniTODO",
+  "description": "Organize your TODO lists with style.",
+  "start_url": "/",
+  "display": "fullscreen",
+  "theme_color": "#121212"
+}
